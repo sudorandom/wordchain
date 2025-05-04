@@ -157,7 +157,7 @@ function GridCell({
       onDragEnd={handleDragEnd}
       className={cellClasses}
     >
-      {isHighlighted && <div className="absolute inset-0 bg-green-300 opacity-50 animate-pulse-fade-out" style={{ animationDuration: '1.5s' }}></div>}
+      {isHighlighted && <div className="absolute inset-0 bg-yellow-300 opacity-50 animate-pulse-fade-out" style={{ animationDuration: '1.5s' }}></div>}
       <span className="relative z-10">{letter.toUpperCase()}</span>
     </div>
   );
@@ -168,6 +168,7 @@ function WordGrid({
     grid,
     selectedCell,
     draggedCell,
+    hoveredCell,
     animationState,
     highlightedCells,
     wiggleCells, // Added prop
@@ -327,8 +328,8 @@ function App() {
   const [highlightedCells, setHighlightedCells] = useState([]);
   const highlightTimeoutRef = useRef(null);
   const [isGameOver, setIsGameOver] = useState(false);
-  const [wiggleCells, setWiggleCells] = useState([]); // State for wiggling cells
-  const wiggleTimeoutRef = useRef(null); // Ref for wiggle timeout
+  const [wiggleCells, setWiggleCells] = useState([]);
+  const wiggleTimeoutRef = useRef(null);
 
   // --- Effect to Load Game Data ---
   useEffect(() => {
@@ -342,8 +343,7 @@ function App() {
 
         try {
             const basePath = ''; // Adjust if deployed in a subdirectory
-            // *** Make sure your JSON files are named correctly (e.g., 0.json, 1.json) ***
-            const response = await fetch(`${basePath}/levels/${currentLevel}.json`);
+            const response = await fetch(`${basePath}/levels/${currentLevel}.json`); // Ensure file extension is correct
             if (!response.ok) throw new Error(`Level ${currentLevel} data not found (HTTP ${response.status})`);
             const data = await response.json();
             setGameData(data); setGrid(data.initialGrid); setCurrentPossibleMoves(data.explorationTree || []);
@@ -641,7 +641,10 @@ function App() {
   // --- Main Render ---
   return (
     <div className="flex flex-col items-center justify-start min-h-screen bg-gray-50 p-4 font-sans pt-8">
-       <h1 className="text-3xl font-bold mb-2 text-gray-700">Word Chains</h1>
+       {/* Apply custom font class (font-bungee) and animated gradient */}
+       <h1 className="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-flow font-bungee">
+            Word Chains
+       </h1>
        <h2 className="text-2xl mb-2 text-gray-700">Level {level}</h2>
        <div className="text-center max-w-xl mb-4 text-sm text-gray-600">
             <p className="font-semibold mb-1">How to Play:</p>
@@ -669,6 +672,7 @@ function App() {
                 grid={grid}
                 selectedCell={selectedCell}
                 draggedCell={draggedCell}
+                hoveredCell={hoveredCell}
                 animationState={animationState}
                 highlightedCells={highlightedCells}
                 wiggleCells={wiggleCells} // Pass wiggle state down
@@ -703,6 +707,17 @@ function App() {
             .animate-wiggle {
               animation: wiggle 0.4s ease-in-out;
               background-color: #fecaca; /* Optional: Add red background during wiggle */
+            }
+
+            /* Gradient Flow Animation */
+            @keyframes gradient-flow {
+              0% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
+            }
+            .animate-gradient-flow {
+              background-size: 200% 200%; /* Larger size for smooth movement */
+              animation: gradient-flow 4s ease infinite;
             }
 
             /* Scrollbar styling (kept in case needed elsewhere, but removed from word chain) */
