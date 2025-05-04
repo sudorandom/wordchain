@@ -157,7 +157,7 @@ function GridCell({
       onDragEnd={handleDragEnd}
       className={cellClasses}
     >
-      {isHighlighted && <div className="absolute inset-0 bg-yellow-300 opacity-50 animate-pulse-fade-out" style={{ animationDuration: '1.5s' }}></div>}
+      {isHighlighted && <div className="absolute inset-0 bg-green-300 opacity-50 animate-pulse-fade-out" style={{ animationDuration: '1.5s' }}></div>}
       <span className="relative z-10">{letter.toUpperCase()}</span>
     </div>
   );
@@ -168,7 +168,6 @@ function WordGrid({
     grid,
     selectedCell,
     draggedCell,
-    hoveredCell,
     animationState,
     highlightedCells,
     wiggleCells, // Added prop
@@ -670,7 +669,6 @@ function App() {
                 grid={grid}
                 selectedCell={selectedCell}
                 draggedCell={draggedCell}
-                hoveredCell={hoveredCell}
                 animationState={animationState}
                 highlightedCells={highlightedCells}
                 wiggleCells={wiggleCells} // Pass wiggle state down
