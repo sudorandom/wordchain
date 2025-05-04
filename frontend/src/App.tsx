@@ -236,7 +236,8 @@ function ProgressBar({ currentScore, maxScore }) {
     const percentage = maxScore > 0 ? Math.min(100, (currentScore / maxScore) * 100) : 0;
     const greenWidth = `${percentage}%`; const greyWidth = `${100 - percentage}%`;
     return (
-        <div className="w-full bg-gray-300 rounded-full h-4 overflow-hidden flex mt-2" title={`Reached depth ${currentScore} of ${maxScore}`}>
+        // Use flex-grow to allow the progress bar to take available space
+        <div className="flex-grow bg-gray-300 rounded-full h-4 overflow-hidden flex mr-2" title={`Reached depth ${currentScore} of ${maxScore}`}>
             <div className="bg-blue-500 h-full transition-all duration-500 ease-out rounded-l-full" style={{ width: greenWidth }}></div>
             <div className="bg-gray-400 h-full rounded-r-full" style={{ width: greyWidth }}></div>
         </div>
@@ -244,7 +245,7 @@ function ProgressBar({ currentScore, maxScore }) {
 }
 
 // --- End Game Panel Component ---
-function EndGamePanel({ score, maxScore, playerWords, optimalPathWords, onReset }) {
+function EndGamePanel({ score, maxScore, playerWords, optimalPathWords, onClose }) {
     const isMaxScore = score === maxScore;
     const sortedPlayerWords = useMemo(() => [...playerWords].sort(), [playerWords]);
     return (
@@ -265,7 +266,7 @@ function EndGamePanel({ score, maxScore, playerWords, optimalPathWords, onReset 
                 </div>
                 {isMaxScore && <p className="text-2xl font-bold text-green-600 mb-4 animate-pulse">Maximum Depth Reached!</p>}
                 {!isMaxScore && <p className="text-xl font-bold text-gray-600 mb-4">You didn't reach the maximum possible depth.</p>}
-                <button onClick={onReset} className="mt-4 px-6 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Close</button>
+                <button onClick={onClose} className="mt-4 px-6 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Close</button>
             </div>
         </div>
     );
@@ -429,7 +430,7 @@ function App() {
             if (typeof matchedNode.maxDepthReached === 'number' && matchedNode.maxDepthReached < maxDepthPossibleFromCurrentState) {
                 isDeviatedMove = true;
             }
-            setHasDeviated(isDeviatedMove);
+            setHasDeviated(isDeviatedMove); // Set deviation based on calculation
 
             setHistory(prevHistory => [...prevHistory, { grid, currentPossibleMoves, currentDepth, moveMade: moveMadeCoords, wordsFormedByMove }]);
             setAnimationState({ animating: true, from: cell1, to: cell2 });
@@ -467,8 +468,10 @@ function App() {
             }, 300);
 
         } else {
+            // *** Invalid move (no word formed) ***
             setIsInvalidMove(true);
-            setHasDeviated(true);
+            // *** Do NOT set hasDeviated here ***
+            // setHasDeviated(true); // REMOVED
             setFoundWordsDisplay(['Invalid Move! No new word found!']);
             triggerWiggle(cell1, cell2);
         }
@@ -607,6 +610,11 @@ function App() {
 
   }, [history, animationState.animating, isGameOver, handleReset, gameData]);
 
+  // --- Handler to close the game over panel ---
+  const handleCloseGameOver = useCallback(() => {
+      setIsGameOver(false);
+  }, []);
+
   // --- Render Helper for Word Chain ---
   const renderWordChain = () => {
       if (history.length === 0) return <div className="min-h-[2rem] mt-4"></div>; // Use min-h instead of h
@@ -641,33 +649,37 @@ function App() {
   // --- Main Render ---
   return (
     <div className="flex flex-col items-center justify-start min-h-screen bg-gray-50 p-4 font-sans pt-8">
-       {/* Apply custom font class (font-bungee) and animated gradient */}
        <h1 className="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-flow font-bungee">
             Word Chains
        </h1>
+       <div className="text-center max-w-xl mb-2 text-sm text-gray-600">
+            <p><span className="font-semibold mb-1">How to Play:</span> Click adjacent cells or drag-and-drop letters to swap them. Find the optimal move sequence to win! Every move <i>must</i> make a new {minWordLength}-letter word.</p>
+       </div>
+
        <h2 className="text-2xl mb-2 text-gray-700">Level {level}</h2>
-       <div className="text-center max-w-xl mb-4 text-sm text-gray-600">
-            <p className="font-semibold mb-1">How to Play:</p>
-            <p>Click adjacent cells or drag-and-drop letters to swap them. Find the optimal move sequence to win! Every move <i>must</i> make a new {minWordLength}-letter word.</p>
+
+       <div className="h-6 mb-2 text-center">
+            {isInvalidMove && <p className="text-red-600 font-semibold">{Array.isArray(foundWordsDisplay) && foundWordsDisplay.length > 0 ? foundWordsDisplay[0] : 'Invalid Move!'}</p>}
        </div>
-       <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg shadow text-center min-w-[300px] min-h-[150px] flex flex-col justify-center">
-           <div>
-               <p className="text-lg">Current Depth: <span className="font-semibold">{currentDepth}</span> / {maxDepthAttainable}</p>
-               <p className={`text-sm ${hasDeviated ? 'text-red-600 font-bold' : 'text-green-600 font-semibold'}`}>
-                   {hasDeviated ? "Deviated from optimal path!" : "On the optimal path"}
-               </p>
-               <div className="h-6 mt-2">
-                   {isInvalidMove && <p className="text-red-600 font-semibold">{Array.isArray(foundWordsDisplay) && foundWordsDisplay.length > 0 ? foundWordsDisplay[0] : 'Invalid Move!'}</p>}
-               </div>
-               <div className="h-6">
-                   {foundWordsDisplay.length > 0 && !animationState.animating && !isInvalidMove && <p className="text-green-700 font-semibold">Words Found: {foundWordsDisplay.join(', ').toUpperCase()}</p>}
-               </div>
-               <p className="text-sm text-gray-600 mt-1">Possible valid moves from here: <strong>{currentPossibleMoves?.length ?? 0}</strong>.</p>
-               {currentPossibleMoves?.length > 1 && !hasDeviated && <p className="text-sm text-orange-600 mt-1 font-semibold">Multiple optimal moves possible!</p>}
-               {currentPossibleMoves?.length > 1 && hasDeviated && <p className="text-sm text-gray-600 mt-1">There might be a better move...</p>}
-           </div>
-       </div>
-       <div className="inline-flex flex-col items-center mb-4">
+
+       <div className="relative inline-flex flex-col items-center mb-1">
+            {(currentPossibleMoves?.length ?? 0) > 1 && (
+                <div
+                    className="absolute top-0 left-0 z-10 px-2.5 py-1 bg-yellow-500 text-gray-900 text-xs font-bold rounded-full shadow-md transform -translate-x-1/4 -translate-y-1/4"
+                    title="Possible valid moves from this state"
+                >
+                    {currentPossibleMoves?.length ?? 0}
+                </div>
+            )}
+
+            {/* Depth Badge */}
+            <div
+                className="absolute top-0 right-0 z-10 px-2.5 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-md transform translate-x-1/4 -translate-y-1/4"
+                title="Current Depth / Max Depth Attainable"
+            >
+                {currentDepth}/{maxDepthAttainable}
+            </div>
+
            <WordGrid
                 grid={grid}
                 selectedCell={selectedCell}
@@ -675,7 +687,7 @@ function App() {
                 hoveredCell={hoveredCell}
                 animationState={animationState}
                 highlightedCells={highlightedCells}
-                wiggleCells={wiggleCells} // Pass wiggle state down
+                wiggleCells={wiggleCells}
                 onCellClick={handleCellClick}
                 onDragStart={handleDragStart}
                 onDragEnter={handleDragEnter}
@@ -683,16 +695,50 @@ function App() {
                 onDragEnd={handleDragEnd}
                 onDrop={handleDrop}
             />
-           <ProgressBar currentScore={currentDepth} maxScore={maxDepthAttainable} />
+            {/* Progress Bar and Buttons Container */}
+            <div className="w-full flex items-center mt-2">
+                <ProgressBar currentScore={currentDepth} maxScore={maxDepthAttainable} />
+                {/* Buttons Container */}
+                <div className="flex space-x-1 ml-2">
+                    <button
+                        onClick={handleBack}
+                        disabled={history.length === 0 || animationState.animating || isGameOver}
+                        className={`p-2 bg-gray-200 text-gray-700 rounded-md shadow hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed`}
+                        title="Back (Undo last move)"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M16 18 L10 12 L16 6 Z"/>
+                            <path d="M7 18 L7 6" strokeWidth="2"/>
+                        </svg>
+                    </button>
+
+                    <button
+                        onClick={handleReset}
+                        disabled={animationState.animating}
+                        className={`p-2 bg-gray-200 text-gray-700 rounded-md shadow hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed`}
+                        title="Reset Game"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                             <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                             <path d="M3 3v5h5"/>
+                             <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+                             <path d="M21 21v-5h-5"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
        </div>
-       <div className="flex space-x-4 mt-6">
-           <button onClick={handleBack} disabled={history.length === 0 || animationState.animating || isGameOver} className={`px-4 py-2 bg-gray-500 text-white rounded-md shadow hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed`}>Back</button>
-           <button onClick={handleReset} disabled={animationState.animating} className={`px-4 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed`}>Reset Game</button>
-       </div>
+
+        <div className="h-6 mt-2 text-center">
+            <p className={`text-sm ${hasDeviated ? 'text-red-600 font-bold' : 'text-green-600 font-semibold'}`}>
+                {hasDeviated ? "Deviated from optimal path!" : "On the optimal path"}
+            </p>
+        </div>
+
+
        {renderWordChain()}
        <ExplorationTreeView treeData={gameData.explorationTree} />
-       {isGameOver && <EndGamePanel score={currentDepth} maxScore={maxDepthAttainable} playerWords={playerUniqueWordsFound} optimalPathWords={optimalPathWords} onReset={handleReset} />}
-       {/* Add CSS for animations */}
+       {isGameOver && <EndGamePanel score={currentDepth} maxScore={maxDepthAttainable} playerWords={playerUniqueWordsFound} optimalPathWords={optimalPathWords} onClose={handleCloseGameOver} />}
        <style>{`
             @keyframes pulse-fade-out { 0% { opacity: 0.6; transform: scale(1); } 20% { opacity: 0.8; transform: scale(1.05); } 80% { opacity: 0.8; transform: scale(1.05); } 100% { opacity: 0; transform: scale(1); } }
             .animate-pulse-fade-out { animation: pulse-fade-out 1.5s ease-in-out forwards; }
