@@ -656,7 +656,7 @@ function App() {
             <p><span className="font-semibold mb-1">How to Play:</span> Click adjacent cells or drag-and-drop letters to swap them. Find the optimal move sequence to win! Every move <i>must</i> make a new {minWordLength}-letter word.</p>
        </div>
 
-       <h2 className="text-2xl mb-2 text-gray-700">Level {level}</h2>
+       <h2 className="text-2xl mb-2 font-bold text-gray-700">Level {level}</h2>
 
        <div className="h-6 mb-2 text-center">
             {isInvalidMove && <p className="text-red-600 font-semibold">{Array.isArray(foundWordsDisplay) && foundWordsDisplay.length > 0 ? foundWordsDisplay[0] : 'Invalid Move!'}</p>}
