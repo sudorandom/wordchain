@@ -91,21 +91,72 @@ const findWordCoordinates = (grid, word, moveCoords) => {
 
 
 // --- Grid Cell Component ---
-function GridCell({ letter, row, col, onDragStart, onDrop, onDragEnter, onDragLeave, onDragEnd, isDragging, isPotentialTarget, isHighlighted }) {
-  const handleDragStart = (e) => { onDragStart({ row, col }); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', `${row}-${col}`); e.currentTarget.style.opacity = '0.6'; };
+function GridCell({
+    letter,
+    row,
+    col,
+    onClick,
+    onDragStart,
+    onDrop,
+    onDragEnter,
+    onDragLeave,
+    onDragEnd,
+    isDraggingSource,
+    isPotentialDropTarget,
+    isHighlighted,
+    isSelected,
+    isWiggling // Added prop for wiggle state
+}) {
+  const handleDragStart = (e) => {
+    onDragStart({ row, col });
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', `${row}-${col}`);
+    e.currentTarget.style.opacity = '0.6';
+    e.currentTarget.classList.add('cursor-grabbing');
+  };
   const handleDragOver = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
   const handleDrop = (e) => { e.preventDefault(); onDrop({ row, col }); };
   const handleDragEnter = (e) => { e.preventDefault(); onDragEnter({ row, col }); };
   const handleDragLeave = (e) => { e.preventDefault(); onDragLeave({ row, col }); };
-  const handleDragEnd = (e) => { e.currentTarget.style.opacity = '1'; onDragEnd(); };
+  const handleDragEnd = (e) => {
+      e.currentTarget.style.opacity = '1';
+      e.currentTarget.classList.remove('cursor-grabbing');
+      onDragEnd();
+  };
+  const handleClick = () => { onClick({ row, col }); };
 
-  let cellClasses = `border border-gray-400 w-16 h-16 flex items-center justify-center text-2xl font-bold cursor-move select-none rounded-md shadow-sm transition-all duration-300 ease-in-out relative overflow-hidden`;
-  if (isDragging) cellClasses += ' bg-blue-200 ring-2 ring-blue-500 scale-105 z-10';
-  else if (isPotentialTarget) cellClasses += ' bg-green-200 ring-2 ring-green-500';
-  else cellClasses += ' bg-white hover:bg-gray-100';
+  // --- Styling ---
+  let cellClasses = `border border-gray-400 w-16 h-16 flex items-center justify-center
+                   text-2xl font-bold select-none rounded-md shadow-sm
+                   transition-all duration-200 ease-in-out relative overflow-hidden`;
+
+  if (isDraggingSource) {
+    cellClasses += ' bg-blue-200 ring-2 ring-blue-500 scale-105 z-10';
+  } else if (isSelected) {
+    cellClasses += ' bg-indigo-100 ring-2 ring-indigo-500 cursor-pointer';
+  } else if (isPotentialDropTarget) {
+    cellClasses += ' bg-green-200 ring-2 ring-green-500 cursor-pointer';
+  } else {
+    cellClasses += ' bg-white hover:bg-gray-100 cursor-grab';
+  }
+
+  // Add wiggle animation class if needed
+  if (isWiggling) {
+      cellClasses += ' animate-wiggle';
+  }
 
   return (
-    <div draggable onDragStart={handleDragStart} onDragOver={handleDragOver} onDrop={handleDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDragEnd={handleDragEnd} className={cellClasses}>
+    <div
+      draggable
+      onClick={handleClick}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDragEnd={handleDragEnd}
+      className={cellClasses}
+    >
       {isHighlighted && <div className="absolute inset-0 bg-yellow-300 opacity-50 animate-pulse-fade-out" style={{ animationDuration: '1.5s' }}></div>}
       <span className="relative z-10">{letter.toUpperCase()}</span>
     </div>
@@ -113,12 +164,27 @@ function GridCell({ letter, row, col, onDragStart, onDrop, onDragEnter, onDragLe
 }
 
 // --- Word Grid Component ---
-function WordGrid({ grid, selectedCell, hoveredCell, animationState, highlightedCells, onDragStart, onDragEnter, onDragLeave, onDragEnd, onDrop }) {
+function WordGrid({
+    grid,
+    selectedCell,
+    draggedCell,
+    hoveredCell,
+    animationState,
+    highlightedCells,
+    wiggleCells, // Added prop
+    onCellClick,
+    onDragStart,
+    onDragEnter,
+    onDragLeave,
+    onDragEnd,
+    onDrop
+}) {
    const gridRef = useRef(null);
    const cellSize = 64; const gapSize = 4; const totalCellSize = cellSize + gapSize;
 
    const getCellStyle = (r, c) => {
-       if (!animationState.animating || !gridRef.current || !animationState.from || !animationState.to) return {};
+       // ... (getCellStyle logic remains the same) ...
+        if (!animationState.animating || !gridRef.current || !animationState.from || !animationState.to) return {};
        if (animationState.from.row === r && animationState.from.col === c) {
            const dx = (animationState.to.col - c) * totalCellSize; const dy = (animationState.to.row - r) * totalCellSize;
            return { transform: `translate(${dx}px, ${dy}px)`, transition: 'transform 0.3s ease-in-out', zIndex: 10 };
@@ -129,20 +195,35 @@ function WordGrid({ grid, selectedCell, hoveredCell, animationState, highlighted
        return { transition: 'transform 0.3s ease-in-out' };
    };
 
-   // Handle case where grid might be null initially
-   if (!grid) {
-       return <div className="p-2 text-center text-gray-500">Loading Grid...</div>;
-   }
+   if (!grid) return <div className="p-2 text-center text-gray-500">Loading Grid...</div>;
 
    return (
     <div ref={gridRef} className="relative inline-grid gap-1 p-2 bg-gray-200 rounded-lg shadow-md" style={{ gridTemplateColumns: `repeat(${grid[0]?.length || 0}, minmax(0, 1fr))` }} onDragOver={(e) => e.preventDefault()}>
       {grid.map((row, r) => row.map((letter, c) => {
-          const isDragging = selectedCell?.row === r && selectedCell?.col === c;
-          const isPotentialTarget = hoveredCell?.row === r && hoveredCell?.col === c && selectedCell && areAdjacent(selectedCell, {row: r, col: c});
+          const isDraggingSource = draggedCell?.row === r && draggedCell?.col === c;
+          const isSelected = selectedCell?.row === r && selectedCell?.col === c && !isDraggingSource;
+          const sourceCell = isDraggingSource ? draggedCell : selectedCell;
+          const isPotentialDropTarget = sourceCell && !(sourceCell.row === r && sourceCell.col === c) && areAdjacent(sourceCell, {row: r, col: c});
           const isHighlighted = highlightedCells.some(cell => cell.row === r && cell.col === c);
+          // Check if this cell should wiggle
+          const isWiggling = wiggleCells.some(cell => cell.row === r && cell.col === c);
+
           return (
               <div key={`${r}-${c}`} style={getCellStyle(r, c)} className="relative">
-                  <GridCell letter={letter} row={r} col={c} isDragging={isDragging} isPotentialTarget={isPotentialTarget} isHighlighted={isHighlighted} onDragStart={onDragStart} onDragEnter={onDragEnter} onDragLeave={onDragLeave} onDragEnd={onDragEnd} onDrop={onDrop} />
+                  <GridCell
+                    letter={letter} row={r} col={c}
+                    onClick={onCellClick}
+                    isDraggingSource={isDraggingSource}
+                    isSelected={isSelected}
+                    isPotentialDropTarget={isPotentialDropTarget}
+                    isHighlighted={isHighlighted}
+                    isWiggling={isWiggling} // Pass wiggle state
+                    onDragStart={onDragStart}
+                    onDragEnter={onDragEnter}
+                    onDragLeave={onDragLeave}
+                    onDragEnd={onDragEnd}
+                    onDrop={onDrop}
+                  />
               </div>
            );
       }))}
@@ -215,10 +296,7 @@ function ExplorationTreeNode({ node, level = 0 }) {
 
 function ExplorationTreeView({ treeData }) {
     const [isVisible, setIsVisible] = useState(false);
-
-    // Don't render if treeData is not available yet
     if (!treeData) return null;
-
     return (
         <div className="w-full max-w-2xl mt-6 border rounded p-3 bg-white shadow">
              <button onClick={() => setIsVisible(!isVisible)} className="text-indigo-600 hover:text-indigo-800 font-semibold mb-2 w-full text-left">{isVisible ? 'Hide' : 'Show'} Full Move Tree {isVisible ? '▼' : '▶'}</button>
@@ -231,17 +309,15 @@ function ExplorationTreeView({ treeData }) {
 // --- Main App Component ---
 function App() {
   // --- State Variables ---
-  // State for the loaded game data, loading status, and potential errors
-  const [gameData, setGameData] = useState(null); // Initialize gameData as null
-  const [loading, setLoading] = useState(true); // Track loading state
-  const [error, setError] = useState(null); // Track potential loading errors
-  const [level, setLevel] = useState(0); // Store the current level number
-
-  // Game state variables (initialized once gameData is loaded)
+  const [gameData, setGameData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [level, setLevel] = useState(0);
   const [grid, setGrid] = useState(null);
   const [currentPossibleMoves, setCurrentPossibleMoves] = useState([]);
   const [currentDepth, setCurrentDepth] = useState(0);
   const [selectedCell, setSelectedCell] = useState(null);
+  const [draggedCell, setDraggedCell] = useState(null);
   const [hoveredCell, setHoveredCell] = useState(null);
   const [isInvalidMove, setIsInvalidMove] = useState(false);
   const [foundWordsDisplay, setFoundWordsDisplay] = useState([]);
@@ -252,75 +328,51 @@ function App() {
   const [highlightedCells, setHighlightedCells] = useState([]);
   const highlightTimeoutRef = useRef(null);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [wiggleCells, setWiggleCells] = useState([]); // State for wiggling cells
+  const wiggleTimeoutRef = useRef(null); // Ref for wiggle timeout
 
   // --- Effect to Load Game Data ---
   useEffect(() => {
-    // Function to fetch and set game data
     const loadLevelData = async () => {
-        setLoading(true);
-        setError(null);
-        // Get level from query params
+        setLoading(true); setError(null);
         const params = new URLSearchParams(window.location.search);
         const levelParam = params.get('level');
-        const requestedLevel = levelParam ? parseInt(levelParam, 10) : 0; // Default to level 0
-
-        // Basic validation for level number
+        const requestedLevel = levelParam ? parseInt(levelParam, 10) : 0;
         const currentLevel = !isNaN(requestedLevel) && requestedLevel >= 0 ? requestedLevel : 0;
-        setLevel(currentLevel); // Store the validated level
+        setLevel(currentLevel);
 
         try {
-            const response = await fetch(`/levels/${currentLevel}.json`);
-            if (!response.ok) {
-                // Throw an error if the file isn't found or there's another HTTP error
-                throw new Error(`Level ${currentLevel} data not found (HTTP ${response.status})`);
-            }
+            const basePath = ''; // Adjust if deployed in a subdirectory
+            // *** Make sure your JSON files are named correctly (e.g., 0.json, 1.json) ***
+            const response = await fetch(`${basePath}/levels/${currentLevel}.json`);
+            if (!response.ok) throw new Error(`Level ${currentLevel} data not found (HTTP ${response.status})`);
             const data = await response.json();
-            setGameData(data); // Set the loaded game data
-            // Initialize game state based on loaded data
-            setGrid(data.initialGrid);
-            setCurrentPossibleMoves(data.explorationTree || []); // Handle potential empty tree
-            setCurrentDepth(0);
-            setHistory([]); // Clear history for new level
-            // Reset other relevant states
-            setHasDeviated(false);
-            setIsInvalidMove(false);
-            setFoundWordsDisplay([]);
-            setIsGameOver(false);
-
+            setGameData(data); setGrid(data.initialGrid); setCurrentPossibleMoves(data.explorationTree || []);
+            setCurrentDepth(0); setHistory([]); setHasDeviated(false); setIsInvalidMove(false);
+            setFoundWordsDisplay([]); setIsGameOver(false); setSelectedCell(null); setHoveredCell(null); setDraggedCell(null); setWiggleCells([]);
         } catch (err) {
             console.error("Error loading level data:", err);
-            setError(`Failed to load level ${currentLevel}. Please check the level number or try level 0.`);
-            // Optionally load a default level or show an error state
-            setGameData(null); // Ensure gameData is null on error
-            setGrid(null);
-            setCurrentPossibleMoves([]);
+            setError(`Failed to load level ${currentLevel}. Try level 0.`);
+            setGameData(null); setGrid(null); setCurrentPossibleMoves([]);
         } finally {
-            setLoading(false); // Set loading to false whether success or error
+            setLoading(false);
         }
     };
+    loadLevelData();
+  }, []);
 
-    loadLevelData(); // Call the function on component mount
-
-    // No dependencies needed if we only load based on initial URL params
-  }, []); // Empty dependency array means this runs once on mount
-
-  const optimalPathWords = useMemo(() => {
-      return gameData ? findLongestWordChain(gameData.explorationTree) : [];
-  }, [gameData]); // Re-calculate when gameData changes
-
+  // --- Memoized Calculations ---
+  const optimalPathWords = useMemo(() => gameData ? findLongestWordChain(gameData.explorationTree) : [], [gameData]);
   const playerUniqueWordsFound = useMemo(() => {
       const words = new Set();
       history.forEach(state => { if (Array.isArray(state.wordsFormedByMove)) { state.wordsFormedByMove.forEach(word => words.add(word)); } });
       return words;
-  }, [history]); // Depends only on history
-
-  // Get max depth from the loaded game data, provide default if not loaded
+  }, [history]);
   const maxDepthAttainable = gameData ? gameData.maxDepthReached : 0;
-  const minWordLength = gameData ? gameData.minWordLength : 4; // Get min word length or default
-
+  const minWordLength = gameData ? gameData.minWordLength : 4;
 
   // --- Effects ---
-  useEffect(() => { // Check for game over (only if gameData is loaded)
+  useEffect(() => { // Check for game over
       if (gameData && !animationState.animating && currentPossibleMoves.length === 0 && currentDepth > 0) setIsGameOver(true);
       else setIsGameOver(false);
   }, [gameData, currentPossibleMoves, currentDepth, animationState.animating]);
@@ -329,129 +381,184 @@ function App() {
       return () => {
           if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current);
           if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current);
+          if (wiggleTimeoutRef.current) clearTimeout(wiggleTimeoutRef.current);
       };
   }, []);
 
   // --- Event Handlers ---
+
+  // Function to trigger the wiggle animation
+  const triggerWiggle = useCallback((cell1, cell2) => {
+      if (wiggleTimeoutRef.current) clearTimeout(wiggleTimeoutRef.current);
+      setWiggleCells([cell1, cell2]);
+      wiggleTimeoutRef.current = setTimeout(() => {
+          setWiggleCells([]);
+          wiggleTimeoutRef.current = null;
+      }, 500);
+  }, []);
+
+  // Shared logic to perform the swap and update state
+  const performSwap = useCallback((cell1, cell2) => {
+        if (!cell1 || !cell2 || animationState.animating || isGameOver || !gameData || !grid) return;
+
+        setSelectedCell(null); setDraggedCell(null); setHoveredCell(null);
+
+        let matchedNode = null;
+        const moveOption1 = { from: [cell1.row, cell1.col], to: [cell2.row, cell2.col] };
+        const moveOption2 = { from: [cell2.row, cell2.col], to: [cell1.row, cell1.col] };
+
+        if (currentPossibleMoves && currentPossibleMoves.length > 0) {
+            for (const node of currentPossibleMoves) {
+                if (!node.move) continue;
+                const fromMatch1 = node.move.from[0] === moveOption1.from[0] && node.move.from[1] === moveOption1.from[1];
+                const toMatch1 = node.move.to[0] === moveOption1.to[0] && node.move.to[1] === moveOption1.to[1];
+                const fromMatch2 = node.move.from[0] === moveOption2.from[0] && node.move.from[1] === moveOption2.from[1];
+                const toMatch2 = node.move.to[0] === moveOption2.to[0] && node.move.to[1] === moveOption2.to[1];
+                if ((fromMatch1 && toMatch1) || (fromMatch2 && toMatch2)) { matchedNode = node; break; }
+            }
+        }
+
+        if (matchedNode) {
+            const moveMadeCoords = { from: { row: cell1.row, col: cell1.col }, to: { row: cell2.row, col: cell2.col } };
+            const wordsFormedByMove = matchedNode.wordsFormed || [];
+            let isDeviatedMove = false;
+            let maxDepthPossibleFromCurrentState = -1;
+            if (currentPossibleMoves && currentPossibleMoves.length > 0) {
+                const validNodes = currentPossibleMoves.filter(node => typeof node.maxDepthReached === 'number');
+                if (validNodes.length > 0) maxDepthPossibleFromCurrentState = Math.max(...validNodes.map(node => node.maxDepthReached));
+            }
+            if (typeof matchedNode.maxDepthReached === 'number' && matchedNode.maxDepthReached < maxDepthPossibleFromCurrentState) {
+                isDeviatedMove = true;
+            }
+            setHasDeviated(isDeviatedMove);
+
+            setHistory(prevHistory => [...prevHistory, { grid, currentPossibleMoves, currentDepth, moveMade: moveMadeCoords, wordsFormedByMove }]);
+            setAnimationState({ animating: true, from: cell1, to: cell2 });
+            setFoundWordsDisplay(wordsFormedByMove);
+            setIsInvalidMove(false);
+            if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current);
+            if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current);
+            setHighlightedCells([]);
+
+            animationTimeoutRef.current = setTimeout(() => {
+                const newGrid = grid.map(row => [...row]);
+                const temp = newGrid[cell1.row][cell1.col];
+                newGrid[cell1.row][cell1.col] = newGrid[cell2.row][cell2.col];
+                newGrid[cell2.row][cell2.col] = temp;
+
+                setGrid(newGrid);
+                setCurrentPossibleMoves(matchedNode.nextMoves || []);
+                setCurrentDepth(currentDepth + 1);
+                setAnimationState({ animating: false, from: null, to: null });
+                animationTimeoutRef.current = null;
+
+                let allCoords = [];
+                wordsFormedByMove.forEach(word => {
+                    const coords = findWordCoordinates(newGrid, word, matchedNode.move);
+                    allCoords = [...allCoords, ...coords];
+                });
+                const uniqueCoords = Array.from(new Map(allCoords.map(item => [`${item.row}-${item.col}`, item])).values());
+                setHighlightedCells(uniqueCoords);
+
+                highlightTimeoutRef.current = setTimeout(() => {
+                    setHighlightedCells([]);
+                    highlightTimeoutRef.current = null;
+                }, 1200);
+
+            }, 300);
+
+        } else {
+            setIsInvalidMove(true);
+            setHasDeviated(true);
+            setFoundWordsDisplay(['Invalid Move! No new word found!']);
+            triggerWiggle(cell1, cell2);
+        }
+  }, [grid, currentPossibleMoves, currentDepth, animationState.animating, isGameOver, gameData, history, triggerWiggle]);
+
   const handleDragStart = useCallback((cellCoords) => {
-    if (animationState.animating || isGameOver || !gameData) return; // Prevent if animating, game over, or not loaded
-    if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current);
-    setHighlightedCells([]); setSelectedCell(cellCoords); setIsInvalidMove(false);
-    setFoundWordsDisplay([]); setHoveredCell(null);
+    if (animationState.animating || isGameOver || !gameData) return;
+    setDraggedCell(cellCoords);
+    setSelectedCell(null);
+    setIsInvalidMove(false); setFoundWordsDisplay([]); setHoveredCell(null);
+    if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current); setHighlightedCells([]);
+    if (wiggleTimeoutRef.current) clearTimeout(wiggleTimeoutRef.current); setWiggleCells([]);
   }, [animationState.animating, isGameOver, gameData]);
 
-  const handleDragEnter = useCallback((cellCoords) => { if (selectedCell && (selectedCell.row !== cellCoords.row || selectedCell.col !== cellCoords.col)) setHoveredCell(cellCoords); }, [selectedCell]);
-  const handleDragLeave = useCallback((cellCoords) => { if (hoveredCell && hoveredCell.row === cellCoords.row && hoveredCell.col === cellCoords.col) setHoveredCell(null); }, [hoveredCell]);
-  const handleDragEnd = useCallback(() => { setSelectedCell(null); setHoveredCell(null); }, []);
+  const handleDragEnter = useCallback((cellCoords) => {
+      if (draggedCell && (draggedCell.row !== cellCoords.row || draggedCell.col !== cellCoords.col)) {
+          if (areAdjacent(draggedCell, cellCoords)) setHoveredCell(cellCoords);
+          else setHoveredCell(null);
+      }
+  }, [draggedCell]);
+
+  const handleDragLeave = useCallback((cellCoords) => {
+      if (hoveredCell && hoveredCell.row === cellCoords.row && hoveredCell.col === cellCoords.col) setHoveredCell(null);
+  }, [hoveredCell]);
+
+  const handleDragEnd = useCallback(() => {
+    setDraggedCell(null); setHoveredCell(null);
+  }, []);
 
   const handleDrop = useCallback((targetCellCoords) => {
-    if (!selectedCell || animationState.animating || isGameOver || !gameData || !grid) return; // Add checks for gameData and grid
+    if (!draggedCell) return;
+
+    const sourceCell = draggedCell;
     setHoveredCell(null);
-    if (selectedCell.row === targetCellCoords.row && selectedCell.col === targetCellCoords.col) { setSelectedCell(null); return; }
-    if (!areAdjacent(selectedCell, targetCellCoords)) { setIsInvalidMove(true); setFoundWordsDisplay(['Must swap adjacent cells.']); setSelectedCell(null); return; }
+    // draggedCell is cleared in handleDragEnd
 
-    let matchedNode = null;
-    const moveOption1 = { from: [selectedCell.row, selectedCell.col], to: [targetCellCoords.row, targetCellCoords.col] };
-    const moveOption2 = { from: [targetCellCoords.row, targetCellCoords.col], to: [selectedCell.row, selectedCell.col] };
+    if (sourceCell.row === targetCellCoords.row && sourceCell.col === targetCellCoords.col) return;
 
-    if (currentPossibleMoves && currentPossibleMoves.length > 0) {
-        for (const node of currentPossibleMoves) {
-            if (!node.move) continue;
-            const fromMatch1 = node.move.from[0] === moveOption1.from[0] && node.move.from[1] === moveOption1.from[1];
-            const toMatch1 = node.move.to[0] === moveOption1.to[0] && node.move.to[1] === moveOption1.to[1];
-            const fromMatch2 = node.move.from[0] === moveOption2.from[0] && node.move.from[1] === moveOption2.from[1];
-            const toMatch2 = node.move.to[0] === moveOption2.to[0] && node.move.to[1] === moveOption2.to[1];
-            if ((fromMatch1 && toMatch1) || (fromMatch2 && toMatch2)) { matchedNode = node; break; }
-        }
+    if (!areAdjacent(sourceCell, targetCellCoords)) {
+        setIsInvalidMove(true); setFoundWordsDisplay(['Must swap adjacent cells.']);
+        triggerWiggle(sourceCell, targetCellCoords);
+        return;
     }
+    performSwap(sourceCell, targetCellCoords);
 
-    if (matchedNode) {
-        const moveMadeCoords = { from: { row: selectedCell.row, col: selectedCell.col }, to: { row: targetCellCoords.row, col: targetCellCoords.col } };
-        const wordsFormedByMove = matchedNode.wordsFormed || [];
-        let isDeviatedMove = false;
-        let maxDepthPossibleFromCurrentState = -1;
-        if (currentPossibleMoves && currentPossibleMoves.length > 0) {
-             const validNodes = currentPossibleMoves.filter(node => typeof node.maxDepthReached === 'number');
-             if (validNodes.length > 0) maxDepthPossibleFromCurrentState = Math.max(...validNodes.map(node => node.maxDepthReached));
-        }
-        if (typeof matchedNode.maxDepthReached === 'number' && matchedNode.maxDepthReached < maxDepthPossibleFromCurrentState) {
-            isDeviatedMove = true;
-        }
-        setHasDeviated(isDeviatedMove);
+  }, [draggedCell, performSwap, triggerWiggle]);
 
-        setHistory(prevHistory => [...prevHistory, { grid, currentPossibleMoves, currentDepth, moveMade: moveMadeCoords, wordsFormedByMove }]);
-        setAnimationState({ animating: true, from: selectedCell, to: targetCellCoords });
-        setFoundWordsDisplay(wordsFormedByMove);
-        setIsInvalidMove(false);
-        if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current);
-        if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current);
-        setHighlightedCells([]);
+  const handleCellClick = useCallback((cellCoords) => {
+      if (animationState.animating || isGameOver || !gameData || draggedCell) return;
 
-        animationTimeoutRef.current = setTimeout(() => {
-            const newGrid = grid.map(row => [...row]); // Use current grid state
-            const temp = newGrid[selectedCell.row][selectedCell.col];
-            newGrid[selectedCell.row][selectedCell.col] = newGrid[targetCellCoords.row][targetCellCoords.col];
-            newGrid[targetCellCoords.row][targetCellCoords.col] = temp;
+      setIsInvalidMove(false); setFoundWordsDisplay([]);
+      if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current); setHighlightedCells([]);
+      if (wiggleTimeoutRef.current) clearTimeout(wiggleTimeoutRef.current); setWiggleCells([]);
 
-            setGrid(newGrid); // Update grid state
-            setCurrentPossibleMoves(matchedNode.nextMoves || []);
-            setCurrentDepth(currentDepth + 1);
-            setAnimationState({ animating: false, from: null, to: null });
-            setSelectedCell(null);
-            animationTimeoutRef.current = null;
-
-            let allCoords = [];
-            wordsFormedByMove.forEach(word => {
-                const coords = findWordCoordinates(newGrid, word, matchedNode.move); // Use the updated grid
-                allCoords = [...allCoords, ...coords];
-            });
-            const uniqueCoords = Array.from(new Map(allCoords.map(item => [`${item.row}-${item.col}`, item])).values());
-            setHighlightedCells(uniqueCoords);
-
-            highlightTimeoutRef.current = setTimeout(() => {
-                setHighlightedCells([]);
-                highlightTimeoutRef.current = null;
-            }, 1200);
-
-        }, 300);
-
-    } else {
-        setIsInvalidMove(true);
-        setHasDeviated(true);
-        setFoundWordsDisplay(['Invalid Move! No new word found!']);
-        setSelectedCell(null);
-    }
-
-  }, [selectedCell, grid, currentPossibleMoves, currentDepth, animationState.animating, isGameOver, gameData]); // Added gameData and grid dependencies
+      if (!selectedCell) {
+          setSelectedCell(cellCoords);
+      } else {
+          const firstCell = selectedCell;
+          if (firstCell.row === cellCoords.row && firstCell.col === cellCoords.col) {
+              setSelectedCell(null); // Deselect
+          } else if (areAdjacent(firstCell, cellCoords)) {
+              performSwap(firstCell, cellCoords); // Attempt swap
+          } else {
+              setSelectedCell(cellCoords); // Select new cell
+          }
+      }
+  }, [selectedCell, animationState.animating, isGameOver, gameData, performSwap, draggedCell]);
 
 
   const handleReset = useCallback(() => {
-     // Reset based on the currently loaded gameData
-     if (!gameData) {
-         console.error("Cannot reset: Game data not loaded.");
-         setError("Cannot reset game. Data failed to load.");
-         return;
-     }
+     if (!gameData) { console.error("Cannot reset: Game data not loaded."); setError("Cannot reset game. Data failed to load."); return; }
      if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current);
      if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current);
-     setGrid(gameData.initialGrid);
-     setCurrentPossibleMoves(gameData.explorationTree || []);
-     setCurrentDepth(0);
-     setSelectedCell(null); setHoveredCell(null); setIsInvalidMove(false); setFoundWordsDisplay([]);
+     if (wiggleTimeoutRef.current) clearTimeout(wiggleTimeoutRef.current);
+     setGrid(gameData.initialGrid); setCurrentPossibleMoves(gameData.explorationTree || []); setCurrentDepth(0);
+     setSelectedCell(null); setHoveredCell(null); setDraggedCell(null); setIsInvalidMove(false); setFoundWordsDisplay([]);
      setHasDeviated(false); setAnimationState({ animating: false, from: null, to: null }); setHistory([]);
-     setHighlightedCells([]); setIsGameOver(false);
-     setError(null); // Clear any previous errors on reset
+     setHighlightedCells([]); setIsGameOver(false); setError(null); setWiggleCells([]);
      console.log("Game reset to initial state for level", level);
-  }, [gameData, level]); // Depend on gameData and level
+  }, [gameData, level]);
 
   const handleBack = useCallback(() => {
-      if (history.length === 0 || animationState.animating || isGameOver || !gameData) return; // Add gameData check
+      if (history.length === 0 || animationState.animating || isGameOver || !gameData) return;
       if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current);
       if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current);
+      if (wiggleTimeoutRef.current) clearTimeout(wiggleTimeoutRef.current);
 
       const previousState = history[history.length - 1];
       const moveToundo = previousState.moveMade;
-      // Add check for previousState.grid existence
       if (!moveToundo || !previousState.grid) { console.error("Cannot undo: History data missing.", previousState); handleReset(); return; }
 
       let previousStateWasDeviated = false;
@@ -486,26 +593,27 @@ function App() {
       setAnimationState({ animating: true, from: moveToundo.to, to: moveToundo.from });
       setIsInvalidMove(false);
       setFoundWordsDisplay([]); setHighlightedCells([]); setIsGameOver(false);
+      setSelectedCell(null); setDraggedCell(null); setHoveredCell(null); setWiggleCells([]);
 
       animationTimeoutRef.current = setTimeout(() => {
-          setGrid(previousState.grid); // Use grid from history
+          setGrid(previousState.grid);
           setCurrentPossibleMoves(previousState.currentPossibleMoves);
           setCurrentDepth(previousState.currentDepth);
           setHistory(prevHistory => prevHistory.slice(0, -1));
           setAnimationState({ animating: false, from: null, to: null });
-          setSelectedCell(null); setHoveredCell(null);
           setHasDeviated(previousStateWasDeviated);
           animationTimeoutRef.current = null;
           console.log("Went back to previous state. Depth:", previousState.currentDepth, "Deviated:", previousStateWasDeviated);
       }, 300);
 
-  }, [history, animationState.animating, isGameOver, handleReset, gameData]); // Added gameData dependency
+  }, [history, animationState.animating, isGameOver, handleReset, gameData]);
 
   // --- Render Helper for Word Chain ---
   const renderWordChain = () => {
-      if (history.length === 0) return <div className="h-8 mt-4"></div>;
+      if (history.length === 0) return <div className="min-h-[2rem] mt-4"></div>; // Use min-h instead of h
+      // Removed fixed height, overflow, whitespace-nowrap, scrollbar classes
       return (
-          <div className="flex flex-wrap items-center justify-center mt-4 space-x-2 text-lg px-4 h-8 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 pb-2">
+          <div className="flex flex-wrap items-center justify-center mt-4 space-x-2 text-lg px-4 pb-2">
               {history.map((histEntry, index) => (
                   <React.Fragment key={index}>
                       <span className="px-2 py-1 bg-green-100 text-green-800 rounded font-medium">
@@ -521,25 +629,14 @@ function App() {
   };
 
   // --- Conditional Rendering for Loading/Error States ---
-  if (loading) {
-      return <div className="flex justify-center items-center min-h-screen">Loading Level {level}...</div>;
-  }
-
-  if (error) {
-      return (
-          <div className="flex flex-col justify-center items-center min-h-screen text-red-600">
-              <p>Error: {error}</p>
-              <a href="/" className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
-                  Go to Level 0
-              </a>
-          </div>
-      );
-  }
-
-  // Render game only if gameData is loaded successfully
-  if (!gameData) {
-       return <div className="flex justify-center items-center min-h-screen text-gray-500">Game data could not be loaded.</div>;
-  }
+  if (loading) return <div className="flex justify-center items-center min-h-screen">Loading Level {level}...</div>;
+  if (error) return (
+      <div className="flex flex-col justify-center items-center min-h-screen text-red-600">
+          <p>Error: {error}</p>
+          <a href="/" className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Go to Level 0</a>
+      </div>
+  );
+  if (!gameData) return <div className="flex justify-center items-center min-h-screen text-gray-500">Game data could not be loaded.</div>;
 
 
   // --- Main Render ---
@@ -549,7 +646,7 @@ function App() {
        <h2 className="text-2xl mb-2 text-gray-700">Level {level}</h2>
        <div className="text-center max-w-xl mb-4 text-sm text-gray-600">
             <p className="font-semibold mb-1">How to Play:</p>
-            <p>Drag and drop adjacent letters to swap them. Find the optimal move sequence to win! Every move <i>must</i> make a new {minWordLength}-letter word.</p>
+            <p>Click adjacent cells or drag-and-drop letters to swap them. Find the optimal move sequence to win! Every move <i>must</i> make a new {minWordLength}-letter word.</p>
        </div>
        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg shadow text-center min-w-[300px] min-h-[150px] flex flex-col justify-center">
            <div>
@@ -558,7 +655,7 @@ function App() {
                    {hasDeviated ? "Deviated from optimal path!" : "On the optimal path"}
                </p>
                <div className="h-6 mt-2">
-                   {isInvalidMove && <p className="text-red-600 font-semibold">{Array.isArray(foundWordsDisplay) && foundWordsDisplay.length > 0 ? foundWordsDisplay[0] : 'Invalid Move! No new word found!'}</p>}
+                   {isInvalidMove && <p className="text-red-600 font-semibold">{Array.isArray(foundWordsDisplay) && foundWordsDisplay.length > 0 ? foundWordsDisplay[0] : 'Invalid Move!'}</p>}
                </div>
                <div className="h-6">
                    {foundWordsDisplay.length > 0 && !animationState.animating && !isInvalidMove && <p className="text-green-700 font-semibold">Words Found: {foundWordsDisplay.join(', ').toUpperCase()}</p>}
@@ -569,8 +666,21 @@ function App() {
            </div>
        </div>
        <div className="inline-flex flex-col items-center mb-4">
-           {/* Pass grid state to WordGrid */}
-           <WordGrid grid={grid} selectedCell={selectedCell} hoveredCell={hoveredCell} animationState={animationState} highlightedCells={highlightedCells} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDragEnd={handleDragEnd} onDrop={handleDrop} />
+           <WordGrid
+                grid={grid}
+                selectedCell={selectedCell}
+                draggedCell={draggedCell}
+                hoveredCell={hoveredCell}
+                animationState={animationState}
+                highlightedCells={highlightedCells}
+                wiggleCells={wiggleCells} // Pass wiggle state down
+                onCellClick={handleCellClick}
+                onDragStart={handleDragStart}
+                onDragEnter={handleDragEnter}
+                onDragLeave={handleDragLeave}
+                onDragEnd={handleDragEnd}
+                onDrop={handleDrop}
+            />
            <ProgressBar currentScore={currentDepth} maxScore={maxDepthAttainable} />
        </div>
        <div className="flex space-x-4 mt-6">
@@ -578,10 +688,31 @@ function App() {
            <button onClick={handleReset} disabled={animationState.animating} className={`px-4 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed`}>Reset Game</button>
        </div>
        {renderWordChain()}
-       {/* Pass explorationTree from gameData state */}
        <ExplorationTreeView treeData={gameData.explorationTree} />
        {isGameOver && <EndGamePanel score={currentDepth} maxScore={maxDepthAttainable} playerWords={playerUniqueWordsFound} optimalPathWords={optimalPathWords} onReset={handleReset} />}
-       <style>{` @keyframes pulse-fade-out { 0% { opacity: 0.6; transform: scale(1); } 20% { opacity: 0.8; transform: scale(1.05); } 80% { opacity: 0.8; transform: scale(1.05); } 100% { opacity: 0; transform: scale(1); } } .animate-pulse-fade-out { animation: pulse-fade-out 1.5s ease-in-out forwards; } .scrollbar-thin { scrollbar-width: thin; scrollbar-color: #9ca3af #e5e7eb; } .scrollbar-thin::-webkit-scrollbar { height: 6px; width: 6px; } .scrollbar-thin::-webkit-scrollbar-track { background: #e5e7eb; border-radius: 3px; } .scrollbar-thin::-webkit-scrollbar-thumb { background-color: #9ca3af; border-radius: 3px; border: 1px solid #e5e7eb; } `}</style>
+       {/* Add CSS for animations */}
+       <style>{`
+            @keyframes pulse-fade-out { 0% { opacity: 0.6; transform: scale(1); } 20% { opacity: 0.8; transform: scale(1.05); } 80% { opacity: 0.8; transform: scale(1.05); } 100% { opacity: 0; transform: scale(1); } }
+            .animate-pulse-fade-out { animation: pulse-fade-out 1.5s ease-in-out forwards; }
+
+            /* Wiggle Animation */
+            @keyframes wiggle {
+              0%, 100% { transform: translateX(0); }
+              25% { transform: translateX(-4px); }
+              50% { transform: translateX(4px); }
+              75% { transform: translateX(-4px); }
+            }
+            .animate-wiggle {
+              animation: wiggle 0.4s ease-in-out;
+              background-color: #fecaca; /* Optional: Add red background during wiggle */
+            }
+
+            /* Scrollbar styling (kept in case needed elsewhere, but removed from word chain) */
+            .scrollbar-thin { scrollbar-width: thin; scrollbar-color: #9ca3af #e5e7eb; }
+            .scrollbar-thin::-webkit-scrollbar { height: 6px; width: 6px; }
+            .scrollbar-thin::-webkit-scrollbar-track { background: #e5e7eb; border-radius: 3px; }
+            .scrollbar-thin::-webkit-scrollbar-thumb { background-color: #9ca3af; border-radius: 3px; border: 1px solid #e5e7eb; }
+       `}</style>
     </div>
   );
 }
