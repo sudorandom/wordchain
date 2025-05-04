@@ -1,0 +1,102 @@
+{
+  "initialGrid": [
+    [
+      "k",
+      "k",
+      "i",
+      "d"
+    ],
+    [
+      "a",
+      "m",
+      "g",
+      "s"
+    ],
+    [
+      "f",
+      "f",
+      "v",
+      "c"
+    ],
+    [
+      "n",
+      "p",
+      "u",
+      "o"
+    ]
+  ],
+  "minWordLength": 4,
+  "requiredMinTurns": 3,
+  "requiredMaxTurns": 7,
+  "maxDepthReached": 3,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          0,
+          2
+        ],
+        "to": [
+          1,
+          2
+        ]
+      },
+      "wordsFormed": [
+        "amis"
+      ],
+      "maxDepthReached": 2,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              3
+            ],
+            "to": [
+              1,
+              3
+            ]
+          },
+          "wordsFormed": [
+            "amid"
+          ],
+          "maxDepthReached": 1,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  0
+                ],
+                "to": [
+                  1,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "maid"
+              ],
+              "maxDepthReached": 0
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              1,
+              1
+            ],
+            "to": [
+              1,
+              2
+            ]
+          },
+          "wordsFormed": [
+            "aims"
+          ],
+          "maxDepthReached": 0
+        }
+      ]
+    }
+  ]
+}

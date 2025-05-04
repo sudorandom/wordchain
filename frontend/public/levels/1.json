@@ -1,0 +1,121 @@
+{
+    "initialGrid": [
+      [
+        "z",
+        "h",
+        "n",
+        "x"
+      ],
+      [
+        "o",
+        "o",
+        "b",
+        "o"
+      ],
+      [
+        "t",
+        "e",
+        "p",
+        "p"
+      ],
+      [
+        "d",
+        "e",
+        "h",
+        "f"
+      ]
+    ],
+    "minWordLength": 4,
+    "requiredMinTurns": 5,
+    "maxDepthReached": 5,
+    "explorationTree": [
+      {
+        "move": {
+          "from": [
+            2,
+            1
+          ],
+          "to": [
+            2,
+            2
+          ]
+        },
+        "wordsFormed": [
+          "hope"
+        ],
+        "maxDepthReached": 4,
+        "nextMoves": [
+          {
+            "move": {
+              "from": [
+                0,
+                1
+              ],
+              "to": [
+                0,
+                2
+              ]
+            },
+            "wordsFormed": [
+              "nope"
+            ],
+            "maxDepthReached": 3,
+            "nextMoves": [
+              {
+                "move": {
+                  "from": [
+                    2,
+                    0
+                  ],
+                  "to": [
+                    2,
+                    1
+                  ]
+                },
+                "wordsFormed": [
+                  "note"
+                ],
+                "maxDepthReached": 2,
+                "nextMoves": [
+                  {
+                    "move": {
+                      "from": [
+                        2,
+                        1
+                      ],
+                      "to": [
+                        3,
+                        1
+                      ]
+                    },
+                    "wordsFormed": [
+                      "peep"
+                    ],
+                    "maxDepthReached": 1,
+                    "nextMoves": [
+                      {
+                        "move": {
+                          "from": [
+                            2,
+                            0
+                          ],
+                          "to": [
+                            3,
+                            0
+                          ]
+                        },
+                        "wordsFormed": [
+                          "deep"
+                        ],
+                        "maxDepthReached": 0
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
