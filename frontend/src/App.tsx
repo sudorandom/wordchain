@@ -728,7 +728,7 @@ function App() {
   return (
     <div className="flex flex-col items-center justify-start min-h-screen bg-gray-50 p-4 font-sans pt-8">
        <h1 className="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-flow font-bungee">
-            Word Chains
+            Word Chain
        </h1>
        <h2 className="text-2xl mb-2 text-gray-700">Level {level}</h2>
        <div className="text-center max-w-xl mb-2 text-sm text-gray-600">
