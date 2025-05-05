@@ -1,0 +1,92 @@
+{
+  "initialGrid": [
+    [
+      "o",
+      "o",
+      "e",
+      "t"
+    ],
+    [
+      "p",
+      "l",
+      "r",
+      "q"
+    ]
+  ],
+  "minWordLength": 4,
+  "requiredMinTurns": 4,
+  "requiredMaxTurns": 10,
+  "maxDepthReached": 4,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          0,
+          0
+        ],
+        "to": [
+          1,
+          0
+        ]
+      },
+      "wordsFormed": [
+        "poet"
+      ],
+      "maxDepthReached": 3,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              2
+            ],
+            "to": [
+              1,
+              2
+            ]
+          },
+          "wordsFormed": [
+            "port"
+          ],
+          "maxDepthReached": 2,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  0,
+                  1
+                ],
+                "to": [
+                  0,
+                  2
+                ]
+              },
+              "wordsFormed": [
+                "prot"
+              ],
+              "maxDepthReached": 1,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      1
+                    ],
+                    "to": [
+                      1,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "plot"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

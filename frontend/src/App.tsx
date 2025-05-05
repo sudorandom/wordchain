@@ -150,7 +150,7 @@ function GridCell({
       onDragEnd={handleDragEnd}
       className={cellClasses}
     >
-      {isHighlighted && <div className="absolute inset-0 bg-yellow-300 animate-pulse-fade-out-short"></div>}
+      {isHighlighted && <div className="absolute inset-0 bg-blue-300 animate-pulse-fade-out-short"></div>}
       {isHintHighlighted && <div className="absolute inset-0 bg-blue-300 animate-pulse-fade-out-long"></div>}
       <span className="relative z-10">{letter.toUpperCase()}</span>
     </div>
@@ -284,7 +284,7 @@ function ExplorationTreeNode({ node, level = 0 }) {
                 <span className="text-xs text-gray-500">(Depth Left: {node.maxDepthReached})</span>
             </div>
             {isExpanded && hasChildren && (
-                <div className="border-l-2 border-gray-300 pl-2 ml-2">
+                <div className="border-l-2 border-gray-300">
                     {node.nextMoves.map((childNode, index) => <ExplorationTreeNode key={`${childNode.move?.from?.join('-')}-${childNode.move?.to?.join('-')}-${index}`} node={childNode} level={level + 1} />)}
                 </div>
             )}
@@ -780,6 +780,8 @@ function App() {
             {/* Progress Bar and Buttons Container */}
             <div className="w-full flex items-center mt-2">
                 <ProgressBar currentScore={currentDepth} maxScore={maxDepthAttainable} />
+            </div>
+            <div className="w-full flex items-center mt-2">
                 <div className="flex space-x-1 ml-2">
                     <button onClick={handleBack} disabled={history.length === 0 || animationState.animating || isGameOver} className={`p-2 bg-gray-200 text-gray-700 rounded-md shadow hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed`} title="Back (Undo last move)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="M16 18 L10 12 L16 6 Z"/><path d="M7 18 L7 6" strokeWidth="2"/></svg>

@@ -15,14 +15,17 @@ import (
 	"maps"
 )
 
-//go:embed data/4-letter.txt
+//go:embed data/dictionary.txt
 var wordlistString string // Embed the word list file
 
+//go:embed data/top-1000.txt
+var simpleWordlistString string // Embed the word list file
+
 // --- Game Configuration ---
-const gridRows = 4 // Grid dimensions
+const gridRows = 2 // Grid dimensions
 const gridCols = 4
 const minWordLength = 4 // Minimum length of a word to be considered valid
-const requiredMinTurns = 5
+const requiredMinTurns = 4
 const requiredMaxTurns = 10 // Maximum depth to explore
 
 // --- Core Data Structures ---
@@ -170,8 +173,8 @@ func copyGrid(grid Grid) Grid {
 	if rows == 0 {
 		return Grid{} // Return an empty grid, not nil
 	}
-	cols := len(grid[0])
-	if cols == 0 {
+	// Check if grid[0] exists before accessing its length
+	if len(grid[0]) == 0 {
 		// Handle case of rows with zero columns
 		newGrid := make(Grid, rows)
 		for r := range newGrid {
@@ -179,6 +182,7 @@ func copyGrid(grid Grid) Grid {
 		}
 		return newGrid
 	}
+	cols := len(grid[0])
 
 	newGrid := make(Grid, rows)
 	for r := range grid {
@@ -203,7 +207,12 @@ func applyMove(grid Grid, move Move) Grid {
 	if rows == 0 {
 		return newGrid // Return the empty grid copy
 	}
+	// Check if newGrid[0] exists before accessing its length
+	if len(newGrid[0]) == 0 {
+		return newGrid // Return the grid copy if columns are empty
+	}
 	cols := len(newGrid[0])
+
 	if !(c1.Row >= 0 && c1.Row < rows && c1.Col >= 0 && c1.Col < cols &&
 		c2.Row >= 0 && c2.Row < rows && c2.Col >= 0 && c2.Col < cols) {
 		fmt.Printf("Warning: Attempted swap with out-of-bounds coordinates: %v\n", move)
@@ -226,10 +235,11 @@ func findNewWords(newGrid Grid, move Move, dict Dictionary, foundWordsBeforeMove
 	if rows == 0 {
 		return []string{} // No words in an empty grid
 	}
-	cols := len(newGrid[0])
-	if cols == 0 {
+	// Check if newGrid[0] exists before accessing its length
+	if len(newGrid[0]) == 0 {
 		return []string{} // No words if columns are empty
 	}
+	cols := len(newGrid[0])
 
 	c1 := move.Cell1
 	c2 := move.Cell2
@@ -246,32 +256,43 @@ func findNewWords(newGrid Grid, move Move, dict Dictionary, foundWordsBeforeMove
 	}
 
 	// --- Check Rows affected by the swap ---
-	rowsToCheck := map[int]struct{}{c1.Row: {}} // Start with the row of the first cell
+	// Use a map to avoid checking the same row twice if the swap is vertical
+	rowsToCheck := map[int]struct{}{c1.Row: {}}
 	if c1.Row != c2.Row {
-		rowsToCheck[c2.Row] = struct{}{} // Add the second cell's row if different
+		rowsToCheck[c2.Row] = struct{}{}
 	}
+
 	for r := range rowsToCheck {
 		// Basic bounds check for the row index
 		if r < 0 || r >= rows {
+			continue
+		}
+		// Ensure the row itself is valid before accessing it
+		if r >= len(newGrid) {
 			continue
 		}
 		rowStr := string(newGrid[r])
 		// Iterate through all possible substring lengths and starting positions
 		for length := minWordLength; length <= cols; length++ {
 			for start := 0; start <= cols-length; start++ {
-				sub := rowStr[start : start+length]
-				if isNewWord(sub) {
-					newlyFound[sub] = struct{}{}
+				// Boundary check for substring slice
+				if start+length <= len(rowStr) {
+					sub := rowStr[start : start+length]
+					if isNewWord(sub) {
+						newlyFound[sub] = struct{}{}
+					}
 				}
 			}
 		}
 	}
 
 	// --- Check Columns affected by the swap ---
-	colsToCheck := map[int]struct{}{c1.Col: {}} // Start with the column of the first cell
+	// Use a map to avoid checking the same column twice if the swap is horizontal
+	colsToCheck := map[int]struct{}{c1.Col: {}}
 	if c1.Col != c2.Col {
-		colsToCheck[c2.Col] = struct{}{} // Add the second cell's column if different
+		colsToCheck[c2.Col] = struct{}{}
 	}
+
 	for c := range colsToCheck {
 		// Basic bounds check for the column index
 		if c < 0 || c >= cols {
@@ -279,26 +300,37 @@ func findNewWords(newGrid Grid, move Move, dict Dictionary, foundWordsBeforeMove
 		}
 		// Build the column string safely
 		var colBuilder strings.Builder
-		colBuilder.Grow(rows) // Pre-allocate approximate size
-		for rIdx := range rows {
+		colBuilder.Grow(rows)                // Pre-allocate approximate size
+		for rIdx := 0; rIdx < rows; rIdx++ { // Iterate using index up to rows
 			// Double-check indices are valid before accessing newGrid
 			if rIdx < len(newGrid) && c < len(newGrid[rIdx]) {
 				colBuilder.WriteRune(newGrid[rIdx][c])
 			} else {
-				// This indicates an inconsistent grid structure, should ideally not happen.
+				// This indicates an inconsistent grid structure or out-of-bounds access.
 				fmt.Printf("Warning: Grid inconsistency detected accessing [%d][%d] while building column string.\n", rIdx, c)
-				break // Stop building this column string
+				// Decide how to handle: break, continue, or return error? Breaking seems safest.
+				colBuilder.Reset() // Reset builder as the string is incomplete/invalid
+				break
 			}
 		}
+
+		// If the builder was reset due to error, skip checking this column
+		if colBuilder.Len() == 0 && rows > 0 {
+			continue
+		}
+
 		colStr := colBuilder.String()
 
 		// Check substrings only if the column string is long enough
 		if len(colStr) >= minWordLength {
 			for length := minWordLength; length <= len(colStr); length++ {
 				for start := 0; start <= len(colStr)-length; start++ {
-					sub := colStr[start : start+length]
-					if isNewWord(sub) {
-						newlyFound[sub] = struct{}{}
+					// Boundary check for substring slice
+					if start+length <= len(colStr) {
+						sub := colStr[start : start+length]
+						if isNewWord(sub) {
+							newlyFound[sub] = struct{}{}
+						}
 					}
 				}
 			}
@@ -347,16 +379,17 @@ func explorePaths(currentState GameState, wordMap Dictionary, pathVisited map[st
 	if rows == 0 {
 		return nil, 0
 	}
-	cols := len(currentState.Grid[0])
-	if cols == 0 {
-		return nil, 0
+	// Check if currentState.Grid[0] exists before accessing its length
+	if len(currentState.Grid[0]) == 0 {
+		return nil, 0 // Cannot explore if columns are empty
 	}
+	cols := len(currentState.Grid[0])
 
 	// --- Explore Neighbors ---
 	// Iterate through all possible adjacent swaps (horizontal and vertical).
 	// Only check right and down neighbors to avoid duplicate swaps (e.g., (0,0)<->(0,1) and (0,1)<->(0,0)).
-	for r := range rows {
-		for c := range cols {
+	for r := 0; r < rows; r++ { // Use explicit loop condition
+		for c := 0; c < cols; c++ { // Use explicit loop condition
 			currentCell := Coordinates{Row: r, Col: c}
 			neighbors := []Coordinates{}
 			// Check right neighbor
@@ -459,16 +492,27 @@ func main() {
 	wordList := strings.Fields(wordlistString)
 	wordlistString = "" // Free memory early
 
+	simpleWordList := strings.Fields(simpleWordlistString)
+	simpleWordlistString = "" // Free memory early
+
 	wordMap := make(Dictionary, len(wordList)/2) // Pre-allocate approximate size
 	validWordCount := 0
 	for _, word := range wordList {
 		lowerWord := strings.ToLower(word)
-		// Filter by length *during* loading
 		if len(lowerWord) >= minWordLength {
 			wordMap[lowerWord] = struct{}{}
 			validWordCount++
 		}
 	}
+
+	simpleWordMap := make(Dictionary, len(simpleWordList)/2) // Pre-allocate approximate size
+	for _, word := range simpleWordList {
+		lowerWord := strings.ToLower(word)
+		if len(lowerWord) >= minWordLength {
+			simpleWordMap[lowerWord] = struct{}{}
+		}
+	}
+
 	fmt.Printf("Dictionary loaded with %d words (length >= %d).\n", validWordCount, minWordLength)
 	fmt.Printf("Grid size: %d x %d\n", gridRows, gridCols)
 	fmt.Printf("Minimum word length: %d\n", minWordLength)
@@ -477,16 +521,18 @@ func main() {
 
 	// --- Grid Generation and Search Loop ---
 	gridAttempts := 0
-	validGridsFound := 0       // Count how many grids meet the criteria
-	maxGridsToGenerate := 1000 // Limit the number of attempts
+	validGridsFound := 0           // Count how many grids meet the criteria
+	maxGridsToGenerate := 10000000 // Limit the number of attempts
 	startTime := time.Now()
 	foundSuitable := false // Flag to indicate if *any* grid met the criteria
+	// Create a dummy move that doesn't change the grid, used for initial word check
+	noopMove := Move{Cell1: Coordinates{Row: 0, Col: 0}, Cell2: Coordinates{Row: 0, Col: 0}}
 
 	fmt.Printf("Attempting to find grids meeting criteria (max attempts: %d)...\n", maxGridsToGenerate)
 
-	for i := 0; i < maxGridsToGenerate; i++ {
+	for range maxGridsToGenerate {
 		gridAttempts++
-		if gridAttempts%100 == 0 && gridAttempts > 0 { // More frequent updates
+		if gridAttempts%1000 == 0 && gridAttempts > 0 { // Less frequent updates for faster loops
 			fmt.Printf("...checked %d grids (found %d valid, elapsed: %v)\n",
 				gridAttempts, validGridsFound, time.Since(startTime).Round(time.Second))
 		}
@@ -497,9 +543,18 @@ func main() {
 			continue
 		}
 
-		// Initial state for exploration
-		initialFoundWords := make(FoundWordsSet) // Start with no words found
-		initialState := GameState{Grid: initialGrid, FoundWords: initialFoundWords}
+		// --- Check if the generated grid *starts* with any words ---
+		// Use an empty FoundWordsSet for this initial check
+		initialWordsCheck := findNewWords(initialGrid, noopMove, wordMap, make(FoundWordsSet))
+		if len(initialWordsCheck) > 0 {
+			// If words are found in the initial state, skip this grid and try generating another.
+			// fmt.Printf("Skipping grid starting with words: %v\n", initialWordsCheck) // Optional debug log
+			continue
+		}
+		// --- Grid is initially word-free, proceed with exploration ---
+
+		// Initial state for exploration starts with an empty FoundWords set
+		initialState := GameState{Grid: initialGrid, FoundWords: make(FoundWordsSet)}
 
 		// Explore the full game tree starting from this initial state
 		pathVisited := make(map[string]struct{}) // Fresh visited map for each grid
@@ -507,28 +562,49 @@ func main() {
 		explorationTree, maxDepth := explorePaths(initialState, wordMap, pathVisited, 0)
 
 		// Check if this grid meets the minimum depth requirement
-		if maxDepth >= requiredMinTurns {
-			foundSuitable = true // Mark that we found at least one
-			// Write output for this valid grid
-			WriteOutput(validGridsFound, initialGrid, explorationTree, maxDepth)
-			validGridsFound++ // Increment the counter for valid grids found
-
-			// Optional: Stop after finding the first suitable grid
-			// fmt.Println("Found a suitable grid. Stopping search.")
-			// break
+		if maxDepth < requiredMinTurns {
+			continue // Skip if max depth is not met
 		}
+
+		// Check if only simple words are used throughout the exploration
+		if !isOnlySimpleWords(simpleWordMap, explorationTree) {
+			continue // Skip if non-simple words are found
+		}
+
+		// --- Grid meets all criteria ---
+		foundSuitable = true // Mark that we found at least one suitable grid
+		// Write output for this valid grid
+		WriteOutput(validGridsFound, initialGrid, explorationTree, maxDepth)
+		validGridsFound++ // Increment the counter for valid grids found
 
 	} // End Grid Generation Loop
 
 	// --- Process Results ---
 	elapsedTime := time.Since(startTime).Round(time.Second)
 	if !foundSuitable {
-		fmt.Printf("\nSearch finished after %v (%d attempts). No grid meeting the minimum depth requirement (%d) was found.\n",
+		fmt.Printf("\nSearch finished after %v (%d attempts). No grid meeting all criteria (min depth %d, initial word check, simple words) was found.\n",
 			elapsedTime, gridAttempts, requiredMinTurns)
 	} else {
 		fmt.Printf("\nSearch finished after %v (%d attempts).\n", elapsedTime, gridAttempts)
-		fmt.Printf("Found and saved %d grids meeting the depth requirement (>= %d turns).\n", validGridsFound, requiredMinTurns)
+		fmt.Printf("Found and saved %d grids meeting all criteria.\n", validGridsFound)
 	}
+}
+
+// isOnlySimpleWords checks if all words found in the exploration tree exist in the simpleWordMap.
+func isOnlySimpleWords(simpleWordMap Dictionary, explorationTree []ExplorationNode) bool {
+	allWordsSet := make(FoundWordsSet)
+	collectAllWords(explorationTree, allWordsSet) // Collect all unique words from the tree
+
+	// Check each collected word against the simple dictionary
+	for word := range allWordsSet {
+		if _, ok := simpleWordMap[word]; !ok {
+			// If any word is not found in the simple map, return false
+			// fmt.Printf("Grid rejected due to non-simple word: %s\n", word) // Optional debug log
+			return false
+		}
+	}
+	// If all words were found in the simple map, return true
+	return true
 }
 
 // collectAllWords recursively traverses the exploration tree and gathers all unique words.
@@ -536,7 +612,8 @@ func collectAllWords(nodes []ExplorationNode, allWords FoundWordsSet) {
 	if allWords == nil { // Should not happen, but safety check
 		return
 	}
-	for _, node := range nodes {
+	for i := range nodes { // Iterate safely using index
+		node := nodes[i] // Get the node by index
 		// Add words formed at this node
 		for _, word := range node.WordsFormed {
 			allWords[word] = struct{}{}
@@ -569,7 +646,8 @@ func WriteOutput(gridIndex int, grid Grid, explorationTree []ExplorationNode, ma
 
 	// --- Prepare Output File ---
 	outputDir := "output"
-	outputFilename := filepath.Join(outputDir, fmt.Sprintf("%d.data.json", gridIndex))
+	// Ensure filename uses gridIndex correctly
+	outputFilename := filepath.Join(outputDir, fmt.Sprintf("%d.json", gridIndex))
 
 	// Create the output directory if it doesn't exist
 	if err := os.MkdirAll(outputDir, 0755); err != nil { // Use 0755 for directory permissions
