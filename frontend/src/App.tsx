@@ -310,8 +310,8 @@ function App() {
   const [gameData, setGameData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [level, setLevel] = useState(0);
-  const [targetLevel, setTargetLevel] = useState(0);
+  const [level, setLevel] = useState(0); // Current level number *being displayed*
+  const [targetLevel, setTargetLevel] = useState(0); // Level we are trying to load
   const [grid, setGrid] = useState(null);
   const [currentPossibleMoves, setCurrentPossibleMoves] = useState([]);
   const [currentDepth, setCurrentDepth] = useState(0);
@@ -320,7 +320,7 @@ function App() {
   const [hoveredCell, setHoveredCell] = useState(null);
   const [isInvalidMove, setIsInvalidMove] = useState(false);
   const [invalidMoveMessage, setInvalidMoveMessage] = useState('');
-  const [setFoundWordsDisplay] = useState([]);
+  const [foundWordsDisplay, setFoundWordsDisplay] = useState([]);
   const [hasDeviated, setHasDeviated] = useState(false);
   const [animationState, setAnimationState] = useState({ animating: false, from: null, to: null });
   const animationTimeoutRef = useRef(null);
@@ -341,47 +341,75 @@ function App() {
     const levelParam = params.get('level');
     const requestedLevel = levelParam ? parseInt(levelParam, 10) : 0;
     const validInitialLevel = !isNaN(requestedLevel) && requestedLevel >= 0 ? requestedLevel : 0;
-    setTargetLevel(validInitialLevel);
-    setLevel(validInitialLevel);
-  }, []);
+    setTargetLevel(validInitialLevel); // Set the target level first
+  }, []); // Runs only once on mount
 
   // Effect to load data when targetLevel changes
   useEffect(() => {
     const loadLevelData = async (levelToLoad) => {
         if (levelToLoad === undefined) return;
-        setLoading(true); setError(null);
-        setGrid(null); setCurrentPossibleMoves([]); setCurrentDepth(0);
-        setHistory([]); setHasDeviated(false); setIsInvalidMove(false);
-        setInvalidMoveMessage(''); setFoundWordsDisplay([]); setIsGameOver(false);
-        setSelectedCell(null); setHoveredCell(null); setDraggedCell(null);
-        setWiggleCells([]); setOverallFailedAttempts(0); setTurnFailedAttempts(0);
+
+        setLoading(true);
+        setError(null);
+        setGameData(null); // Clear previous game data immediately
+        setGrid(null);
+        setCurrentPossibleMoves([]);
+        setCurrentDepth(0);
+        setHistory([]);
+        setHasDeviated(false);
+        setIsInvalidMove(false);
+        setInvalidMoveMessage('');
+        setFoundWordsDisplay([]);
+        setIsGameOver(false);
+        setSelectedCell(null);
+        setHoveredCell(null);
+        setDraggedCell(null);
+        setWiggleCells([]);
+        setOverallFailedAttempts(0);
+        setTurnFailedAttempts(0);
         setHintCells([]);
-        console.log(`Loading level ${levelToLoad}...`);
+        console.log(`Attempting to load level ${levelToLoad}...`);
+
         try {
             const basePath = '';
             const response = await fetch(`${basePath}/levels/${levelToLoad}.json`);
+            console.log(`Fetch response for level ${levelToLoad}:`, response.status, response.ok);
+
             if (!response.ok) {
                  if (response.status === 404) {
                      throw new Error(`Level ${levelToLoad} not found. More levels coming soon!`);
-                 } else { throw new Error(`Failed to fetch level ${levelToLoad} data (HTTP ${response.status})`); }
+                 } else {
+                    throw new Error(`Failed to fetch level ${levelToLoad} data (HTTP ${response.status})`);
+                 }
             }
-            // Check content type BEFORE parsing
             const contentType = response.headers.get("content-type");
             if (!contentType || !contentType.includes("application/json")) {
+                console.error("Received non-JSON content type:", contentType);
                 throw new Error(`Level ${levelToLoad} not found. More levels coming soon!`);
             }
-            const data = await response.json(); // Now safe to parse
-            setGameData(data); setGrid(data.initialGrid); setCurrentPossibleMoves(data.explorationTree || []);
-            setLevel(levelToLoad);
+
+            const data = await response.json();
+            console.log(`Successfully loaded data for level ${levelToLoad}`);
+            setGameData(data);
+            setGrid(data.initialGrid);
+            setCurrentPossibleMoves(data.explorationTree || []);
+            setLevel(levelToLoad); // Update the display level *after* successful load
         } catch (err) {
-            console.error("Error loading level data:", err);
-            setError(err.message); setGameData(null); setGrid(null); setCurrentPossibleMoves([]);
+            console.error("Error in loadLevelData:", err);
+            setError(err.message);
+            setGameData(null);
+            setGrid(null);
+            setCurrentPossibleMoves([]);
+            setLevel(levelToLoad); // Still update display level even on error
         } finally {
+            console.log(`Finished loading attempt for level ${levelToLoad}. Setting loading to false.`);
             setLoading(false);
         }
     };
-    loadLevelData(targetLevel);
-  }, [targetLevel]);
+
+    loadLevelData(targetLevel); // Load data based on the target level
+
+  }, [targetLevel]); // Rerun when targetLevel changes
 
   // Memoized Calculations
   const optimalPathWords = useMemo(() => gameData ? findLongestWordChain(gameData.explorationTree) : [], [gameData]);
@@ -688,7 +716,7 @@ function App() {
           <p className="text-gray-700 mt-2">{error}</p>
           {targetLevel > 0 && (
             <a href="/?level=0" className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
-                Go to Level 0
+                Go to the first level
             </a>
           )}
       </div>
