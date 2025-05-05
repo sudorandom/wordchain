@@ -351,7 +351,7 @@ function App() {
 
         setLoading(true);
         setError(null);
-        setGameData(null); // Clear previous game data immediately
+        setGameData(null);
         setGrid(null);
         setCurrentPossibleMoves([]);
         setCurrentDepth(0);
