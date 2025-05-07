@@ -916,10 +916,11 @@ function App() {
             {isDebugMode && gameData && <ExplorationTreeView treeData={gameData.explorationTree} />}
             {shouldShowEndGamePanel && (simpleDataForPanel || hardDataForPanel) && ( // Ensure at least one set of data exists
                 <EndGamePanel 
+                    difficulty={difficulty}
                     simpleModeData={simpleDataForPanel}
                     hardModeData={hardDataForPanel}
+                    handlePlayHardMode={handlePlayHardMode}
                     onClose={handleCloseGameOver}
-                    // Removed onPlayHardMode and onResetGame props
                 />
             )}
         </div>

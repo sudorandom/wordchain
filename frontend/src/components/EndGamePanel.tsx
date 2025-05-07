@@ -14,8 +14,10 @@ interface LevelResultData {
 
 // Props for the combined EndGamePanel
 interface CombinedEndGamePanelProps {
+  difficulty: string
   simpleModeData?: LevelResultData | null; // Optional data for simple mode
   hardModeData?: LevelResultData | null;   // Optional data for hard mode
+  handlePlayHardMode: () => void;
   onClose: () => void;
 }
 
@@ -43,6 +45,8 @@ const generateEmojiLine = (data: LevelResultData | null | undefined): string => 
 const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
     simpleModeData,
     hardModeData,
+    handlePlayHardMode,
+    difficulty,
     onClose,
 }) => {
     const [copied, setCopied] = useState(false);
@@ -171,6 +175,10 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
     const hasHardData = hardModeData != null;
     const showComeBackMessage = bothCompleted; 
     const canShare = (simpleModeData && simpleModeData.maxScore > 0) || (hardModeData && hardModeData.maxScore > 0);
+    const onPlayHardMode = () => {
+        handlePlayHardMode();
+        onClose();
+    }
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex flex-col items-center justify-center z-20 p-4 font-sans">
@@ -214,6 +222,13 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
                             You've completed both challenges! Come back tomorrow!
                         </p>
                     )}
+
+                    {difficulty == 'simple' && simpleModeData?.levelCompleted && <button 
+                        onClick={onPlayHardMode} 
+                        className="mr-5 px-8 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md shadow focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:bg-purple-600 dark:hover:bg-purple-500 dark:focus:ring-purple-500 dark:ring-offset-purple-800"
+                    >
+                        Try Hard Mode
+                    </button>}
                     <button 
                         onClick={onClose} 
                         className="px-8 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md shadow focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:bg-gray-600 dark:hover:bg-gray-500 dark:focus:ring-gray-500 dark:ring-offset-gray-800"
