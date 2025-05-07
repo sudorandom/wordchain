@@ -62,8 +62,6 @@ const WordGrid: React.FC<WordGridProps> = ({
       {grid.map((row, r) => row.map((letter, c) => {
           const isDraggingSource = draggedCell?.row === r && draggedCell?.col === c;
           const isSelected = selectedCell?.row === r && selectedCell?.col === c && !isDraggingSource;
-          const sourceCellForAdjacency = isDraggingSource ? draggedCell : selectedCell;
-          const isPotentialDropTarget = sourceCellForAdjacency && !(sourceCellForAdjacency.row === r && sourceCellForAdjacency.col === c) && areAdjacent(sourceCellForAdjacency, {row: r, col: c});
           const isHighlighted = highlightedCells.some(cell => cell.row === r && cell.col === c);
           const isWiggling = wiggleCells.some(cell => cell.row === r && cell.col === c);
           const isHintHighlighted = hintCells.some(cell => cell.row === r && cell.col === c);
@@ -75,7 +73,8 @@ const WordGrid: React.FC<WordGridProps> = ({
                     onClick={onCellClick}
                     isDraggingSource={isDraggingSource}
                     isSelected={isSelected}
-                    isPotentialDropTarget={isPotentialDropTarget}
+                    gridRows={grid.length}
+                    gridCols={grid[0].length}
                     isHighlighted={isHighlighted}
                     isWiggling={isWiggling}
                     isHintHighlighted={isHintHighlighted}

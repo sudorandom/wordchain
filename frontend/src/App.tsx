@@ -543,41 +543,12 @@ function App() {
         </button>
 
        <h1 className="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-flow font-bungee">
-            Word Chain
+            <a href="/">Word Chain</a>
        </h1>
        <h2 className="text-2xl mb-1 text-gray-700 dark:text-gray-300">
             {currentDate} <span className="capitalize">{difficulty != 'simple' && `(${difficulty}) `}</span>
             { currentLevelCompleted && <i className="fas fa-check text-green-600"></i>}
        </h2>
-
-       {dailyProgress.simpleCompleted && difficulty === 'simple' && (
-        <div>
-            <div className="text-center max-w-xl mb-2 text-sm text-gray-600 dark:text-gray-400">
-                <p><strong>You have completed the first level.</strong> <i>Maybe try hard mode next?</i></p>
-                <button
-                    onClick={handlePlayHardMode}
-                    className="mt-4 px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:ring-offset-gray-900"
-                >
-                    Play Hard Mode
-                </button>
-            </div>
-        </div>
-        )}
-
-
-        {difficulty === 'hard' && (
-        <div>
-            <div className="text-center max-w-xl mb-2 text-sm text-gray-600 dark:text-gray-400">
-                <p><strong>You have completed both level for today!</strong> Come back tomorrow for another challenge.</p>
-                <button
-                    onClick={handlePlaySimpleMode}
-                    className="mt-4 px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:ring-offset-gray-900"
-                >
-                    Back to normal mode
-                </button>
-            </div>
-        </div>
-        )}
 
        <div className="text-center max-w-xl mb-2 text-sm text-gray-600 dark:text-gray-400">
             <p><span className="font-semibold mb-1">How to Play: </span>This is hard mode. You no longer have hints but you still need to find the optimal move sequence to win! Every move <i>must</i> make a new {wordLength}-letter word.</p>
@@ -588,7 +559,7 @@ function App() {
        </div>
         <div className="h-6 mb-2 text-center">
             <p className={`text-sm ${hasDeviated ? 'text-red-600 dark:text-red-400 font-bold' : 'text-green-600 dark:text-green-400 font-semibold'}`}>
-                {hasDeviated ? "Deviated from optimal path!" : "On the optimal path."}
+                {hasDeviated && "Deviated from optimal path!"}
             </p>
         </div>
 
@@ -643,6 +614,33 @@ function App() {
        </div>
 
        {renderWordChain()}
+
+       {difficulty === 'hard' && (
+        <div>
+            <div className="text-center max-w-xl mb-2 text-sm text-gray-600 dark:text-gray-400">
+                <p><strong>You have completed both level for today!</strong> Come back tomorrow for another challenge.</p>
+                <button
+                    onClick={handlePlaySimpleMode}
+                    className="mt-4 px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:ring-offset-gray-900"
+                >
+                    Back to normal mode
+                </button>
+            </div>
+        </div>
+        )}
+       {dailyProgress.simpleCompleted && difficulty === 'simple' && (
+        <div>
+            <div className="text-center max-w-xl mb-2 text-sm text-gray-600 dark:text-gray-400">
+                <p><strong>You have completed the first level.</strong> <i>Maybe try hard mode next?</i></p>
+                <button
+                    onClick={handlePlayHardMode}
+                    className="mt-4 px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:ring-offset-gray-900"
+                >
+                    Play Hard Mode
+                </button>
+            </div>
+        </div>
+        )}
        {isDebugMode && <ExplorationTreeView treeData={gameData?.explorationTree} />}
        {isGameOver && <EndGamePanel score={currentDepth} maxScore={maxDepthAttainable} playerWords={playerUniqueWordsFound} optimalPathWords={optimalPathWords} onClose={handleCloseGameOver} onPlayHardMode={handlePlayHardMode} onResetGame={handleReset} difficulty={difficulty} dailyProgress={dailyProgress} levelJustCompleted={currentDepth === maxDepthAttainable} />}
     </div>
