@@ -1,0 +1,583 @@
+{
+  "initialGrid": [
+    [
+      "t",
+      "n",
+      "s"
+    ],
+    [
+      "h",
+      "e",
+      "m"
+    ],
+    [
+      "n",
+      "e",
+      "t"
+    ],
+    [
+      "d",
+      "n",
+      "n"
+    ]
+  ],
+  "wordLength": 4,
+  "requiredMinTurns": 7,
+  "requiredMaxTurns": 10,
+  "maxDepthReached": 7,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          0,
+          0
+        ],
+        "to": [
+          0,
+          1
+        ]
+      },
+      "wordsFormed": [
+        "teen"
+      ],
+      "maxDepthReached": 6,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              1
+            ],
+            "to": [
+              0,
+              2
+            ]
+          },
+          "wordsFormed": [
+            "seen"
+          ],
+          "maxDepthReached": 5,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  3,
+                  0
+                ],
+                "to": [
+                  3,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "seed"
+              ],
+              "maxDepthReached": 4,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      0
+                    ],
+                    "to": [
+                      0,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "need"
+                  ],
+                  "maxDepthReached": 0
+                },
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      0
+                    ],
+                    "to": [
+                      1,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "shed"
+                  ],
+                  "maxDepthReached": 0
+                },
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      0
+                    ],
+                    "to": [
+                      2,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "send"
+                  ],
+                  "maxDepthReached": 3,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          1
+                        ],
+                        "to": [
+                          0,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "tend"
+                      ],
+                      "maxDepthReached": 2,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              0
+                            ],
+                            "to": [
+                              0,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "then"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  0
+                                ],
+                                "to": [
+                                  2,
+                                  1
+                                ]
+                              },
+                              "wordsFormed": [
+                                "need"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              1,
+              0
+            ],
+            "to": [
+              1,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "then"
+          ],
+          "maxDepthReached": 1,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  0,
+                  0
+                ],
+                "to": [
+                  0,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "tend"
+              ],
+              "maxDepthReached": 0
+            },
+            {
+              "move": {
+                "from": [
+                  2,
+                  0
+                ],
+                "to": [
+                  2,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "need"
+              ],
+              "maxDepthReached": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          0,
+          1
+        ],
+        "to": [
+          0,
+          2
+        ]
+      },
+      "wordsFormed": [
+        "seen"
+      ],
+      "maxDepthReached": 6,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              0
+            ],
+            "to": [
+              0,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "teen"
+          ],
+          "maxDepthReached": 5,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  0
+                ],
+                "to": [
+                  1,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "send",
+                "then"
+              ],
+              "maxDepthReached": 4,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      0
+                    ],
+                    "to": [
+                      0,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "tend"
+                  ],
+                  "maxDepthReached": 3,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          0
+                        ],
+                        "to": [
+                          3,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "shed"
+                      ],
+                      "maxDepthReached": 2,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              0
+                            ],
+                            "to": [
+                              1,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "seed"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  0,
+                                  1
+                                ],
+                                "to": [
+                                  0,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "need"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      0
+                    ],
+                    "to": [
+                      2,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "seed"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          0
+                        ],
+                        "to": [
+                          1,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "shed"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              3,
+                              0
+                            ],
+                            "to": [
+                              3,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "tend"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  2,
+                  0
+                ],
+                "to": [
+                  2,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "shed"
+              ],
+              "maxDepthReached": 1,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      3,
+                      0
+                    ],
+                    "to": [
+                      3,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "tend"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              1,
+              0
+            ],
+            "to": [
+              1,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "tend"
+          ],
+          "maxDepthReached": 3,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  3,
+                  0
+                ],
+                "to": [
+                  3,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "shed"
+              ],
+              "maxDepthReached": 2,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      0
+                    ],
+                    "to": [
+                      1,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "seed"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          1
+                        ],
+                        "to": [
+                          0,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "need"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              3,
+              0
+            ],
+            "to": [
+              3,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "seed"
+          ],
+          "maxDepthReached": 1,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  0,
+                  1
+                ],
+                "to": [
+                  0,
+                  2
+                ]
+              },
+              "wordsFormed": [
+                "need"
+              ],
+              "maxDepthReached": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          1,
+          0
+        ],
+        "to": [
+          1,
+          1
+        ]
+      },
+      "wordsFormed": [
+        "tend"
+      ],
+      "maxDepthReached": 0
+    },
+    {
+      "move": {
+        "from": [
+          3,
+          0
+        ],
+        "to": [
+          3,
+          1
+        ]
+      },
+      "wordsFormed": [
+        "need"
+      ],
+      "maxDepthReached": 0
+    }
+  ]
+}

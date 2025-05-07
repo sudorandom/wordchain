@@ -1,0 +1,460 @@
+{
+  "initialGrid": [
+    [
+      "d",
+      "w",
+      "b"
+    ],
+    [
+      "f",
+      "e",
+      "f"
+    ],
+    [
+      "a",
+      "s",
+      "b"
+    ],
+    [
+      "r",
+      "t",
+      "m"
+    ]
+  ],
+  "wordLength": 4,
+  "requiredMinTurns": 7,
+  "requiredMaxTurns": 10,
+  "maxDepthReached": 7,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          0,
+          1
+        ],
+        "to": [
+          0,
+          2
+        ]
+      },
+      "wordsFormed": [
+        "best"
+      ],
+      "maxDepthReached": 6,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              1
+            ],
+            "to": [
+              0,
+              2
+            ]
+          },
+          "wordsFormed": [
+            "west"
+          ],
+          "maxDepthReached": 0
+        },
+        {
+          "move": {
+            "from": [
+              1,
+              0
+            ],
+            "to": [
+              1,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "dear"
+          ],
+          "maxDepthReached": 3,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  0,
+                  0
+                ],
+                "to": [
+                  0,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "bear"
+              ],
+              "maxDepthReached": 2,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      3,
+                      0
+                    ],
+                    "to": [
+                      3,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "beat"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          0
+                        ],
+                        "to": [
+                          3,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "beta"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              2,
+              0
+            ],
+            "to": [
+              2,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "beat"
+          ],
+          "maxDepthReached": 5,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  2,
+                  1
+                ],
+                "to": [
+                  3,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "beta"
+              ],
+              "maxDepthReached": 0
+            },
+            {
+              "move": {
+                "from": [
+                  3,
+                  0
+                ],
+                "to": [
+                  3,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "bear"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      0
+                    ],
+                    "to": [
+                      0,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "dear"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          1
+                        ],
+                        "to": [
+                          0,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "wear"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      1
+                    ],
+                    "to": [
+                      0,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "wear"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          0
+                        ],
+                        "to": [
+                          0,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "dear"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              0
+                            ],
+                            "to": [
+                              1,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "west"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      3,
+                      1
+                    ],
+                    "to": [
+                      3,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "beam"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  3,
+                  1
+                ],
+                "to": [
+                  3,
+                  2
+                ]
+              },
+              "wordsFormed": [
+                "beam"
+              ],
+              "maxDepthReached": 4,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      3,
+                      0
+                    ],
+                    "to": [
+                      3,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "bear"
+                  ],
+                  "maxDepthReached": 3,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          0
+                        ],
+                        "to": [
+                          0,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "dear"
+                      ],
+                      "maxDepthReached": 2,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              0,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "wear"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  1,
+                                  1
+                                ],
+                                "to": [
+                                  1,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "debt"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          1
+                        ],
+                        "to": [
+                          0,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "wear"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              0
+                            ],
+                            "to": [
+                              0,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "dear"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          1,
+          0
+        ],
+        "to": [
+          1,
+          1
+        ]
+      },
+      "wordsFormed": [
+        "dear"
+      ],
+      "maxDepthReached": 1,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              0
+            ],
+            "to": [
+              0,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "wear"
+          ],
+          "maxDepthReached": 0
+        },
+        {
+          "move": {
+            "from": [
+              1,
+              0
+            ],
+            "to": [
+              1,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "west"
+          ],
+          "maxDepthReached": 0
+        }
+      ]
+    }
+  ]
+}

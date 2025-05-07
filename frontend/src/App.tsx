@@ -1,439 +1,196 @@
+// src/App.tsx
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import WordGrid from './components/WordGrid';
+import ProgressBar from './components/ProgressBar';
+import EndGamePanel from './components/EndGamePanel';
+import ExplorationTreeView from './components/ExplorationTreeView';
+import {
+    getFormattedDate,
+    findLongestWordChain,
+    areAdjacent,
+    findWordCoordinates,
+    getInitialGameState,
+    CellCoordinates,
+    GameData,
+    HistoryEntry,
+    ExplorationNodeData // Added this import
+} from './utils/gameHelpers';
 
-// Function to find the sequence of words along the longest path
-const findLongestWordChain = (nodes) => {
-    if (!nodes) return [];
-    let startingNodeOfLongestPath = null;
-    if (nodes && nodes.length > 0) {
-       const validNodes = nodes.filter(n => typeof n.maxDepthReached === 'number');
-       if (validNodes.length > 0) {
-           const overallMaxDepth = Math.max(...validNodes.map(n => n.maxDepthReached));
-           startingNodeOfLongestPath = validNodes.find(n => n.maxDepthReached === overallMaxDepth);
-       }
-    }
-    const tracePath = (startNode) => {
-        if (!startNode) return [];
-        const currentPathWords = startNode.wordsFormed || [];
-        let nextNode = null;
-        if (startNode.nextMoves && startNode.nextMoves.length > 0) {
-             const validNextNodes = startNode.nextMoves.filter(n => typeof n.maxDepthReached === 'number');
-             if (validNextNodes.length > 0) {
-                const maxDepthBelow = Math.max(...validNextNodes.map(n => n.maxDepthReached));
-                nextNode = validNextNodes.find(n => n.maxDepthReached === maxDepthBelow);
-             }
-        }
-        if (nextNode) {
-            return [...currentPathWords, ...tracePath(nextNode)];
-        } else {
-            return currentPathWords;
-        }
-    };
-    return tracePath(startingNodeOfLongestPath);
-};
-
-// Helper to check if two cells are adjacent
-const areAdjacent = (cell1, cell2) => {
-  if (!cell1 || !cell2) return false;
-  const rowDiff = Math.abs(cell1.row - cell2.row);
-  const colDiff = Math.abs(cell1.col - cell2.col);
-  return (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1);
-};
-
-// Helper function to find coordinates of a word in the grid
-const findWordCoordinates = (grid, word, moveCoords) => {
-    if (!word || !grid || !moveCoords || !moveCoords.from || !moveCoords.to) return [];
-    const affectedRows = new Set([moveCoords.from[0], moveCoords.to[0]]);
-    const affectedCols = new Set([moveCoords.from[1], moveCoords.to[1]]);
-    const rows = grid.length;
-    const cols = grid[0]?.length || 0;
-
-    for (const r of affectedRows) {
-        if (r < 0 || r >= rows) continue;
-        const rowStr = grid[r].join('');
-        let index = rowStr.indexOf(word);
-        while (index !== -1) {
-            const currentCoords = [];
-            for (let i = 0; i < word.length; i++) {
-                if (index + i >= 0 && index + i < cols) currentCoords.push({ row: r, col: index + i });
-                else { console.warn(`Coord calc error: col ${index + i} out of bounds.`); return []; }
-            }
-            if (currentCoords.length === word.length) return currentCoords;
-            index = rowStr.indexOf(word, index + 1);
-        }
-    }
-    for (const c of affectedCols) {
-        if (c < 0 || c >= cols) continue;
-        let colStr = '';
-        for (let r = 0; r < rows; r++) {
-            if (grid[r] && grid[r][c]) colStr += grid[r][c];
-            else { console.warn(`Grid structure issue at row ${r}, col ${c}`); colStr += '?'; }
-        }
-        let index = colStr.indexOf(word);
-         while (index !== -1) {
-             const currentCoords = [];
-            for (let i = 0; i < word.length; i++) {
-                 if (index + i >= 0 && index + i < rows) currentCoords.push({ row: index + i, col: c });
-                 else { console.warn(`Coord calc error: row ${index + i} out of bounds.`); return []; }
-            }
-             if (currentCoords.length === word.length) return currentCoords;
-             index = colStr.indexOf(word, index + 1);
-        }
-    }
-    console.warn(`Coords for word "${word}" not found after move.`, {grid, moveCoords});
-    return [];
-};
-
-
-// --- Grid Cell Component ---
-function GridCell({
-    letter,
-    row,
-    col,
-    onClick,
-    onDragStart,
-    onDrop,
-    onDragEnter,
-    onDragLeave,
-    onDragEnd,
-    isDraggingSource,
-    isPotentialDropTarget,
-    isHighlighted,
-    isSelected,
-    isWiggling,
-    isHintHighlighted
-}) {
-  const handleDragStart = (e) => {
-    onDragStart({ row, col });
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', `${row}-${col}`);
-    e.currentTarget.style.opacity = '0.6';
-    e.currentTarget.classList.add('cursor-grabbing');
-  };
-  const handleDragOver = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
-  const handleDrop = (e) => { e.preventDefault(); onDrop({ row, col }); };
-  const handleDragEnter = (e) => { e.preventDefault(); onDragEnter({ row, col }); };
-  const handleDragLeave = (e) => { e.preventDefault(); onDragLeave({ row, col }); };
-  const handleDragEnd = (e) => {
-      e.currentTarget.style.opacity = '1';
-      e.currentTarget.classList.remove('cursor-grabbing');
-      onDragEnd();
-  };
-  const handleClick = () => { onClick({ row, col }); };
-
-  let cellClasses = `border border-gray-400 w-16 h-16 flex items-center justify-center
-                   text-2xl font-bold select-none rounded-md shadow-sm
-                   transition-all duration-200 ease-in-out relative overflow-hidden`;
-
-  if (isDraggingSource) {
-    cellClasses += ' bg-blue-200 ring-2 ring-blue-500 scale-105 z-10';
-  } else if (isSelected) {
-    cellClasses += ' bg-indigo-100 ring-2 ring-indigo-500 cursor-pointer';
-  } else if (isPotentialDropTarget) {
-    cellClasses += ' bg-green-200 ring-2 ring-green-500 cursor-pointer';
-  } else {
-    cellClasses += ' bg-white hover:bg-gray-100 cursor-grab';
-  }
-
-  if (isWiggling) {
-      cellClasses += ' animate-wiggle';
-  }
-
-  return (
-    <div
-      draggable
-      onClick={handleClick}
-      onDragStart={handleDragStart}
-      onDragOver={handleDragOver}
-      onDrop={handleDrop}
-      onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}
-      onDragEnd={handleDragEnd}
-      className={cellClasses}
-    >
-      {isHighlighted && <div className="absolute inset-0 bg-blue-300 animate-pulse-fade-out-short"></div>}
-      {isHintHighlighted && <div className="absolute inset-0 bg-blue-300 animate-pulse-fade-out-long"></div>}
-      <span className="relative z-10">{letter.toUpperCase()}</span>
-    </div>
-  );
-}
-
-// --- Word Grid Component ---
-function WordGrid({
-    grid,
-    selectedCell,
-    draggedCell,
-    hoveredCell,
-    animationState,
-    highlightedCells,
-    hintCells,
-    wiggleCells,
-    onCellClick,
-    onDragStart,
-    onDragEnter,
-    onDragLeave,
-    onDragEnd,
-    onDrop
-}) {
-   const gridRef = useRef(null);
-   const cellSize = 64; const gapSize = 4; const totalCellSize = cellSize + gapSize;
-
-   const getCellStyle = (r, c) => {
-        if (!animationState.animating || !gridRef.current || !animationState.from || !animationState.to) return {};
-       if (animationState.from.row === r && animationState.from.col === c) {
-           const dx = (animationState.to.col - c) * totalCellSize; const dy = (animationState.to.row - r) * totalCellSize;
-           return { transform: `translate(${dx}px, ${dy}px)`, transition: 'transform 0.3s ease-in-out', zIndex: 10 };
-       } else if (animationState.to.row === r && animationState.to.col === c) {
-           const dx = (animationState.from.col - c) * totalCellSize; const dy = (animationState.from.row - r) * totalCellSize;
-           return { transform: `translate(${dx}px, ${dy}px)`, transition: 'transform 0.3s ease-in-out', zIndex: 10 };
-       }
-       return { transition: 'transform 0.3s ease-in-out' };
-   };
-
-   if (!grid) return <div className="p-2 text-center text-gray-500">Loading Grid...</div>;
-
-   return (
-    <div ref={gridRef} className="relative inline-grid gap-1 p-2 bg-gray-200 rounded-lg shadow-md" style={{ gridTemplateColumns: `repeat(${grid[0]?.length || 0}, minmax(0, 1fr))` }} onDragOver={(e) => e.preventDefault()}>
-      {grid.map((row, r) => row.map((letter, c) => {
-          const isDraggingSource = draggedCell?.row === r && draggedCell?.col === c;
-          const isSelected = selectedCell?.row === r && selectedCell?.col === c && !isDraggingSource;
-          const sourceCell = isDraggingSource ? draggedCell : selectedCell;
-          const isPotentialDropTarget = sourceCell && !(sourceCell.row === r && sourceCell.col === c) && areAdjacent(sourceCell, {row: r, col: c});
-          const isHighlighted = highlightedCells.some(cell => cell.row === r && cell.col === c);
-          const isWiggling = wiggleCells.some(cell => cell.row === r && cell.col === c);
-          const isHintHighlighted = hintCells.some(cell => cell.row === r && cell.col === c);
-
-          return (
-              <div key={`${r}-${c}`} style={getCellStyle(r, c)} className="relative">
-                  <GridCell
-                    letter={letter} row={r} col={c}
-                    onClick={onCellClick}
-                    isDraggingSource={isDraggingSource}
-                    isSelected={isSelected}
-                    isPotentialDropTarget={isPotentialDropTarget}
-                    isHighlighted={isHighlighted}
-                    isWiggling={isWiggling}
-                    isHintHighlighted={isHintHighlighted}
-                    onDragStart={onDragStart}
-                    onDragEnter={onDragEnter}
-                    onDragLeave={onDragLeave}
-                    onDragEnd={onDragEnd}
-                    onDrop={onDrop}
-                  />
-              </div>
-           );
-      }))}
-    </div>
-  );
-}
-
-// --- Progress Bar Component ---
-function ProgressBar({ currentScore, maxScore }) {
-    const percentage = maxScore > 0 ? Math.min(100, (currentScore / maxScore) * 100) : 0;
-    const greenWidth = `${percentage}%`; const greyWidth = `${100 - percentage}%`;
-    return (
-        <div className="flex-grow bg-gray-300 rounded-full h-4 overflow-hidden flex mr-2" title={`Reached depth ${currentScore} of ${maxScore}`}>
-            <div className="bg-blue-500 h-full transition-all duration-500 ease-out rounded-l-full" style={{ width: greenWidth }}></div>
-            <div className="bg-gray-400 h-full rounded-r-full" style={{ width: greyWidth }}></div>
-        </div>
-    );
-}
-
-// --- End Game Panel Component ---
-function EndGamePanel({ score, maxScore, playerWords, optimalPathWords, overallFailedAttempts, onClose, onNextLevel }) {
-    const isMaxScore = score === maxScore;
-    const sortedPlayerWords = useMemo(() => [...playerWords].sort(), [playerWords]);
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex flex-col items-center justify-center z-20 p-4">
-            <div className="bg-white p-6 md:p-8 rounded-lg shadow-xl text-center w-full max-w-2xl">
-                <h2 className="text-3xl font-bold mb-4">{isMaxScore ? "Level Complete!" : "Game Over!"}</h2>
-                <p className="text-xl mb-4">You reached depth <span className="font-semibold">{score}</span> out of <span className="font-semibold">{maxScore}</span>.</p>
-                <p className="text-lg mb-2">You found <span className="font-semibold">{playerWords.size}</span> unique words.</p>
-                <p className="text-lg mb-4">Failed Attempts: <span className="font-semibold">{overallFailedAttempts}</span></p>
-                <div className="flex flex-col md:flex-row justify-around gap-4 mb-6 max-h-60 overflow-y-auto">
-                    <div className="flex-1 border rounded p-3 bg-gray-50">
-                        <h3 className="text-lg font-semibold mb-2 text-green-700">Words You Found ({sortedPlayerWords.length})</h3>
-                        {sortedPlayerWords.length > 0 ? <ul className="text-left text-sm space-y-1">{sortedPlayerWords.map(word => <li key={word}>{word.toUpperCase()}</li>)}</ul> : <p className="text-sm text-gray-500 italic">None found.</p>}
-                    </div>
-                    <div className="flex-1 border rounded p-3 bg-gray-50">
-                        <h3 className="text-lg font-semibold mb-2 text-blue-700">Optimal Path Words ({optimalPathWords.length})</h3>
-                        {optimalPathWords.length > 0 ? <ol className="text-left text-sm space-y-1 list-decimal list-inside">{optimalPathWords.map((word, index) => <li key={`${word}-${index}`}>{word.toUpperCase()}</li>)}</ol> : <p className="text-sm text-gray-500 italic">No optimal path defined.</p>}
-                    </div>
-                </div>
-                {isMaxScore && <p className="text-2xl font-bold text-green-600 mb-4 animate-pulse">Maximum Depth Reached!</p>}
-                <div className="mt-6 flex justify-center space-x-4">
-                    <button onClick={onClose} className="px-6 py-2 bg-gray-500 text-white rounded-md shadow hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">Close</button>
-                    <button onClick={onNextLevel} className="px-6 py-2 bg-green-500 text-white rounded-md shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2">Next Level</button>
-                </div>
-            </div>
-        </div>
-    );
-}
-
-// --- Exploration Tree View Component ---
-function ExplorationTreeNode({ node, level = 0 }) {
-    const [isExpanded, setIsExpanded] = useState(level < 1);
-    const handleToggle = () => setIsExpanded(!isExpanded);
-    const hasChildren = node.nextMoves && node.nextMoves.length > 0;
-    return (
-        <div style={{ marginLeft: `${level * 20}px` }} className="my-1">
-            <div className={`flex items-center p-1 rounded ${hasChildren ? 'cursor-pointer hover:bg-gray-100' : ''} ${level === 0 ? 'bg-blue-50 border border-blue-200' : ''}`} onClick={hasChildren ? handleToggle : undefined}>
-                {hasChildren && <span className="text-xs mr-1 w-4 text-center">{isExpanded ? '▼' : '▶'}</span>}
-                {!hasChildren && <span className="w-4 mr-1"></span>}
-                <span className="text-xs font-mono mr-2 text-purple-700">{node.move ? `[${node.move.from.join(',')}]↔[${node.move.to.join(',')}]` : 'Start'}</span>
-                <span className="text-xs font-semibold mr-2 text-green-700">[{node.wordsFormed?.join(', ').toUpperCase() || ''}]</span>
-                <span className="text-xs text-gray-500">(Depth Left: {node.maxDepthReached})</span>
-            </div>
-            {isExpanded && hasChildren && (
-                <div className="border-l-2 border-gray-300">
-                    {node.nextMoves.map((childNode, index) => <ExplorationTreeNode key={`${childNode.move?.from?.join('-')}-${childNode.move?.to?.join('-')}-${index}`} node={childNode} level={level + 1} />)}
-                </div>
-            )}
-        </div>
-    );
-}
-
-function ExplorationTreeView({ treeData }) {
-    const [isVisible, setIsVisible] = useState(false);
-    if (!treeData) return null;
-    return (
-        <div className="w-full max-w-2xl mt-6 border rounded p-3 bg-white shadow">
-             <button onClick={() => setIsVisible(!isVisible)} className="text-indigo-600 hover:text-indigo-800 font-semibold mb-2 w-full text-left">{isVisible ? 'Hide' : 'Show'} Full Move Tree {isVisible ? '▼' : '▶'}</button>
-             {isVisible && <div className="mt-2 max-h-80 overflow-y-auto border-t pt-2">{treeData.map((rootNode, index) => <ExplorationTreeNode key={`${rootNode.move?.from?.join('-')}-${rootNode.move?.to?.join('-')}-${index}`} node={rootNode} level={0} />)}</div>}
-        </div>
-    );
-}
-
-
-// --- Main App Component ---
 function App() {
   // State Variables
-  const [gameData, setGameData] = useState(null);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+        const savedMode = localStorage.getItem('darkMode');
+        if (savedMode) return JSON.parse(savedMode);
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    return false;
+  });
+  const [gameData, setGameData] = useState<GameData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [level, setLevel] = useState(0); // Current level number *being displayed*
-  const [targetLevel, setTargetLevel] = useState(0); // Level we are trying to load
-  const [grid, setGrid] = useState(null);
-  const [currentPossibleMoves, setCurrentPossibleMoves] = useState([]);
-  const [currentDepth, setCurrentDepth] = useState(0);
-  const [selectedCell, setSelectedCell] = useState(null);
-  const [draggedCell, setDraggedCell] = useState(null);
-  const [hoveredCell, setHoveredCell] = useState(null);
-  const [isInvalidMove, setIsInvalidMove] = useState(false);
-  const [invalidMoveMessage, setInvalidMoveMessage] = useState('');
-  const [foundWordsDisplay, setFoundWordsDisplay] = useState([]);
-  const [hasDeviated, setHasDeviated] = useState(false);
-  const [animationState, setAnimationState] = useState({ animating: false, from: null, to: null });
-  const animationTimeoutRef = useRef(null);
-  const [history, setHistory] = useState([]);
-  const [highlightedCells, setHighlightedCells] = useState([]);
-  const highlightTimeoutRef = useRef(null);
-  const [isGameOver, setIsGameOver] = useState(false);
-  const [wiggleCells, setWiggleCells] = useState([]);
-  const wiggleTimeoutRef = useRef(null);
+  const [error, setError] = useState<string | null>(null);
+  const [currentDate, setCurrentDate] = useState<string>('');
+  const [difficulty, setDifficulty] = useState<'simple' | 'hard'>('simple');
+  const [dailyProgress, setDailyProgress] = useState({ simpleCompleted: false, hardCompleted: false });
+  const [isDebugMode, setIsDebugMode] = useState(false);
+
+  const initialStates = useMemo(() => getInitialGameState(gameData), [gameData]);
+
+  const [grid, setGrid] = useState<string[][] | null>(initialStates.grid);
+  const [currentPossibleMoves, setCurrentPossibleMoves] = useState<ExplorationNodeData[]>(initialStates.currentPossibleMoves);
+  const [currentDepth, setCurrentDepth] = useState<number>(initialStates.currentDepth);
+  const [selectedCell, setSelectedCell] = useState<CellCoordinates | null>(initialStates.selectedCell);
+  const [draggedCell, setDraggedCell] = useState<CellCoordinates | null>(initialStates.draggedCell);
+  const [hoveredCell, setHoveredCell] = useState<CellCoordinates | null>(initialStates.hoveredCell);
+  const [isInvalidMove, setIsInvalidMove] = useState<boolean>(initialStates.isInvalidMove);
+  const [invalidMoveMessage, setInvalidMoveMessage] = useState<string>(initialStates.invalidMoveMessage);
+  const [foundWordsDisplay, setFoundWordsDisplay] = useState<string[]>(initialStates.foundWordsDisplay);
+  const [hasDeviated, setHasDeviated] = useState<boolean>(initialStates.hasDeviated);
+  const [animationState, setAnimationState] = useState(initialStates.animationState);
+  const animationTimeoutRef = useRef<number | null>(null);
+  const [history, setHistory] = useState<HistoryEntry[]>(initialStates.history);
+  const [highlightedCells, setHighlightedCells] = useState<CellCoordinates[]>([]);
+  const highlightTimeoutRef = useRef<number | null>(null);
+  const [isGameOver, setIsGameOver] = useState<boolean>(initialStates.isGameOver);
+  const [wiggleCells, setWiggleCells] = useState<CellCoordinates[]>([]);
+  const wiggleTimeoutRef = useRef<number | null>(null);
   const [overallFailedAttempts, setOverallFailedAttempts] = useState(0);
   const [turnFailedAttempts, setTurnFailedAttempts] = useState(0);
-  const [hintCells, setHintCells] = useState([]);
-  const hintTimeoutRef = useRef(null);
+  const [hintCells, setHintCells] = useState<CellCoordinates[]>([]);
+  const hintTimeoutRef = useRef<number | null>(null);
 
-  // Effect to determine initial target level from URL on mount
+  // Effect for Dark Mode
   useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('darkMode', JSON.stringify(true));
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('darkMode', JSON.stringify(false));
+    }
+  }, [darkMode]);
+
+  // Effect to get current date and load initial daily progress
+  useEffect(() => {
+    const todayDateString = getFormattedDate(new Date());
+    setCurrentDate(todayDateString);
+
+    const savedProgress = localStorage.getItem(`wordChainsProgress-${todayDateString}`);
+    if (savedProgress) {
+        const progress = JSON.parse(savedProgress);
+        setDailyProgress(progress);
+        if (progress.simpleCompleted && !progress.hardCompleted) {
+            setDifficulty('hard');
+        } else {
+            setDifficulty('simple');
+        }
+    } else {
+        setDailyProgress({ simpleCompleted: false, hardCompleted: false });
+        setDifficulty('simple');
+    }
+
     const params = new URLSearchParams(window.location.search);
-    const levelParam = params.get('level');
-    const requestedLevel = levelParam ? parseInt(levelParam, 10) : 0;
-    const validInitialLevel = !isNaN(requestedLevel) && requestedLevel >= 0 ? requestedLevel : 0;
-    setTargetLevel(validInitialLevel); // Set the target level first
-  }, []); // Runs only once on mount
+    const debugParam = params.get('debug');
+    setIsDebugMode(debugParam === 'true');
+  }, []);
 
-  // Effect to load data when targetLevel changes
+  // Effect to load level data when currentDate or difficulty changes
   useEffect(() => {
-    const loadLevelData = async (levelToLoad) => {
-        if (levelToLoad === undefined) return;
-
-        setLoading(true);
-        setError(null);
-        setGameData(null);
-        setGrid(null);
-        setCurrentPossibleMoves([]);
-        setCurrentDepth(0);
-        setHistory([]);
-        setHasDeviated(false);
-        setIsInvalidMove(false);
-        setInvalidMoveMessage('');
-        setFoundWordsDisplay([]);
-        setIsGameOver(false);
-        setSelectedCell(null);
-        setHoveredCell(null);
-        setDraggedCell(null);
-        setWiggleCells([]);
-        setOverallFailedAttempts(0);
-        setTurnFailedAttempts(0);
-        setHintCells([]);
-        console.log(`Attempting to load level ${levelToLoad}...`);
+    const loadLevelData = async (date: string, diff: 'simple' | 'hard') => {
+        if (!date) return;
+        setLoading(true); setError(null);
+        const initial = getInitialGameState();
+        setGameData(null); setGrid(initial.grid); setCurrentPossibleMoves(initial.currentPossibleMoves);
+        setCurrentDepth(initial.currentDepth); setHistory(initial.history); setHasDeviated(initial.hasDeviated);
+        setIsInvalidMove(initial.isInvalidMove); setInvalidMoveMessage(initial.invalidMoveMessage);
+        setFoundWordsDisplay(initial.foundWordsDisplay); setIsGameOver(initial.isGameOver);
+        setSelectedCell(initial.selectedCell); setHoveredCell(initial.hoveredCell); setDraggedCell(initial.draggedCell);
+        setWiggleCells([]); setTurnFailedAttempts(0); setHintCells([]);
+        setAnimationState(initial.animationState); // Reset animation state too
 
         try {
             const basePath = '';
-            const response = await fetch(`${basePath}/levels/${levelToLoad}.json`);
-            console.log(`Fetch response for level ${levelToLoad}:`, response.status, response.ok);
-
+            const response = await fetch(`${basePath}/levels/${diff}/${date}.json`);
             if (!response.ok) {
                  if (response.status === 404) {
-                     throw new Error(`Level ${levelToLoad} not found. More levels coming soon!`);
-                 } else {
-                    throw new Error(`Failed to fetch level ${levelToLoad} data (HTTP ${response.status})`);
-                 }
+                     throw new Error(`Today's ${diff} level is not available yet. Please check back later!`);
+                 } else { throw new Error(`Failed to fetch ${diff} level for ${date} (HTTP ${response.status})`); }
             }
             const contentType = response.headers.get("content-type");
             if (!contentType || !contentType.includes("application/json")) {
-                console.error("Received non-JSON content type:", contentType);
-                throw new Error(`Level ${levelToLoad} not found. More levels coming soon!`);
+                const textResponse = await response.text();
+                console.error("Received non-JSON content type:", contentType, "Response text:", textResponse);
+                throw new Error(`Received non-JSON response for ${diff} level ${date}.`);
             }
-
             const data = await response.json();
-            console.log(`Successfully loaded data for level ${levelToLoad}`);
-            setGameData(data);
-            setGrid(data.initialGrid);
-            setCurrentPossibleMoves(data.explorationTree || []);
-            setLevel(levelToLoad); // Update the display level *after* successful load
-        } catch (err) {
-            console.error("Error in loadLevelData:", err);
-            setError(err.message);
-            setGameData(null);
-            setGrid(null);
-            setCurrentPossibleMoves([]);
-            setLevel(levelToLoad); // Still update display level even on error
+            setGameData(data); setGrid(data.initialGrid); setCurrentPossibleMoves(data.explorationTree || []);
+
+            const savedGameState = localStorage.getItem(`wordChainsState-${date}-${diff}`);
+            if (savedGameState) {
+                const { history: savedHistory, currentDepth: savedDepth, overallFailedAttempts: savedOverallFails, turnFailedAttempts: savedTurnFails, hasDeviated: savedDeviation } = JSON.parse(savedGameState);
+                setHistory(savedHistory || []);
+                setCurrentDepth(savedDepth || 0);
+                setOverallFailedAttempts(savedOverallFails || 0);
+                setTurnFailedAttempts(savedTurnFails || 0);
+                setHasDeviated(savedDeviation || false);
+            } else {
+                 setHistory([]); setCurrentDepth(0);
+                 if (diff === 'simple') setOverallFailedAttempts(0);
+                 setTurnFailedAttempts(0); setHasDeviated(false);
+            }
+        } catch (err: any) {
+            setError(err.message); setGameData(null); setGrid(null); setCurrentPossibleMoves([]);
         } finally {
-            console.log(`Finished loading attempt for level ${levelToLoad}. Setting loading to false.`);
             setLoading(false);
         }
     };
 
-    loadLevelData(targetLevel); // Load data based on the target level
+    if (currentDate) {
+        loadLevelData(currentDate, difficulty);
+    }
+  }, [currentDate, difficulty]);
 
-  }, [targetLevel]); // Rerun when targetLevel changes
+  // Effect to save game state
+  useEffect(() => {
+      if (!loading && gameData && currentDate && difficulty) {
+          const gameStateToSave = { history, currentDepth, overallFailedAttempts, turnFailedAttempts, hasDeviated };
+          localStorage.setItem(`wordChainsState-${currentDate}-${difficulty}`, JSON.stringify(gameStateToSave));
+      }
+  }, [history, currentDepth, overallFailedAttempts, turnFailedAttempts, hasDeviated, currentDate, difficulty, gameData, loading]);
+
 
   // Memoized Calculations
   const optimalPathWords = useMemo(() => gameData ? findLongestWordChain(gameData.explorationTree) : [], [gameData]);
   const playerUniqueWordsFound = useMemo(() => {
-      const words = new Set();
+      const words = new Set<string>();
       history.forEach(state => { if (Array.isArray(state.wordsFormedByMove)) { state.wordsFormedByMove.forEach(word => words.add(word)); } });
       return words;
   }, [history]);
   const maxDepthAttainable = gameData ? gameData.maxDepthReached : 0;
-  const minWordLength = gameData ? gameData.minWordLength : 4;
+  const wordLength = gameData ? gameData.wordLength : 4;
 
   // Effects
-  useEffect(() => { // Check for game end (win or no more moves)
+  useEffect(() => {
       if (gameData && !animationState.animating && currentDepth > 0) {
-          if (currentDepth === maxDepthAttainable || currentPossibleMoves.length === 0) {
-             console.log("Game ended. Depth:", currentDepth, "Max:", maxDepthAttainable, "Moves left:", currentPossibleMoves.length);
+          const levelCompleted = currentDepth === maxDepthAttainable;
+          if (levelCompleted || (currentPossibleMoves && currentPossibleMoves.length === 0)) {
              setIsGameOver(true);
+             if (levelCompleted && difficulty === 'simple' && !dailyProgress.simpleCompleted) {
+                 const newProgress = { ...dailyProgress, simpleCompleted: true };
+                 setDailyProgress(newProgress);
+                 localStorage.setItem(`wordChainsProgress-${currentDate}`, JSON.stringify(newProgress));
+             } else if (levelCompleted && difficulty === 'hard' && !dailyProgress.hardCompleted) {
+                 const newProgress = { ...dailyProgress, hardCompleted: true };
+                 setDailyProgress(newProgress);
+                 localStorage.setItem(`wordChainsProgress-${currentDate}`, JSON.stringify(newProgress));
+             }
           } else {
              setIsGameOver(false);
           }
       }
-  }, [gameData, currentPossibleMoves, currentDepth, animationState.animating, maxDepthAttainable]);
+  }, [gameData, currentPossibleMoves, currentDepth, animationState.animating, maxDepthAttainable, difficulty, dailyProgress, currentDate]);
 
-  useEffect(() => { // Trigger hint
+  useEffect(() => {
       if (turnFailedAttempts >= 3 && currentPossibleMoves && currentPossibleMoves.length > 0) {
           let optimalMoveNode = null; let highestDepth = -1;
           for (const node of currentPossibleMoves) {
@@ -446,12 +203,12 @@ function App() {
               const toCoords = { row: optimalMoveNode.move.to[0], col: optimalMoveNode.move.to[1] };
               setHintCells([fromCoords, toCoords]);
               if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
-              hintTimeoutRef.current = setTimeout(() => { setHintCells([]); hintTimeoutRef.current = null; }, 3000);
+              hintTimeoutRef.current = window.setTimeout(() => { setHintCells([]); hintTimeoutRef.current = null; }, 3000);
           }
       }
   }, [turnFailedAttempts, currentPossibleMoves]);
 
-  useEffect(() => { // Cleanup timeouts on unmount
+  useEffect(() => {
       return () => {
           if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current);
           if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current);
@@ -461,10 +218,10 @@ function App() {
   }, []);
 
   // Event Handlers
-  const triggerWiggle = useCallback((cell1, cell2) => {
+  const triggerWiggle = useCallback((cell1: CellCoordinates, cell2: CellCoordinates) => {
       if (wiggleTimeoutRef.current) clearTimeout(wiggleTimeoutRef.current);
       setWiggleCells([cell1, cell2]);
-      wiggleTimeoutRef.current = setTimeout(() => { setWiggleCells([]); wiggleTimeoutRef.current = null; }, 500);
+      wiggleTimeoutRef.current = window.setTimeout(() => { setWiggleCells([]); wiggleTimeoutRef.current = null; }, 500);
   }, []);
 
   const incrementFailedAttempts = useCallback(() => {
@@ -472,11 +229,11 @@ function App() {
       setTurnFailedAttempts(prev => prev + 1);
   }, []);
 
-  const performSwap = useCallback((cell1, cell2) => {
+  const performSwap = useCallback((cell1: CellCoordinates, cell2: CellCoordinates) => {
         if (!cell1 || !cell2 || animationState.animating || isGameOver || !gameData || !grid) return;
         setSelectedCell(null); setDraggedCell(null); setHoveredCell(null);
 
-        let matchedNode = null;
+        let matchedNode: ExplorationNodeData | null = null;
         const moveOption1 = { from: [cell1.row, cell1.col], to: [cell2.row, cell2.col] };
         const moveOption2 = { from: [cell2.row, cell2.col], to: [cell1.row, cell1.col] };
 
@@ -507,7 +264,7 @@ function App() {
             setTurnFailedAttempts(0);
             setHintCells([]); if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
 
-            setHistory(prevHistory => [...prevHistory, { grid, currentPossibleMoves, currentDepth, moveMade: moveMadeCoords, wordsFormedByMove, turnFailedAttempts }]);
+            setHistory(prevHistory => [...prevHistory, { grid: grid!, currentPossibleMoves, currentDepth, moveMade: moveMadeCoords, wordsFormedByMove, turnFailedAttempts }]);
             setAnimationState({ animating: true, from: cell1, to: cell2 });
             setFoundWordsDisplay(wordsFormedByMove);
             setIsInvalidMove(false); setInvalidMoveMessage('');
@@ -515,26 +272,25 @@ function App() {
             if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current);
             setHighlightedCells([]);
 
-            animationTimeoutRef.current = setTimeout(() => {
-                const newGrid = grid.map(row => [...row]);
+            animationTimeoutRef.current = window.setTimeout(() => {
+                const newGrid = grid!.map(r => [...r]);
                 const temp = newGrid[cell1.row][cell1.col];
                 newGrid[cell1.row][cell1.col] = newGrid[cell2.row][cell2.col];
                 newGrid[cell2.row][cell2.col] = temp;
                 const nextDepth = currentDepth + 1;
                 setGrid(newGrid);
-                setCurrentPossibleMoves(matchedNode.nextMoves || []);
+                setCurrentPossibleMoves(matchedNode!.nextMoves || []);
                 setCurrentDepth(nextDepth);
                 setAnimationState({ animating: false, from: null, to: null });
                 animationTimeoutRef.current = null;
-                let allCoords = [];
-                wordsFormedByMove.forEach(word => { const coords = findWordCoordinates(newGrid, word, matchedNode.move); allCoords = [...allCoords, ...coords]; });
+                let allCoords: CellCoordinates[] = [];
+                wordsFormedByMove.forEach(word => { const coords = findWordCoordinates(newGrid, word, matchedNode!.move!); allCoords = [...allCoords, ...coords]; });
                 const uniqueCoords = Array.from(new Map(allCoords.map(item => [`${item.row}-${item.col}`, item])).values());
                 setHighlightedCells(uniqueCoords);
-                highlightTimeoutRef.current = setTimeout(() => { setHighlightedCells([]); highlightTimeoutRef.current = null; }, 1500);
+                highlightTimeoutRef.current = window.setTimeout(() => { setHighlightedCells([]); highlightTimeoutRef.current = null; }, 1500);
             }, 300);
         } else {
             setIsInvalidMove(true);
-            // Don't set hasDeviated for invalid move
             setInvalidMoveMessage('Invalid Move! No new word found!');
             setFoundWordsDisplay([]);
             triggerWiggle(cell1, cell2);
@@ -542,7 +298,7 @@ function App() {
         }
   }, [grid, currentPossibleMoves, currentDepth, animationState.animating, isGameOver, gameData, history, triggerWiggle, incrementFailedAttempts, maxDepthAttainable]);
 
-  const handleDragStart = useCallback((cellCoords) => {
+  const handleDragStart = useCallback((cellCoords: CellCoordinates) => {
     if (animationState.animating || isGameOver || !gameData) return;
     setDraggedCell(cellCoords); setSelectedCell(null);
     setIsInvalidMove(false); setInvalidMoveMessage(''); setFoundWordsDisplay([]); setHoveredCell(null);
@@ -551,14 +307,14 @@ function App() {
     if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current); setHintCells([]);
   }, [animationState.animating, isGameOver, gameData]);
 
-  const handleDragEnter = useCallback((cellCoords) => {
+  const handleDragEnter = useCallback((cellCoords: CellCoordinates) => {
       if (draggedCell && (draggedCell.row !== cellCoords.row || draggedCell.col !== cellCoords.col)) {
           if (areAdjacent(draggedCell, cellCoords)) setHoveredCell(cellCoords);
           else setHoveredCell(null);
       }
   }, [draggedCell]);
 
-  const handleDragLeave = useCallback((cellCoords) => {
+  const handleDragLeave = useCallback((cellCoords: CellCoordinates) => {
       if (hoveredCell && hoveredCell.row === cellCoords.row && hoveredCell.col === cellCoords.col) setHoveredCell(null);
   }, [hoveredCell]);
 
@@ -566,7 +322,7 @@ function App() {
     setDraggedCell(null); setHoveredCell(null);
   }, []);
 
-  const handleDrop = useCallback((targetCellCoords) => {
+  const handleDrop = useCallback((targetCellCoords: CellCoordinates) => {
     if (!draggedCell) return;
     const sourceCell = draggedCell;
     setHoveredCell(null);
@@ -580,7 +336,7 @@ function App() {
     performSwap(sourceCell, targetCellCoords);
   }, [draggedCell, performSwap, triggerWiggle, incrementFailedAttempts]);
 
-  const handleCellClick = useCallback((cellCoords) => {
+  const handleCellClick = useCallback((cellCoords: CellCoordinates) => {
       if (animationState.animating || isGameOver || !gameData || draggedCell) return;
       setIsInvalidMove(false); setInvalidMoveMessage(''); setFoundWordsDisplay([]);
       if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current); setHighlightedCells([]);
@@ -603,20 +359,22 @@ function App() {
 
   const handleReset = useCallback(() => {
      if (!gameData && !error) { console.warn("Cannot reset: Game not loaded yet."); return; }
-     const levelToResetTo = level;
      if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current);
      if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current);
      if (wiggleTimeoutRef.current) clearTimeout(wiggleTimeoutRef.current);
      if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
-     setGrid(gameData ? gameData.initialGrid : null);
-     setCurrentPossibleMoves(gameData ? (gameData.explorationTree || []) : []);
-     setCurrentDepth(0); setHistory([]); setHasDeviated(false); setIsInvalidMove(false);
-     setInvalidMoveMessage(''); setFoundWordsDisplay([]); setIsGameOver(false); setSelectedCell(null);
-     setHoveredCell(null); setDraggedCell(null); setWiggleCells([]); setOverallFailedAttempts(0);
-     setTurnFailedAttempts(0); setHintCells([]);
-     setAnimationState({ animating: false, from: null, to: null });
-     console.log("Game reset for level", levelToResetTo);
-  }, [gameData, level, error]);
+
+     const initial = getInitialGameState(gameData || undefined);
+     setGrid(initial.grid); setCurrentPossibleMoves(initial.currentPossibleMoves);
+     setCurrentDepth(initial.currentDepth); setHistory(initial.history); setHasDeviated(initial.hasDeviated);
+     setIsInvalidMove(initial.isInvalidMove); setInvalidMoveMessage(initial.invalidMoveMessage);
+     setFoundWordsDisplay(initial.foundWordsDisplay); setIsGameOver(initial.isGameOver);
+     setSelectedCell(initial.selectedCell); setHoveredCell(initial.hoveredCell); setDraggedCell(initial.draggedCell);
+     setWiggleCells([]); setTurnFailedAttempts(0); setHintCells([]);
+     setAnimationState(initial.animationState);
+     // Overall failed attempts are not reset here as it's per-day/difficulty combination
+     console.log("Game reset for level", currentDate, "Difficulty:", difficulty);
+  }, [gameData, currentDate, difficulty, error]);
 
   const handleBack = useCallback(() => {
       if (history.length === 0 || animationState.animating || isGameOver || !gameData) return;
@@ -663,7 +421,7 @@ function App() {
       setFoundWordsDisplay([]); setHighlightedCells([]); setIsGameOver(false);
       setSelectedCell(null); setDraggedCell(null); setHoveredCell(null); setWiggleCells([]); setHintCells([]);
 
-      animationTimeoutRef.current = setTimeout(() => {
+      animationTimeoutRef.current = window.setTimeout(() => {
           setGrid(previousState.grid);
           setCurrentPossibleMoves(previousState.currentPossibleMoves);
           setCurrentDepth(previousState.currentDepth);
@@ -672,7 +430,6 @@ function App() {
           setHasDeviated(previousStateWasDeviated);
           setTurnFailedAttempts(previousTurnFailedAttempts);
           animationTimeoutRef.current = null;
-          console.log("Went back to previous state. Depth:", previousState.currentDepth, "Deviated:", previousStateWasDeviated, "Turn Fails:", previousTurnFailedAttempts);
       }, 300);
 
   }, [history, animationState.animating, isGameOver, handleReset, gameData]);
@@ -681,13 +438,51 @@ function App() {
       setIsGameOver(false);
   }, []);
 
-  const handleNextLevel = useCallback(() => {
-      const nextLevelNum = level + 1;
-      const newUrl = `/?level=${nextLevelNum}`;
-      window.history.pushState({}, '', newUrl);
-      setTargetLevel(nextLevelNum);
+  const handlePlayHardMode = useCallback(() => {
       setIsGameOver(false);
-  }, [level]);
+      const initial = getInitialGameState();
+      setGrid(initial.grid); setCurrentPossibleMoves(initial.currentPossibleMoves);
+      setCurrentDepth(initial.currentDepth); setHistory(initial.history); setHasDeviated(initial.hasDeviated);
+      setIsInvalidMove(initial.isInvalidMove); setInvalidMoveMessage(initial.invalidMoveMessage);
+      setFoundWordsDisplay(initial.foundWordsDisplay);
+      setSelectedCell(initial.selectedCell); setHoveredCell(initial.hoveredCell); setDraggedCell(initial.draggedCell);
+      setWiggleCells([]); setTurnFailedAttempts(0); setHintCells([]);
+      setAnimationState(initial.animationState);
+      setDifficulty('hard');
+  }, []);
+
+  const handlePlaySimpleMode = useCallback(() => {
+    setIsGameOver(false);
+    const initial = getInitialGameState();
+    setGrid(initial.grid); setCurrentPossibleMoves(initial.currentPossibleMoves);
+    setCurrentDepth(initial.currentDepth); setHistory(initial.history); setHasDeviated(initial.hasDeviated);
+    setIsInvalidMove(initial.isInvalidMove); setInvalidMoveMessage(initial.invalidMoveMessage);
+    setFoundWordsDisplay(initial.foundWordsDisplay);
+    setSelectedCell(initial.selectedCell); setHoveredCell(initial.hoveredCell); setDraggedCell(initial.draggedCell);
+    setWiggleCells([]); setTurnFailedAttempts(0); setHintCells([]);
+    setAnimationState(initial.animationState);
+    setOverallFailedAttempts(0);
+    setDifficulty('simple');
+}, []);
+
+  const handleHintButtonClick = useCallback(() => {
+    if (currentPossibleMoves && currentPossibleMoves.length > 0 && !animationState.animating) {
+        let optimalMoveNode = null; let highestDepth = -1;
+        for (const node of currentPossibleMoves) {
+            if (typeof node.maxDepthReached === 'number' && node.maxDepthReached > highestDepth) {
+                highestDepth = node.maxDepthReached; optimalMoveNode = node;
+            }
+        }
+        if (optimalMoveNode && optimalMoveNode.move) {
+            const fromCoords = { row: optimalMoveNode.move.from[0], col: optimalMoveNode.move.from[1] };
+            const toCoords = { row: optimalMoveNode.move.to[0], col: optimalMoveNode.move.to[1] };
+            setHintCells([fromCoords, toCoords]);
+            if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
+            hintTimeoutRef.current = window.setTimeout(() => { setHintCells([]); hintTimeoutRef.current = null; }, 3000);
+        }
+    }
+  }, [currentPossibleMoves, animationState.animating]);
+
 
   // Render Helper for Word Chain
   const renderWordChain = () => {
@@ -696,54 +491,95 @@ function App() {
           <div className="flex flex-wrap items-center justify-center mt-4 space-x-2 text-lg px-4 pb-2">
               {history.map((histEntry, index) => (
                   <React.Fragment key={index}>
-                      <span className="px-2 py-1 bg-green-100 text-green-800 rounded font-medium">
+                      <span className="px-2 py-1 bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 rounded font-medium">
                           {histEntry.wordsFormedByMove?.[0]?.toUpperCase() || '???'}
                           {histEntry.wordsFormedByMove?.length > 1 ? '...' : ''}
                       </span>
-                      <span className="text-gray-500 font-bold mx-1">→</span>
+                      <span className="text-gray-500 dark:text-gray-400 font-bold mx-1">→</span>
                   </React.Fragment>
               ))}
-              <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded font-medium">Current</span>
+              <span className="px-2 py-1 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 rounded font-medium">Current</span>
           </div>
       );
   };
 
   // --- Conditional Rendering for Loading/Error States ---
-  if (loading) return <div className="flex justify-center items-center min-h-screen">Loading Level {targetLevel}...</div>;
+  if (loading) return <div className="flex justify-center items-center min-h-screen text-gray-700 dark:text-gray-300">Loading {difficulty} level for {currentDate}...</div>;
   if (error) return (
       <div className="flex flex-col justify-center items-center min-h-screen text-center px-4">
-          <p className="text-red-600 text-xl font-semibold">Error</p>
-          <p className="text-gray-700 mt-2">{error}</p>
-          {targetLevel > 0 && (
-            <a href="/?level=0" className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
-                Go to the first level
-            </a>
-          )}
+          <p className="text-red-600 dark:text-red-400 text-xl font-semibold">Error</p>
+          <p className="text-gray-700 dark:text-gray-300 mt-2">{error}</p>
+          <button onClick={() => { setCurrentDate(''); setDifficulty('simple'); }} className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600">Try Again</button>
       </div>
   );
-  if (!gameData) return <div className="flex justify-center items-center min-h-screen text-gray-500">Game data could not be loaded.</div>;
+  if (!gameData) return <div className="flex justify-center items-center min-h-screen text-gray-500 dark:text-gray-400">Game data could not be loaded.</div>;
 
+  const currentLevelCompleted = (
+    (difficulty === 'simple' && dailyProgress.simpleCompleted) ||
+    (difficulty === 'hard' && dailyProgress.hardCompleted)
+  )
 
   // --- Main Render ---
   return (
-    <div className="flex flex-col items-center justify-start min-h-screen bg-gray-50 p-4 font-sans pt-8">
+    <div className={`flex flex-col items-center justify-start min-h-screen p-4 font-sans pt-8 ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+        <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="absolute top-4 right-4 p-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+        >
+            {darkMode ? (
+                <i className="fas fa-sun"></i>
+            ) : (
+                <i className="fas fa-moon"></i>
+            )}
+        </button>
+
        <h1 className="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-flow font-bungee">
             Word Chain
        </h1>
-       <h2 className="text-2xl mb-2 text-gray-700">Level {level}</h2>
-       <div className="text-center max-w-xl mb-2 text-sm text-gray-600">
-            <p className="font-semibold mb-1">How to Play:</p>
-            <p>Click adjacent cells or drag-and-drop letters to swap them. Find the optimal move sequence to win! Every move <i>must</i> make a new {minWordLength}-letter word.</p>
+       <h2 className="text-2xl mb-1 text-gray-700 dark:text-gray-300">
+            {currentDate} <span className="capitalize">{difficulty != 'simple' && `(${difficulty}) `}</span>
+            { currentLevelCompleted && <i className="fas fa-check text-green-600"></i>}
+       </h2>
+
+       {dailyProgress.simpleCompleted && difficulty === 'simple' && (
+        <div>
+            <div className="text-center max-w-xl mb-2 text-sm text-gray-600 dark:text-gray-400">
+                <p><strong>You have completed the first level.</strong> <i>Maybe try hard mode next?</i></p>
+                <button
+                    onClick={handlePlayHardMode}
+                    className="mt-4 px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:ring-offset-gray-900"
+                >
+                    Play Hard Mode
+                </button>
+            </div>
+        </div>
+        )}
+
+
+        {dailyProgress.hardCompleted && difficulty === 'hard' && (
+        <div>
+            <div className="text-center max-w-xl mb-2 text-sm text-gray-600 dark:text-gray-400">
+                <p><strong>You have completed both level for today!</strong> Come back tomorrow for another challenge.</p>
+                <button
+                    onClick={handlePlaySimpleMode}
+                    className="mt-4 px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:ring-offset-gray-900"
+                >
+                    Back to normal mode
+                </button>
+            </div>
+        </div>
+        )}
+
+       <div className="text-center max-w-xl mb-2 text-sm text-gray-600 dark:text-gray-400">
+            <p><span className="font-semibold mb-1">How to Play: </span>This is hard mode. You no longer have hints but you still need to find the optimal move sequence to win! Every move <i>must</i> make a new {wordLength}-letter word.</p>
        </div>
 
-       {/* Invalid Move Message Area */}
        <div className="h-6 mb-2 text-center">
-            {isInvalidMove && <p className="text-red-600 font-semibold">{invalidMoveMessage}</p>}
+            {isInvalidMove && <p className="text-red-600 dark:text-red-400 font-semibold">{invalidMoveMessage}</p>}
        </div>
 
-       {/* Grid Container */}
        <div className="relative inline-flex flex-col items-center mb-1">
-            {/* Failed Attempts Badge */}
             {overallFailedAttempts > 0 && (
                  <div
                     className="absolute top-0 left-0 z-10 px-2.5 py-1 bg-red-500 text-white text-xs font-bold rounded-full shadow-md transform -translate-x-1/4 -translate-y-1/4"
@@ -752,15 +588,12 @@ function App() {
                     {overallFailedAttempts}
                 </div>
             )}
-
-            {/* Depth Badge */}
             <div
-                className="absolute top-0 right-0 z-10 px-2.5 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-md transform translate-x-1/4 -translate-y-1/4"
+                className="absolute top-0 right-0 z-10 px-2.5 py-1 bg-blue-600 dark:bg-blue-500 text-white text-xs font-bold rounded-full shadow-md transform translate-x-1/4 -translate-y-1/4"
                 title="Current Depth / Max Depth Attainable"
             >
                 {currentDepth}/{maxDepthAttainable}
             </div>
-
            <WordGrid
                 grid={grid}
                 selectedCell={selectedCell}
@@ -777,74 +610,33 @@ function App() {
                 onDragEnd={handleDragEnd}
                 onDrop={handleDrop}
             />
-            {/* Progress Bar and Buttons Container */}
             <div className="w-full flex items-center mt-2">
                 <ProgressBar currentScore={currentDepth} maxScore={maxDepthAttainable} />
-            </div>
-            <div className="w-full flex items-center mt-2">
                 <div className="flex space-x-1 ml-2">
-                    <button onClick={handleBack} disabled={history.length === 0 || animationState.animating || isGameOver} className={`p-2 bg-gray-200 text-gray-700 rounded-md shadow hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed`} title="Back (Undo last move)">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="M16 18 L10 12 L16 6 Z"/><path d="M7 18 L7 6" strokeWidth="2"/></svg>
+                    <button onClick={handleBack} disabled={history.length === 0 || animationState.animating || isGameOver} className={`p-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md shadow hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed`} title="Back (Undo last move)">
+                        <i className="fas fa-step-backward"></i>
                     </button>
-                    <button onClick={handleReset} disabled={animationState.animating} className={`p-2 bg-gray-200 text-gray-700 rounded-md shadow hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed`} title="Reset Game">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M21 21v-5h-5"/></svg>
+                    <button onClick={handleReset} disabled={animationState.animating} className={`p-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md shadow hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-500 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed`} title="Reset Game">
+                        <i className="fas fa-redo"></i>
                     </button>
-                     <button onClick={handleNextLevel} disabled={animationState.animating || isGameOver} className={`p-2 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed bg-green-500 hover:bg-green-600 text-white`} title="Next Level">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                    </button>
+                    {difficulty === 'simple' &&
+                        <button onClick={handleHintButtonClick} disabled={animationState.animating || isGameOver || (currentPossibleMoves && currentPossibleMoves.length === 0)} className={`p-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md shadow hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 dark:focus:ring-yellow-500 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed`} title="Get a Hint">
+                            <i className="fas fa-lightbulb"></i>
+                        </button>
+                    }
                 </div>
             </div>
        </div>
 
-        {/* Status Text Area Below Grid */}
         <div className="h-6 mt-2 text-center">
-            <p className={`text-sm ${hasDeviated ? 'text-red-600 font-bold' : 'text-green-600 font-semibold'}`}>
-                {hasDeviated ? "Deviated from optimal path!" : "On the optimal path"}
+            <p className={`text-sm ${hasDeviated ? 'text-red-600 dark:text-red-400 font-bold' : 'text-green-600 dark:text-green-400 font-semibold'}`}>
+                {hasDeviated ? "Deviated from optimal path!" : "On the optimal path."}
             </p>
         </div>
 
        {renderWordChain()}
-       <ExplorationTreeView treeData={gameData.explorationTree} />
-       {isGameOver && <EndGamePanel score={currentDepth} maxScore={maxDepthAttainable} playerWords={playerUniqueWordsFound} optimalPathWords={optimalPathWords} overallFailedAttempts={overallFailedAttempts} onClose={handleCloseGameOver} onNextLevel={handleNextLevel} />}
-       {/* Add CSS for animations */}
-       <style>{`
-            /* Yellow Pulse/Fade for Successful Word */
-            @keyframes pulse-fade-out-short { 0% { opacity: 0.6; transform: scale(1); } 20% { opacity: 0.8; transform: scale(1.05); } 80% { opacity: 0.8; transform: scale(1.05); } 100% { opacity: 0; transform: scale(1); } }
-            .animate-pulse-fade-out-short { animation: pulse-fade-out-short 1.5s ease-in-out forwards; }
-
-            /* Blue Pulse/Fade for Hint (Longer Duration) */
-            @keyframes pulse-fade-out-long { 0% { opacity: 0.7; transform: scale(1); } 20% { opacity: 0.9; transform: scale(1.05); } 80% { opacity: 0.9; transform: scale(1.05); } 100% { opacity: 0; transform: scale(1); } }
-            .animate-pulse-fade-out-long { animation: pulse-fade-out-long 3s ease-in-out forwards; } /* 3s duration */
-
-            /* Wiggle Animation */
-            @keyframes wiggle {
-              0%, 100% { transform: translateX(0); }
-              25% { transform: translateX(-4px); }
-              50% { transform: translateX(4px); }
-              75% { transform: translateX(-4px); }
-            }
-            .animate-wiggle {
-              animation: wiggle 0.4s ease-in-out;
-              background-color: #fecaca; /* Optional: Add red background during wiggle */
-            }
-
-            /* Gradient Flow Animation */
-            @keyframes gradient-flow {
-              0% { background-position: 0% 50%; }
-              50% { background-position: 100% 50%; }
-              100% { background-position: 0% 50%; }
-            }
-            .animate-gradient-flow {
-              background-size: 200% 200%; /* Larger size for smooth movement */
-              animation: gradient-flow 4s ease infinite;
-            }
-
-            /* Scrollbar styling (kept in case needed elsewhere, but removed from word chain) */
-            .scrollbar-thin { scrollbar-width: thin; scrollbar-color: #9ca3af #e5e7eb; }
-            .scrollbar-thin::-webkit-scrollbar { height: 6px; width: 6px; }
-            .scrollbar-thin::-webkit-scrollbar-track { background: #e5e7eb; border-radius: 3px; }
-            .scrollbar-thin::-webkit-scrollbar-thumb { background-color: #9ca3af; border-radius: 3px; border: 1px solid #e5e7eb; }
-       `}</style>
+       {isDebugMode && <ExplorationTreeView treeData={gameData?.explorationTree} />}
+       {isGameOver && <EndGamePanel score={currentDepth} maxScore={maxDepthAttainable} playerWords={playerUniqueWordsFound} optimalPathWords={optimalPathWords} overallFailedAttempts={overallFailedAttempts} onClose={handleCloseGameOver} onPlayHardMode={handlePlayHardMode} onResetGame={handleReset} difficulty={difficulty} dailyProgress={dailyProgress} levelJustCompleted={currentDepth === maxDepthAttainable} />}
     </div>
   );
 }
