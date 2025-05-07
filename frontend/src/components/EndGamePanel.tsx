@@ -35,7 +35,6 @@ const EndGamePanel: React.FC<EndGamePanelProps> = ({
 
     if (levelJustCompleted) {
         title = difficulty === 'simple' ? "Simple Level Complete!" : "Daily Challenge Complete!";
-        message = "Great job!";
     }
 
     const showPlayHardButton = levelJustCompleted && difficulty === 'simple';
@@ -46,19 +45,20 @@ const EndGamePanel: React.FC<EndGamePanelProps> = ({
         <div className="fixed inset-0 bg-black bg-opacity-75 flex flex-col items-center justify-center z-20 p-4">
             <div className="bg-white dark:bg-gray-800 p-6 md:p-8 rounded-lg shadow-xl text-center w-full max-w-2xl">
                 <h2 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">{title}</h2>
-                <p className="text-xl mb-4 text-gray-700 dark:text-gray-300">{message}</p>
                 <p className="text-lg mb-2 text-gray-700 dark:text-gray-300">You found <span className="font-semibold">{playerWords.size}</span> unique words.</p>
-                <p className="text-lg mb-4 text-gray-700 dark:text-gray-300">Failed Attempts: <span className="font-semibold">{overallFailedAttempts}</span></p>
 
                 <div className="flex flex-col md:flex-row justify-around gap-4 mb-6 max-h-60 overflow-y-auto">
                     <div className="flex-1 border rounded p-3 bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                        <h3 className="text-lg font-semibold mb-2 text-green-700 dark:text-green-400">Words You Found ({sortedPlayerWords.length})</h3>
-                        {sortedPlayerWords.length > 0 ? <ul className="text-left text-sm space-y-1 text-gray-700 dark:text-gray-300">{sortedPlayerWords.map(word => <li key={word}>{word.toUpperCase()}</li>)}</ul> : <p className="text-sm text-gray-500 dark:text-gray-400 italic">None found.</p>}
+                        <h3 className="text-lg font-semibold mb-2 text-green-700 dark:text-green-400">You found {sortedPlayerWords.length} words</h3>
+                        {sortedPlayerWords.length > 0 ? <ol className="text-left text-sm space-y-1 list-decimal list-inside text-gray-700 dark:text-gray-300">{sortedPlayerWords.map(word => <li key={word}>{word.toUpperCase()}</li>)}</ol> : <p className="text-sm text-gray-500 dark:text-gray-400 italic">None found.</p>}
                     </div>
-                    <div className="flex-1 border rounded p-3 bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                        <h3 className="text-lg font-semibold mb-2 text-blue-700 dark:text-blue-400">Optimal Path Words ({optimalPathWords.length})</h3>
-                        {optimalPathWords.length > 0 ? <ol className="text-left text-sm space-y-1 list-decimal list-inside text-gray-700 dark:text-gray-300">{optimalPathWords.map((word, index) => <li key={`${word}-${index}`}>{word.toUpperCase()}</li>)}</ol> : <p className="text-sm text-gray-500 dark:text-gray-400 italic">No optimal path defined.</p>}
-                    </div>
+                    {
+                        score != maxScore &&
+                        <div className="flex-1 border rounded p-3 bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                            <h3 className="text-lg font-semibold mb-2 text-blue-700 dark:text-blue-400">There are {optimalPathWords.length} words possible.</h3>
+                            {optimalPathWords.length > 0 ? <ol className="text-left text-sm space-y-1 list-decimal list-inside text-gray-700 dark:text-gray-300">{optimalPathWords.map((word, index) => <li key={`${word}-${index}`}>{word.toUpperCase()}</li>)}</ol> : <p className="text-sm text-gray-500 dark:text-gray-400 italic">No optimal path defined.</p>}
+                        </div>
+                    }
                 </div>
 
                 {showPlayHardButton && (

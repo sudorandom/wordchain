@@ -87,7 +87,7 @@ const GridCell: React.FC<GridCellProps> = ({
       onDragEnd={handleDragEnd}
       className={cellClasses}
     >
-      {isHighlighted && <div className="absolute inset-0 bg-yellow-300 dark:bg-yellow-500 animate-pulse-fade-out-short"></div>}
+      {isHighlighted && <div className="absolute inset-0 bg-green-300 dark:bg-green-500 animate-pulse-fade-out-short"></div>}
       {isHintHighlighted && <div className="absolute inset-0 bg-blue-300 dark:bg-blue-600 animate-pulse-fade-out-long"></div>}
       <span className="relative z-10">{letter.toUpperCase()}</span>
     </div>

@@ -54,7 +54,6 @@ function App() {
   const [isGameOver, setIsGameOver] = useState<boolean>(initialStates.isGameOver);
   const [wiggleCells, setWiggleCells] = useState<CellCoordinates[]>([]);
   const wiggleTimeoutRef = useRef<number | null>(null);
-  const [overallFailedAttempts, setOverallFailedAttempts] = useState(0);
   const [turnFailedAttempts, setTurnFailedAttempts] = useState(0);
   const [hintCells, setHintCells] = useState<CellCoordinates[]>([]);
   const hintTimeoutRef = useRef<number | null>(null);
@@ -75,23 +74,31 @@ function App() {
     const todayDateString = getFormattedDate(new Date());
     setCurrentDate(todayDateString);
 
-    const savedProgress = localStorage.getItem(`wordChainsProgress-${todayDateString}`);
-    if (savedProgress) {
-        const progress = JSON.parse(savedProgress);
-        setDailyProgress(progress);
-        if (progress.simpleCompleted && !progress.hardCompleted) {
-            setDifficulty('hard');
-        } else {
-            setDifficulty('simple');
-        }
-    } else {
-        setDailyProgress({ simpleCompleted: false, hardCompleted: false });
-        setDifficulty('simple');
-    }
-
     const params = new URLSearchParams(window.location.search);
     const debugParam = params.get('debug');
     setIsDebugMode(debugParam === 'true');
+    const hardParam = params.get('hard') === 'true'; // Check if 'hard=true' is in URL
+    // Load daily progress
+    const savedProgressData = localStorage.getItem(`wordChainsProgress-${todayDateString}`);
+    let currentDailyProgress = { simpleCompleted: false, hardCompleted: false };
+    if (savedProgressData) {
+        currentDailyProgress = JSON.parse(savedProgressData);
+    }
+    setDailyProgress(currentDailyProgress); // Update dailyProgress state regardless of initial difficulty chosen
+    // Determine initial difficulty: URL param 'hard=true' takes precedence
+    let initialDifficultyValue: 'simple' | 'hard';
+    if (hardParam) {
+        initialDifficultyValue = 'hard';
+    } else {
+     // If no 'hard' URL param, determine by progress
+     if (currentDailyProgress.simpleCompleted && !currentDailyProgress.hardCompleted) {
+         initialDifficultyValue = 'hard';
+     } else {
+         initialDifficultyValue = 'simple';
+     }
+    }
+    setDifficulty(initialDifficultyValue);
+
   }, []);
 
   // Effect to load level data when currentDate or difficulty changes
@@ -127,15 +134,16 @@ function App() {
 
             const savedGameState = localStorage.getItem(`wordChainsState-${date}-${diff}`);
             if (savedGameState) {
-                const { history: savedHistory, currentDepth: savedDepth, overallFailedAttempts: savedOverallFails, turnFailedAttempts: savedTurnFails, hasDeviated: savedDeviation } = JSON.parse(savedGameState);
+                const { lastGrid: lastGrid, history: savedHistory, currentDepth: savedDepth, turnFailedAttempts: savedTurnFails, hasDeviated: savedDeviation } = JSON.parse(savedGameState);
+                if (lastGrid) {
+                    setGrid(lastGrid);
+                }
                 setHistory(savedHistory || []);
                 setCurrentDepth(savedDepth || 0);
-                setOverallFailedAttempts(savedOverallFails || 0);
                 setTurnFailedAttempts(savedTurnFails || 0);
                 setHasDeviated(savedDeviation || false);
             } else {
                  setHistory([]); setCurrentDepth(0);
-                 if (diff === 'simple') setOverallFailedAttempts(0);
                  setTurnFailedAttempts(0); setHasDeviated(false);
             }
         } catch (err: any) {
@@ -153,10 +161,10 @@ function App() {
   // Effect to save game state
   useEffect(() => {
       if (!loading && gameData && currentDate && difficulty) {
-          const gameStateToSave = { history, currentDepth, overallFailedAttempts, turnFailedAttempts, hasDeviated };
+          const gameStateToSave = { lastGrid: grid, history, currentDepth, turnFailedAttempts, hasDeviated };
           localStorage.setItem(`wordChainsState-${currentDate}-${difficulty}`, JSON.stringify(gameStateToSave));
       }
-  }, [history, currentDepth, overallFailedAttempts, turnFailedAttempts, hasDeviated, currentDate, difficulty, gameData, loading]);
+  }, [history, currentDepth, turnFailedAttempts, hasDeviated, currentDate, difficulty, gameData, loading]);
 
 
   // Memoized Calculations
@@ -225,7 +233,6 @@ function App() {
   }, []);
 
   const incrementFailedAttempts = useCallback(() => {
-      setOverallFailedAttempts(prev => prev + 1);
       setTurnFailedAttempts(prev => prev + 1);
   }, []);
 
@@ -372,8 +379,6 @@ function App() {
      setSelectedCell(initial.selectedCell); setHoveredCell(initial.hoveredCell); setDraggedCell(initial.draggedCell);
      setWiggleCells([]); setTurnFailedAttempts(0); setHintCells([]);
      setAnimationState(initial.animationState);
-     // Overall failed attempts are not reset here as it's per-day/difficulty combination
-     console.log("Game reset for level", currentDate, "Difficulty:", difficulty);
   }, [gameData, currentDate, difficulty, error]);
 
   const handleBack = useCallback(() => {
@@ -446,7 +451,9 @@ function App() {
       setIsInvalidMove(initial.isInvalidMove); setInvalidMoveMessage(initial.invalidMoveMessage);
       setFoundWordsDisplay(initial.foundWordsDisplay);
       setSelectedCell(initial.selectedCell); setHoveredCell(initial.hoveredCell); setDraggedCell(initial.draggedCell);
-      setWiggleCells([]); setTurnFailedAttempts(0); setHintCells([]);
+      setWiggleCells([]);
+      setTurnFailedAttempts(0);
+      setHintCells([]);
       setAnimationState(initial.animationState);
       setDifficulty('hard');
   }, []);
@@ -459,9 +466,10 @@ function App() {
     setIsInvalidMove(initial.isInvalidMove); setInvalidMoveMessage(initial.invalidMoveMessage);
     setFoundWordsDisplay(initial.foundWordsDisplay);
     setSelectedCell(initial.selectedCell); setHoveredCell(initial.hoveredCell); setDraggedCell(initial.draggedCell);
-    setWiggleCells([]); setTurnFailedAttempts(0); setHintCells([]);
+    setWiggleCells([]);
+    setTurnFailedAttempts(0);
+    setHintCells([]);
     setAnimationState(initial.animationState);
-    setOverallFailedAttempts(0);
     setDifficulty('simple');
 }, []);
 
@@ -557,7 +565,7 @@ function App() {
         )}
 
 
-        {dailyProgress.hardCompleted && difficulty === 'hard' && (
+        {difficulty === 'hard' && (
         <div>
             <div className="text-center max-w-xl mb-2 text-sm text-gray-600 dark:text-gray-400">
                 <p><strong>You have completed both level for today!</strong> Come back tomorrow for another challenge.</p>
@@ -580,12 +588,12 @@ function App() {
        </div>
 
        <div className="relative inline-flex flex-col items-center mb-1">
-            {overallFailedAttempts > 0 && (
+            {turnFailedAttempts > 0 && (
                  <div
                     className="absolute top-0 left-0 z-10 px-2.5 py-1 bg-red-500 text-white text-xs font-bold rounded-full shadow-md transform -translate-x-1/4 -translate-y-1/4"
-                    title={`Total Failed Attempts: ${overallFailedAttempts}`}
+                    title={`Failed Attempts: ${turnFailedAttempts}`}
                 >
-                    {overallFailedAttempts}
+                    {turnFailedAttempts}
                 </div>
             )}
             <div
@@ -636,7 +644,7 @@ function App() {
 
        {renderWordChain()}
        {isDebugMode && <ExplorationTreeView treeData={gameData?.explorationTree} />}
-       {isGameOver && <EndGamePanel score={currentDepth} maxScore={maxDepthAttainable} playerWords={playerUniqueWordsFound} optimalPathWords={optimalPathWords} overallFailedAttempts={overallFailedAttempts} onClose={handleCloseGameOver} onPlayHardMode={handlePlayHardMode} onResetGame={handleReset} difficulty={difficulty} dailyProgress={dailyProgress} levelJustCompleted={currentDepth === maxDepthAttainable} />}
+       {isGameOver && <EndGamePanel score={currentDepth} maxScore={maxDepthAttainable} playerWords={playerUniqueWordsFound} optimalPathWords={optimalPathWords} onClose={handleCloseGameOver} onPlayHardMode={handlePlayHardMode} onResetGame={handleReset} difficulty={difficulty} dailyProgress={dailyProgress} levelJustCompleted={currentDepth === maxDepthAttainable} />}
     </div>
   );
 }
