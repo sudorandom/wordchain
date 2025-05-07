@@ -1,0 +1,723 @@
+{
+  "initialGrid": [
+    [
+      "o",
+      "r",
+      "r",
+      "i",
+      "t"
+    ],
+    [
+      "f",
+      "c",
+      "i",
+      "h",
+      "e"
+    ],
+    [
+      "e",
+      "g",
+      "n",
+      "h",
+      "h"
+    ],
+    [
+      "a",
+      "w",
+      "r",
+      "d",
+      "e"
+    ],
+    [
+      "v",
+      "e",
+      "a",
+      "s",
+      "s"
+    ]
+  ],
+  "cli.WordLength": 5,
+  "cli.RequiredMinTurns": 10,
+  "cli.RequiredMaxTurns": 20,
+  "maxDepthReached": 12,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          1,
+          1
+        ],
+        "to": [
+          1,
+          2
+        ]
+      },
+      "wordsFormed": [
+        "fiche"
+      ],
+      "maxDepthReached": 11,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              1,
+              4
+            ],
+            "to": [
+              2,
+              4
+            ]
+          },
+          "wordsFormed": [
+            "thees"
+          ],
+          "maxDepthReached": 10,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  3,
+                  4
+                ],
+                "to": [
+                  4,
+                  4
+                ]
+              },
+              "wordsFormed": [
+                "these"
+              ],
+              "maxDepthReached": 9,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      3,
+                      0
+                    ],
+                    "to": [
+                      3,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "wards"
+                  ],
+                  "maxDepthReached": 8,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          2
+                        ],
+                        "to": [
+                          3,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "wands"
+                      ],
+                      "maxDepthReached": 2,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              3,
+                              1
+                            ],
+                            "to": [
+                              4,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "wends"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  0
+                                ],
+                                "to": [
+                                  4,
+                                  0
+                                ]
+                              },
+                              "wordsFormed": [
+                                "vends"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          2
+                        ],
+                        "to": [
+                          4,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "verse"
+                      ],
+                      "maxDepthReached": 7,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              2
+                            ],
+                            "to": [
+                              3,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "wands"
+                          ],
+                          "maxDepthReached": 6,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  1
+                                ],
+                                "to": [
+                                  4,
+                                  1
+                                ]
+                              },
+                              "wordsFormed": [
+                                "wends"
+                              ],
+                              "maxDepthReached": 5,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      3,
+                                      0
+                                    ],
+                                    "to": [
+                                      4,
+                                      0
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "vends"
+                                  ],
+                                  "maxDepthReached": 4,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          4,
+                                          3
+                                        ],
+                                        "to": [
+                                          4,
+                                          4
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "wares"
+                                      ],
+                                      "maxDepthReached": 3,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              3,
+                                              2
+                                            ],
+                                            "to": [
+                                              4,
+                                              2
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "wanes"
+                                          ],
+                                          "maxDepthReached": 2,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  2,
+                                                  4
+                                                ],
+                                                "to": [
+                                                  3,
+                                                  4
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "verde"
+                                              ],
+                                              "maxDepthReached": 1,
+                                              "nextMoves": [
+                                                {
+                                                  "move": {
+                                                    "from": [
+                                                      3,
+                                                      0
+                                                    ],
+                                                    "to": [
+                                                      4,
+                                                      0
+                                                    ]
+                                                  },
+                                                  "wordsFormed": [
+                                                    "vanes"
+                                                  ],
+                                                  "maxDepthReached": 0
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  3,
+                                                  0
+                                                ],
+                                                "to": [
+                                                  4,
+                                                  0
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "vanes"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  3
+                                ],
+                                "to": [
+                                  4,
+                                  3
+                                ]
+                              },
+                              "wordsFormed": [
+                                "verde"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              3,
+                              3
+                            ],
+                            "to": [
+                              4,
+                              3
+                            ]
+                          },
+                          "wordsFormed": [
+                            "verde"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      3,
+                      2
+                    ],
+                    "to": [
+                      4,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "verse"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          3
+                        ],
+                        "to": [
+                          4,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "verde"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          1,
+          4
+        ],
+        "to": [
+          2,
+          4
+        ]
+      },
+      "wordsFormed": [
+        "thees"
+      ],
+      "maxDepthReached": 10,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              3,
+              4
+            ],
+            "to": [
+              4,
+              4
+            ]
+          },
+          "wordsFormed": [
+            "these"
+          ],
+          "maxDepthReached": 9,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  3,
+                  0
+                ],
+                "to": [
+                  3,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "wards"
+              ],
+              "maxDepthReached": 8,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      2
+                    ],
+                    "to": [
+                      3,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "wands"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          1
+                        ],
+                        "to": [
+                          4,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "wends"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              3,
+                              0
+                            ],
+                            "to": [
+                              4,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "vends"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      3,
+                      2
+                    ],
+                    "to": [
+                      4,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "verse"
+                  ],
+                  "maxDepthReached": 7,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          2
+                        ],
+                        "to": [
+                          3,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "wands"
+                      ],
+                      "maxDepthReached": 6,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              3,
+                              1
+                            ],
+                            "to": [
+                              4,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "wends"
+                          ],
+                          "maxDepthReached": 5,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  0
+                                ],
+                                "to": [
+                                  4,
+                                  0
+                                ]
+                              },
+                              "wordsFormed": [
+                                "vends"
+                              ],
+                              "maxDepthReached": 4,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      4,
+                                      3
+                                    ],
+                                    "to": [
+                                      4,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "wares"
+                                  ],
+                                  "maxDepthReached": 3,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          3,
+                                          2
+                                        ],
+                                        "to": [
+                                          4,
+                                          2
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "wanes"
+                                      ],
+                                      "maxDepthReached": 2,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              2,
+                                              4
+                                            ],
+                                            "to": [
+                                              3,
+                                              4
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "verde"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  3,
+                                                  0
+                                                ],
+                                                "to": [
+                                                  4,
+                                                  0
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "vanes"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "move": {
+                                            "from": [
+                                              3,
+                                              0
+                                            ],
+                                            "to": [
+                                              4,
+                                              0
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "vanes"
+                                          ],
+                                          "maxDepthReached": 0
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              3,
+                              3
+                            ],
+                            "to": [
+                              4,
+                              3
+                            ]
+                          },
+                          "wordsFormed": [
+                            "verde"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          3
+                        ],
+                        "to": [
+                          4,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "verde"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  3,
+                  2
+                ],
+                "to": [
+                  4,
+                  2
+                ]
+              },
+              "wordsFormed": [
+                "verse"
+              ],
+              "maxDepthReached": 1,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      3,
+                      3
+                    ],
+                    "to": [
+                      4,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "verde"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

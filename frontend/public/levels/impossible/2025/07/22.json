@@ -1,0 +1,1921 @@
+{
+  "initialGrid": [
+    [
+      "s",
+      "o",
+      "e",
+      "r",
+      "s"
+    ],
+    [
+      "v",
+      "h",
+      "n",
+      "m",
+      "o"
+    ],
+    [
+      "e",
+      "u",
+      "b",
+      "e",
+      "h"
+    ],
+    [
+      "s",
+      "s",
+      "e",
+      "i",
+      "n"
+    ],
+    [
+      "t",
+      "e",
+      "t",
+      "o",
+      "a"
+    ]
+  ],
+  "cli.WordLength": 5,
+  "cli.RequiredMinTurns": 10,
+  "cli.RequiredMaxTurns": 20,
+  "maxDepthReached": 12,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          0,
+          1
+        ],
+        "to": [
+          1,
+          1
+        ]
+      },
+      "wordsFormed": [
+        "house"
+      ],
+      "maxDepthReached": 2,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              0
+            ],
+            "to": [
+              0,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "souse"
+          ],
+          "maxDepthReached": 1,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  0,
+                  1
+                ],
+                "to": [
+                  1,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "hoers"
+              ],
+              "maxDepthReached": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          0,
+          2
+        ],
+        "to": [
+          0,
+          3
+        ]
+      },
+      "wordsFormed": [
+        "sores"
+      ],
+      "maxDepthReached": 11,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              1
+            ],
+            "to": [
+              1,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "house"
+          ],
+          "maxDepthReached": 10,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  0,
+                  0
+                ],
+                "to": [
+                  0,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "souse"
+              ],
+              "maxDepthReached": 9,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      1
+                    ],
+                    "to": [
+                      0,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "rouse"
+                  ],
+                  "maxDepthReached": 8,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          1
+                        ],
+                        "to": [
+                          1,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "hoses"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              2
+                            ],
+                            "to": [
+                              1,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "hones"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          1
+                        ],
+                        "to": [
+                          4,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "roues"
+                      ],
+                      "maxDepthReached": 3,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              1,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "hoses"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  0,
+                                  2
+                                ],
+                                "to": [
+                                  1,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "hones"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              1
+                            ],
+                            "to": [
+                              2,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "robes"
+                          ],
+                          "maxDepthReached": 2,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  0,
+                                  1
+                                ],
+                                "to": [
+                                  1,
+                                  1
+                                ]
+                              },
+                              "wordsFormed": [
+                                "hoses"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      0,
+                                      2
+                                    ],
+                                    "to": [
+                                      1,
+                                      2
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "hones"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          4,
+                          0
+                        ],
+                        "to": [
+                          4,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "roust"
+                      ],
+                      "maxDepthReached": 7,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              1,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "hoses"
+                          ],
+                          "maxDepthReached": 6,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  0,
+                                  2
+                                ],
+                                "to": [
+                                  1,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "hones"
+                              ],
+                              "maxDepthReached": 5,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      3,
+                                      1
+                                    ],
+                                    "to": [
+                                      4,
+                                      1
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "stein"
+                                  ],
+                                  "maxDepthReached": 4,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          0,
+                                          1
+                                        ],
+                                        "to": [
+                                          1,
+                                          1
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "routs"
+                                      ],
+                                      "maxDepthReached": 3,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              3,
+                                              1
+                                            ],
+                                            "to": [
+                                              3,
+                                              2
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "roues"
+                                          ],
+                                          "maxDepthReached": 2,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  2,
+                                                  1
+                                                ],
+                                                "to": [
+                                                  2,
+                                                  2
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "robes"
+                                              ],
+                                              "maxDepthReached": 1,
+                                              "nextMoves": [
+                                                {
+                                                  "move": {
+                                                    "from": [
+                                                      3,
+                                                      3
+                                                    ],
+                                                    "to": [
+                                                      4,
+                                                      3
+                                                    ]
+                                                  },
+                                                  "wordsFormed": [
+                                                    "seton"
+                                                  ],
+                                                  "maxDepthReached": 0
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  3,
+                                                  3
+                                                ],
+                                                "to": [
+                                                  4,
+                                                  3
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "seton"
+                                              ],
+                                              "maxDepthReached": 1,
+                                              "nextMoves": [
+                                                {
+                                                  "move": {
+                                                    "from": [
+                                                      2,
+                                                      1
+                                                    ],
+                                                    "to": [
+                                                      2,
+                                                      2
+                                                    ]
+                                                  },
+                                                  "wordsFormed": [
+                                                    "robes"
+                                                  ],
+                                                  "maxDepthReached": 0
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "move": {
+                                            "from": [
+                                              4,
+                                              0
+                                            ],
+                                            "to": [
+                                              4,
+                                              1
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "route"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  3,
+                                                  4
+                                                ],
+                                                "to": [
+                                                  4,
+                                                  4
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "seton"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  1
+                                ],
+                                "to": [
+                                  4,
+                                  1
+                                ]
+                              },
+                              "wordsFormed": [
+                                "stein"
+                              ],
+                              "maxDepthReached": 5,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      0,
+                                      1
+                                    ],
+                                    "to": [
+                                      1,
+                                      1
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "routs"
+                                  ],
+                                  "maxDepthReached": 3,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          3,
+                                          1
+                                        ],
+                                        "to": [
+                                          3,
+                                          2
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "roues"
+                                      ],
+                                      "maxDepthReached": 2,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              2,
+                                              1
+                                            ],
+                                            "to": [
+                                              2,
+                                              2
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "robes"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  3,
+                                                  3
+                                                ],
+                                                "to": [
+                                                  4,
+                                                  3
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "seton"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "move": {
+                                            "from": [
+                                              3,
+                                              3
+                                            ],
+                                            "to": [
+                                              4,
+                                              3
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "seton"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  2,
+                                                  1
+                                                ],
+                                                "to": [
+                                                  2,
+                                                  2
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "robes"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "move": {
+                                        "from": [
+                                          4,
+                                          0
+                                        ],
+                                        "to": [
+                                          4,
+                                          1
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "route"
+                                      ],
+                                      "maxDepthReached": 1,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              3,
+                                              4
+                                            ],
+                                            "to": [
+                                              4,
+                                              4
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "seton"
+                                          ],
+                                          "maxDepthReached": 0
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "move": {
+                                    "from": [
+                                      0,
+                                      2
+                                    ],
+                                    "to": [
+                                      1,
+                                      2
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "hones"
+                                  ],
+                                  "maxDepthReached": 4,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          0,
+                                          1
+                                        ],
+                                        "to": [
+                                          1,
+                                          1
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "routs"
+                                      ],
+                                      "maxDepthReached": 3,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              3,
+                                              1
+                                            ],
+                                            "to": [
+                                              3,
+                                              2
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "roues"
+                                          ],
+                                          "maxDepthReached": 2,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  2,
+                                                  1
+                                                ],
+                                                "to": [
+                                                  2,
+                                                  2
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "robes"
+                                              ],
+                                              "maxDepthReached": 1,
+                                              "nextMoves": [
+                                                {
+                                                  "move": {
+                                                    "from": [
+                                                      3,
+                                                      3
+                                                    ],
+                                                    "to": [
+                                                      4,
+                                                      3
+                                                    ]
+                                                  },
+                                                  "wordsFormed": [
+                                                    "seton"
+                                                  ],
+                                                  "maxDepthReached": 0
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  3,
+                                                  3
+                                                ],
+                                                "to": [
+                                                  4,
+                                                  3
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "seton"
+                                              ],
+                                              "maxDepthReached": 1,
+                                              "nextMoves": [
+                                                {
+                                                  "move": {
+                                                    "from": [
+                                                      2,
+                                                      1
+                                                    ],
+                                                    "to": [
+                                                      2,
+                                                      2
+                                                    ]
+                                                  },
+                                                  "wordsFormed": [
+                                                    "robes"
+                                                  ],
+                                                  "maxDepthReached": 0
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "move": {
+                                            "from": [
+                                              4,
+                                              0
+                                            ],
+                                            "to": [
+                                              4,
+                                              1
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "route"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  3,
+                                                  4
+                                                ],
+                                                "to": [
+                                                  4,
+                                                  4
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "seton"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              3,
+                              1
+                            ],
+                            "to": [
+                              4,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "routs",
+                            "stein"
+                          ],
+                          "maxDepthReached": 3,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  1
+                                ],
+                                "to": [
+                                  3,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "roues"
+                              ],
+                              "maxDepthReached": 2,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      1
+                                    ],
+                                    "to": [
+                                      2,
+                                      2
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "robes"
+                                  ],
+                                  "maxDepthReached": 1,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          3,
+                                          3
+                                        ],
+                                        "to": [
+                                          4,
+                                          3
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "seton"
+                                      ],
+                                      "maxDepthReached": 0
+                                    }
+                                  ]
+                                },
+                                {
+                                  "move": {
+                                    "from": [
+                                      3,
+                                      3
+                                    ],
+                                    "to": [
+                                      4,
+                                      3
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "seton"
+                                  ],
+                                  "maxDepthReached": 1,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          2,
+                                          1
+                                        ],
+                                        "to": [
+                                          2,
+                                          2
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "robes"
+                                      ],
+                                      "maxDepthReached": 0
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  4,
+                                  0
+                                ],
+                                "to": [
+                                  4,
+                                  1
+                                ]
+                              },
+                              "wordsFormed": [
+                                "route"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      3,
+                                      4
+                                    ],
+                                    "to": [
+                                      4,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "seton"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          4,
+                          1
+                        ],
+                        "to": [
+                          4,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "roust"
+                      ],
+                      "maxDepthReached": 7,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              1,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "hoses"
+                          ],
+                          "maxDepthReached": 6,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  0,
+                                  2
+                                ],
+                                "to": [
+                                  1,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "hones"
+                              ],
+                              "maxDepthReached": 5,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      3,
+                                      1
+                                    ],
+                                    "to": [
+                                      4,
+                                      1
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "stein"
+                                  ],
+                                  "maxDepthReached": 4,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          0,
+                                          1
+                                        ],
+                                        "to": [
+                                          1,
+                                          1
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "routs"
+                                      ],
+                                      "maxDepthReached": 3,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              3,
+                                              1
+                                            ],
+                                            "to": [
+                                              3,
+                                              2
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "roues"
+                                          ],
+                                          "maxDepthReached": 2,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  2,
+                                                  1
+                                                ],
+                                                "to": [
+                                                  2,
+                                                  2
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "robes"
+                                              ],
+                                              "maxDepthReached": 1,
+                                              "nextMoves": [
+                                                {
+                                                  "move": {
+                                                    "from": [
+                                                      3,
+                                                      3
+                                                    ],
+                                                    "to": [
+                                                      4,
+                                                      3
+                                                    ]
+                                                  },
+                                                  "wordsFormed": [
+                                                    "seton"
+                                                  ],
+                                                  "maxDepthReached": 0
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  3,
+                                                  3
+                                                ],
+                                                "to": [
+                                                  4,
+                                                  3
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "seton"
+                                              ],
+                                              "maxDepthReached": 1,
+                                              "nextMoves": [
+                                                {
+                                                  "move": {
+                                                    "from": [
+                                                      2,
+                                                      1
+                                                    ],
+                                                    "to": [
+                                                      2,
+                                                      2
+                                                    ]
+                                                  },
+                                                  "wordsFormed": [
+                                                    "robes"
+                                                  ],
+                                                  "maxDepthReached": 0
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "move": {
+                                            "from": [
+                                              4,
+                                              1
+                                            ],
+                                            "to": [
+                                              4,
+                                              2
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "route"
+                                          ],
+                                          "maxDepthReached": 0
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  1
+                                ],
+                                "to": [
+                                  4,
+                                  1
+                                ]
+                              },
+                              "wordsFormed": [
+                                "stein"
+                              ],
+                              "maxDepthReached": 5,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      0,
+                                      1
+                                    ],
+                                    "to": [
+                                      1,
+                                      1
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "routs"
+                                  ],
+                                  "maxDepthReached": 3,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          3,
+                                          1
+                                        ],
+                                        "to": [
+                                          3,
+                                          2
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "roues"
+                                      ],
+                                      "maxDepthReached": 2,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              2,
+                                              1
+                                            ],
+                                            "to": [
+                                              2,
+                                              2
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "robes"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  3,
+                                                  3
+                                                ],
+                                                "to": [
+                                                  4,
+                                                  3
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "seton"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "move": {
+                                            "from": [
+                                              3,
+                                              3
+                                            ],
+                                            "to": [
+                                              4,
+                                              3
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "seton"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  2,
+                                                  1
+                                                ],
+                                                "to": [
+                                                  2,
+                                                  2
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "robes"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "move": {
+                                        "from": [
+                                          4,
+                                          1
+                                        ],
+                                        "to": [
+                                          4,
+                                          2
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "route"
+                                      ],
+                                      "maxDepthReached": 0
+                                    }
+                                  ]
+                                },
+                                {
+                                  "move": {
+                                    "from": [
+                                      0,
+                                      2
+                                    ],
+                                    "to": [
+                                      1,
+                                      2
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "hones"
+                                  ],
+                                  "maxDepthReached": 4,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          0,
+                                          1
+                                        ],
+                                        "to": [
+                                          1,
+                                          1
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "routs"
+                                      ],
+                                      "maxDepthReached": 3,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              3,
+                                              1
+                                            ],
+                                            "to": [
+                                              3,
+                                              2
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "roues"
+                                          ],
+                                          "maxDepthReached": 2,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  2,
+                                                  1
+                                                ],
+                                                "to": [
+                                                  2,
+                                                  2
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "robes"
+                                              ],
+                                              "maxDepthReached": 1,
+                                              "nextMoves": [
+                                                {
+                                                  "move": {
+                                                    "from": [
+                                                      3,
+                                                      3
+                                                    ],
+                                                    "to": [
+                                                      4,
+                                                      3
+                                                    ]
+                                                  },
+                                                  "wordsFormed": [
+                                                    "seton"
+                                                  ],
+                                                  "maxDepthReached": 0
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  3,
+                                                  3
+                                                ],
+                                                "to": [
+                                                  4,
+                                                  3
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "seton"
+                                              ],
+                                              "maxDepthReached": 1,
+                                              "nextMoves": [
+                                                {
+                                                  "move": {
+                                                    "from": [
+                                                      2,
+                                                      1
+                                                    ],
+                                                    "to": [
+                                                      2,
+                                                      2
+                                                    ]
+                                                  },
+                                                  "wordsFormed": [
+                                                    "robes"
+                                                  ],
+                                                  "maxDepthReached": 0
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "move": {
+                                            "from": [
+                                              4,
+                                              1
+                                            ],
+                                            "to": [
+                                              4,
+                                              2
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "route"
+                                          ],
+                                          "maxDepthReached": 0
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              3,
+                              1
+                            ],
+                            "to": [
+                              4,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "routs",
+                            "stein"
+                          ],
+                          "maxDepthReached": 3,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  1
+                                ],
+                                "to": [
+                                  3,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "roues"
+                              ],
+                              "maxDepthReached": 2,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      1
+                                    ],
+                                    "to": [
+                                      2,
+                                      2
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "robes"
+                                  ],
+                                  "maxDepthReached": 1,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          3,
+                                          3
+                                        ],
+                                        "to": [
+                                          4,
+                                          3
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "seton"
+                                      ],
+                                      "maxDepthReached": 0
+                                    }
+                                  ]
+                                },
+                                {
+                                  "move": {
+                                    "from": [
+                                      3,
+                                      3
+                                    ],
+                                    "to": [
+                                      4,
+                                      3
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "seton"
+                                  ],
+                                  "maxDepthReached": 1,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          2,
+                                          1
+                                        ],
+                                        "to": [
+                                          2,
+                                          2
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "robes"
+                                      ],
+                                      "maxDepthReached": 0
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  4,
+                                  1
+                                ],
+                                "to": [
+                                  4,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "route"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  0,
+                  1
+                ],
+                "to": [
+                  0,
+                  2
+                ]
+              },
+              "wordsFormed": [
+                "rouse"
+              ],
+              "maxDepthReached": 5,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      0
+                    ],
+                    "to": [
+                      0,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "souse"
+                  ],
+                  "maxDepthReached": 0
+                },
+                {
+                  "move": {
+                    "from": [
+                      3,
+                      1
+                    ],
+                    "to": [
+                      4,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "roues"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          1
+                        ],
+                        "to": [
+                          2,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "robes"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      4,
+                      0
+                    ],
+                    "to": [
+                      4,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "roust"
+                  ],
+                  "maxDepthReached": 4,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          1
+                        ],
+                        "to": [
+                          4,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "routs",
+                        "stein"
+                      ],
+                      "maxDepthReached": 3,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              3,
+                              1
+                            ],
+                            "to": [
+                              3,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "roues"
+                          ],
+                          "maxDepthReached": 2,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  1
+                                ],
+                                "to": [
+                                  2,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "robes"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      3,
+                                      3
+                                    ],
+                                    "to": [
+                                      4,
+                                      3
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "seton"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  3
+                                ],
+                                "to": [
+                                  4,
+                                  3
+                                ]
+                              },
+                              "wordsFormed": [
+                                "seton"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      1
+                                    ],
+                                    "to": [
+                                      2,
+                                      2
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "robes"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              4,
+                              0
+                            ],
+                            "to": [
+                              4,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "route"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  4
+                                ],
+                                "to": [
+                                  4,
+                                  4
+                                ]
+                              },
+                              "wordsFormed": [
+                                "seton"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      4,
+                      1
+                    ],
+                    "to": [
+                      4,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "roust"
+                  ],
+                  "maxDepthReached": 4,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          1
+                        ],
+                        "to": [
+                          4,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "routs",
+                        "stein"
+                      ],
+                      "maxDepthReached": 3,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              3,
+                              1
+                            ],
+                            "to": [
+                              3,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "roues"
+                          ],
+                          "maxDepthReached": 2,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  1
+                                ],
+                                "to": [
+                                  2,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "robes"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      3,
+                                      3
+                                    ],
+                                    "to": [
+                                      4,
+                                      3
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "seton"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  3
+                                ],
+                                "to": [
+                                  4,
+                                  3
+                                ]
+                              },
+                              "wordsFormed": [
+                                "seton"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      1
+                                    ],
+                                    "to": [
+                                      2,
+                                      2
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "robes"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              4,
+                              1
+                            ],
+                            "to": [
+                              4,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "route"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

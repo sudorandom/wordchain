@@ -1,0 +1,813 @@
+{
+  "initialGrid": [
+    [
+      "b",
+      "a",
+      "t",
+      "t",
+      "s"
+    ],
+    [
+      "i",
+      "w",
+      "d",
+      "e",
+      "r"
+    ],
+    [
+      "c",
+      "s",
+      "h",
+      "n",
+      "m"
+    ]
+  ],
+  "cli.WordLength": 5,
+  "cli.RequiredMinTurns": 7,
+  "cli.RequiredMaxTurns": 9,
+  "maxDepthReached": 9,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          0,
+          3
+        ],
+        "to": [
+          1,
+          3
+        ]
+      },
+      "wordsFormed": [
+        "bates"
+      ],
+      "maxDepthReached": 0
+    },
+    {
+      "move": {
+        "from": [
+          1,
+          0
+        ],
+        "to": [
+          1,
+          1
+        ]
+      },
+      "wordsFormed": [
+        "wider"
+      ],
+      "maxDepthReached": 8,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              0
+            ],
+            "to": [
+              1,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "watts"
+          ],
+          "maxDepthReached": 7,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  0,
+                  2
+                ],
+                "to": [
+                  1,
+                  2
+                ]
+              },
+              "wordsFormed": [
+                "biter"
+              ],
+              "maxDepthReached": 6,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      3
+                    ],
+                    "to": [
+                      1,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "wades"
+                  ],
+                  "maxDepthReached": 5,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          4
+                        ],
+                        "to": [
+                          1,
+                          4
+                        ]
+                      },
+                      "wordsFormed": [
+                        "wader"
+                      ],
+                      "maxDepthReached": 4,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              2
+                            ],
+                            "to": [
+                              1,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "water"
+                          ],
+                          "maxDepthReached": 3,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  0,
+                                  3
+                                ],
+                                "to": [
+                                  1,
+                                  3
+                                ]
+                              },
+                              "wordsFormed": [
+                                "bides"
+                              ],
+                              "maxDepthReached": 2,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      0,
+                                      2
+                                    ],
+                                    "to": [
+                                      1,
+                                      2
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "bites"
+                                  ],
+                                  "maxDepthReached": 1,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          0,
+                                          1
+                                        ],
+                                        "to": [
+                                          1,
+                                          1
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "bates"
+                                      ],
+                                      "maxDepthReached": 0
+                                    },
+                                    {
+                                      "move": {
+                                        "from": [
+                                          1,
+                                          0
+                                        ],
+                                        "to": [
+                                          2,
+                                          0
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "cites"
+                                      ],
+                                      "maxDepthReached": 0
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              3
+                            ],
+                            "to": [
+                              1,
+                              3
+                            ]
+                          },
+                          "wordsFormed": [
+                            "bites"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  0,
+                                  1
+                                ],
+                                "to": [
+                                  1,
+                                  1
+                                ]
+                              },
+                              "wordsFormed": [
+                                "bates"
+                              ],
+                              "maxDepthReached": 0
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  1,
+                                  0
+                                ],
+                                "to": [
+                                  2,
+                                  0
+                                ]
+                              },
+                              "wordsFormed": [
+                                "cites"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      4
+                    ],
+                    "to": [
+                      1,
+                      4
+                    ]
+                  },
+                  "wordsFormed": [
+                    "bites"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          1
+                        ],
+                        "to": [
+                          1,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "bates"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          0
+                        ],
+                        "to": [
+                          2,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "cites"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  0,
+                  4
+                ],
+                "to": [
+                  1,
+                  4
+                ]
+              },
+              "wordsFormed": [
+                "bides"
+              ],
+              "maxDepthReached": 2,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      2
+                    ],
+                    "to": [
+                      1,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "bites"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          1
+                        ],
+                        "to": [
+                          1,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "bates"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          0
+                        ],
+                        "to": [
+                          2,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "cites"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  1,
+                  0
+                ],
+                "to": [
+                  2,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "cider"
+              ],
+              "maxDepthReached": 0
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              0,
+              1
+            ],
+            "to": [
+              1,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "wader"
+          ],
+          "maxDepthReached": 6,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  0,
+                  2
+                ],
+                "to": [
+                  1,
+                  2
+                ]
+              },
+              "wordsFormed": [
+                "water"
+              ],
+              "maxDepthReached": 5,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      3
+                    ],
+                    "to": [
+                      1,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "bides"
+                  ],
+                  "maxDepthReached": 3,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          2
+                        ],
+                        "to": [
+                          1,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "bites"
+                      ],
+                      "maxDepthReached": 2,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              1,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "bates"
+                          ],
+                          "maxDepthReached": 0
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              4
+                            ],
+                            "to": [
+                              1,
+                              4
+                            ]
+                          },
+                          "wordsFormed": [
+                            "biter"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  0,
+                                  2
+                                ],
+                                "to": [
+                                  1,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "watts"
+                              ],
+                              "maxDepthReached": 0
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  0,
+                                  3
+                                ],
+                                "to": [
+                                  1,
+                                  3
+                                ]
+                              },
+                              "wordsFormed": [
+                                "wades"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          4
+                        ],
+                        "to": [
+                          1,
+                          4
+                        ]
+                      },
+                      "wordsFormed": [
+                        "watts"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      0
+                    ],
+                    "to": [
+                      2,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "cater"
+                  ],
+                  "maxDepthReached": 4,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          3
+                        ],
+                        "to": [
+                          1,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "bides"
+                      ],
+                      "maxDepthReached": 3,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              2
+                            ],
+                            "to": [
+                              1,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "bites"
+                          ],
+                          "maxDepthReached": 2,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  0,
+                                  0
+                                ],
+                                "to": [
+                                  1,
+                                  0
+                                ]
+                              },
+                              "wordsFormed": [
+                                "cites"
+                              ],
+                              "maxDepthReached": 0
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  0,
+                                  1
+                                ],
+                                "to": [
+                                  1,
+                                  1
+                                ]
+                              },
+                              "wordsFormed": [
+                                "bates"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      0,
+                                      3
+                                    ],
+                                    "to": [
+                                      1,
+                                      3
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "cider"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  0,
+                                  4
+                                ],
+                                "to": [
+                                  1,
+                                  4
+                                ]
+                              },
+                              "wordsFormed": [
+                                "biter"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  0,
+                  3
+                ],
+                "to": [
+                  1,
+                  3
+                ]
+              },
+              "wordsFormed": [
+                "bites"
+              ],
+              "maxDepthReached": 2,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      1
+                    ],
+                    "to": [
+                      1,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "bates"
+                  ],
+                  "maxDepthReached": 0
+                },
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      4
+                    ],
+                    "to": [
+                      1,
+                      4
+                    ]
+                  },
+                  "wordsFormed": [
+                    "biter"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          2
+                        ],
+                        "to": [
+                          1,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "watts"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          3
+                        ],
+                        "to": [
+                          1,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "wades"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  0,
+                  4
+                ],
+                "to": [
+                  1,
+                  4
+                ]
+              },
+              "wordsFormed": [
+                "wades"
+              ],
+              "maxDepthReached": 0
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              0,
+              3
+            ],
+            "to": [
+              1,
+              3
+            ]
+          },
+          "wordsFormed": [
+            "bates"
+          ],
+          "maxDepthReached": 0
+        },
+        {
+          "move": {
+            "from": [
+              1,
+              0
+            ],
+            "to": [
+              2,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "cider"
+          ],
+          "maxDepthReached": 0
+        }
+      ]
+    }
+  ]
+}

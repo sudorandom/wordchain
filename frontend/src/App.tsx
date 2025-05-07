@@ -6,6 +6,7 @@ import EndGamePanel from './components/EndGamePanel';
 import ExplorationTreeView from './components/ExplorationTreeView';
 import {
     getFormattedDate,
+    getDataFilePath,
     findLongestWordChain,
     areAdjacent,
     findWordCoordinates,
@@ -29,7 +30,7 @@ function App() {
   const [gameData, setGameData] = useState<GameData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentDate, setCurrentDate] = useState<string>('');
+  const [currentDate, setCurrentDate] = useState<Date>();
   const [difficulty, setDifficulty] = useState<'simple' | 'hard'>('simple');
   const [dailyProgress, setDailyProgress] = useState({ simpleCompleted: false, hardCompleted: false });
   const [isDebugMode, setIsDebugMode] = useState(false);
@@ -71,15 +72,15 @@ function App() {
 
   // Effect to get current date and load initial daily progress
   useEffect(() => {
-    const todayDateString = getFormattedDate(new Date());
-    setCurrentDate(todayDateString);
+    const today = new Date();
+    setCurrentDate(today);
 
     const params = new URLSearchParams(window.location.search);
     const debugParam = params.get('debug');
     setIsDebugMode(debugParam === 'true');
     const hardParam = params.get('hard') === 'true'; // Check if 'hard=true' is in URL
     // Load daily progress
-    const savedProgressData = localStorage.getItem(`wordChainsProgress-${todayDateString}`);
+    const savedProgressData = localStorage.getItem(`wordChainsProgress-${getFormattedDate(today)}`);
     let currentDailyProgress = { simpleCompleted: false, hardCompleted: false };
     if (savedProgressData) {
         currentDailyProgress = JSON.parse(savedProgressData);
@@ -103,7 +104,7 @@ function App() {
 
   // Effect to load level data when currentDate or difficulty changes
   useEffect(() => {
-    const loadLevelData = async (date: string, diff: 'simple' | 'hard') => {
+    const loadLevelData = async (date: Date, diff: 'simple' | 'hard') => {
         if (!date) return;
         setLoading(true); setError(null);
         const initial = getInitialGameState();
@@ -117,7 +118,7 @@ function App() {
 
         try {
             const basePath = '';
-            const response = await fetch(`${basePath}/levels/${diff}/${date}.json`);
+            const response = await fetch(`${basePath}/levels/${diff}/${getDataFilePath(date)}`);
             if (!response.ok) {
                  if (response.status === 404) {
                      throw new Error(`Today's ${diff} level is not available yet. Please check back later!`);
@@ -162,7 +163,7 @@ function App() {
   useEffect(() => {
       if (!loading && gameData && currentDate && difficulty) {
           const gameStateToSave = { lastGrid: grid, history, currentDepth, turnFailedAttempts, hasDeviated };
-          localStorage.setItem(`wordChainsState-${currentDate}-${difficulty}`, JSON.stringify(gameStateToSave));
+          localStorage.setItem(`wordChainsState-${getFormattedDate(currentDate)}-${difficulty}`, JSON.stringify(gameStateToSave));
       }
   }, [history, currentDepth, turnFailedAttempts, hasDeviated, currentDate, difficulty, gameData, loading]);
 
@@ -186,11 +187,11 @@ function App() {
              if (levelCompleted && difficulty === 'simple' && !dailyProgress.simpleCompleted) {
                  const newProgress = { ...dailyProgress, simpleCompleted: true };
                  setDailyProgress(newProgress);
-                 localStorage.setItem(`wordChainsProgress-${currentDate}`, JSON.stringify(newProgress));
+                 localStorage.setItem(`wordChainsProgress-${getFormattedDate(currentDate)}`, JSON.stringify(newProgress));
              } else if (levelCompleted && difficulty === 'hard' && !dailyProgress.hardCompleted) {
                  const newProgress = { ...dailyProgress, hardCompleted: true };
                  setDailyProgress(newProgress);
-                 localStorage.setItem(`wordChainsProgress-${currentDate}`, JSON.stringify(newProgress));
+                 localStorage.setItem(`wordChainsProgress-${getFormattedDate(currentDate)}`, JSON.stringify(newProgress));
              }
           } else {
              setIsGameOver(false);
@@ -512,12 +513,12 @@ function App() {
   };
 
   // --- Conditional Rendering for Loading/Error States ---
-  if (loading) return <div className="flex justify-center items-center min-h-screen text-gray-700 dark:text-gray-300">Loading {difficulty} level for {currentDate}...</div>;
+  if (loading) return <div className="flex justify-center items-center min-h-screen text-gray-700 dark:text-gray-300">Loading {difficulty} level for {getFormattedDate(currentDate)}...</div>;
   if (error) return (
       <div className="flex flex-col justify-center items-center min-h-screen text-center px-4">
           <p className="text-red-600 dark:text-red-400 text-xl font-semibold">Error</p>
           <p className="text-gray-700 dark:text-gray-300 mt-2">{error}</p>
-          <button onClick={() => { setCurrentDate(''); setDifficulty('simple'); }} className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600">Try Again</button>
+          <button onClick={() => { setCurrentDate(new Date()); setDifficulty('simple'); }} className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600">Try Again</button>
       </div>
   );
   if (!gameData) return <div className="flex justify-center items-center min-h-screen text-gray-500 dark:text-gray-400">Game data could not be loaded.</div>;
@@ -546,7 +547,7 @@ function App() {
             <a href="/">Word Chain</a>
        </h1>
        <h2 className="text-2xl mb-1 text-gray-700 dark:text-gray-300">
-            {currentDate} <span className="capitalize">{difficulty != 'simple' && `(${difficulty}) `}</span>
+            {getFormattedDate(currentDate)} <span className="capitalize">{difficulty != 'simple' && `(${difficulty}) `}</span>
             { currentLevelCompleted && <i className="fas fa-check text-green-600"></i>}
        </h2>
 
@@ -642,7 +643,17 @@ function App() {
         </div>
         )}
        {isDebugMode && <ExplorationTreeView treeData={gameData?.explorationTree} />}
-       {isGameOver && <EndGamePanel score={currentDepth} maxScore={maxDepthAttainable} playerWords={playerUniqueWordsFound} optimalPathWords={optimalPathWords} onClose={handleCloseGameOver} onPlayHardMode={handlePlayHardMode} onResetGame={handleReset} difficulty={difficulty} dailyProgress={dailyProgress} levelJustCompleted={currentDepth === maxDepthAttainable} />}
+       {isGameOver && <EndGamePanel history={history}
+                                    score={currentDepth}
+                                    maxScore={maxDepthAttainable}
+                                    playerWords={playerUniqueWordsFound}
+                                    optimalPathWords={optimalPathWords}
+                                    onClose={handleCloseGameOver}
+                                    onPlayHardMode={handlePlayHardMode}
+                                    onResetGame={handleReset}
+                                    difficulty={difficulty}
+                                    levelJustCompleted={currentDepth === maxDepthAttainable}
+                                    />}
     </div>
   );
 }

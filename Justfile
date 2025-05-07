@@ -1,0 +1,44 @@
+all $date='':
+    just expand-dictionary
+    just gen-simple ${date}
+    just gen-hard ${date}
+    just gen-impossible ${date}
+
+gen-simple $date='':
+  go run ./cmd/generate-map \
+    --grid-rows=3 \
+    --grid-cols=4 \
+    --word-length=4 \
+    --min-turns=7 \
+    --max-turns=10 \
+    --max-unique-words=12 \
+    --num-grids=100 \
+    --output=output/simple \
+    --start-date=${date}
+
+gen-hard $date='':
+  go run ./cmd/generate-map \
+    --grid-rows=3 \
+    --grid-cols=5 \
+    --word-length=5 \
+    --min-turns=7 \
+    --max-turns=9 \
+    --max-unique-words=15 \
+    --num-grids=100 \
+    --output=output/hard \
+    --start-date=${date}
+
+gen-impossible $date='':
+  go run ./cmd/generate-map \
+    --grid-rows=5 \
+    --grid-cols=5 \
+    --word-length=5 \
+    --min-turns=10 \
+    --max-turns=20 \
+    --max-unique-words=30 \
+    --num-grids=100 \
+    --output=output/impossible \
+    --start-date=${date}
+
+expand-dictionary:
+    unmunch cmd/generate-map/data/en.dic cmd/generate-map/data/en.aff > cmd/generate-map/data/en.txt

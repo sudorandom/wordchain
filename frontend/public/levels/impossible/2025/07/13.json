@@ -1,0 +1,1613 @@
+{
+  "initialGrid": [
+    [
+      "h",
+      "s",
+      "f",
+      "c",
+      "s"
+    ],
+    [
+      "w",
+      "e",
+      "s",
+      "r",
+      "t"
+    ],
+    [
+      "r",
+      "t",
+      "d",
+      "a",
+      "a"
+    ],
+    [
+      "w",
+      "s",
+      "a",
+      "r",
+      "s"
+    ],
+    [
+      "a",
+      "t",
+      "o",
+      "m",
+      "h"
+    ]
+  ],
+  "cli.WordLength": 5,
+  "cli.RequiredMinTurns": 10,
+  "cli.RequiredMaxTurns": 20,
+  "maxDepthReached": 10,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          2,
+          3
+        ],
+        "to": [
+          2,
+          4
+        ]
+      },
+      "wordsFormed": [
+        "stash"
+      ],
+      "maxDepthReached": 0
+    },
+    {
+      "move": {
+        "from": [
+          3,
+          1
+        ],
+        "to": [
+          4,
+          1
+        ]
+      },
+      "wordsFormed": [
+        "setts"
+      ],
+      "maxDepthReached": 7,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              1,
+              1
+            ],
+            "to": [
+              2,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "stets"
+          ],
+          "maxDepthReached": 6,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  2,
+                  1
+                ],
+                "to": [
+                  3,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "wears"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      0
+                    ],
+                    "to": [
+                      3,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "rears"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          3
+                        ],
+                        "to": [
+                          2,
+                          4
+                        ]
+                      },
+                      "wordsFormed": [
+                        "stash"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          3
+                        ],
+                        "to": [
+                          4,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "reams"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              3
+                            ],
+                            "to": [
+                              2,
+                              4
+                            ]
+                          },
+                          "wordsFormed": [
+                            "stash"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      3
+                    ],
+                    "to": [
+                      2,
+                      4
+                    ]
+                  },
+                  "wordsFormed": [
+                    "stash"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  2,
+                  3
+                ],
+                "to": [
+                  2,
+                  4
+                ]
+              },
+              "wordsFormed": [
+                "stash"
+              ],
+              "maxDepthReached": 0
+            },
+            {
+              "move": {
+                "from": [
+                  3,
+                  0
+                ],
+                "to": [
+                  3,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "stews"
+              ],
+              "maxDepthReached": 5,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      1
+                    ],
+                    "to": [
+                      3,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "tears"
+                  ],
+                  "maxDepthReached": 4,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          0
+                        ],
+                        "to": [
+                          3,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "rears"
+                      ],
+                      "maxDepthReached": 3,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              3
+                            ],
+                            "to": [
+                              2,
+                              4
+                            ]
+                          },
+                          "wordsFormed": [
+                            "stash"
+                          ],
+                          "maxDepthReached": 0
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              3,
+                              3
+                            ],
+                            "to": [
+                              4,
+                              3
+                            ]
+                          },
+                          "wordsFormed": [
+                            "reams"
+                          ],
+                          "maxDepthReached": 2,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  0
+                                ],
+                                "to": [
+                                  3,
+                                  0
+                                ]
+                              },
+                              "wordsFormed": [
+                                "teams"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      3
+                                    ],
+                                    "to": [
+                                      2,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "stash"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  3
+                                ],
+                                "to": [
+                                  2,
+                                  4
+                                ]
+                              },
+                              "wordsFormed": [
+                                "stash"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          3
+                        ],
+                        "to": [
+                          2,
+                          4
+                        ]
+                      },
+                      "wordsFormed": [
+                        "stash"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          3
+                        ],
+                        "to": [
+                          4,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "teams"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              3
+                            ],
+                            "to": [
+                              2,
+                              4
+                            ]
+                          },
+                          "wordsFormed": [
+                            "stash"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      3
+                    ],
+                    "to": [
+                      2,
+                      4
+                    ]
+                  },
+                  "wordsFormed": [
+                    "stash"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              2,
+              3
+            ],
+            "to": [
+              2,
+              4
+            ]
+          },
+          "wordsFormed": [
+            "stash"
+          ],
+          "maxDepthReached": 0
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          3,
+          4
+        ],
+        "to": [
+          4,
+          4
+        ]
+      },
+      "wordsFormed": [
+        "atoms"
+      ],
+      "maxDepthReached": 9,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              3,
+              1
+            ],
+            "to": [
+              4,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "setts"
+          ],
+          "maxDepthReached": 8,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  1
+                ],
+                "to": [
+                  2,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "stets"
+              ],
+              "maxDepthReached": 7,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      3,
+                      0
+                    ],
+                    "to": [
+                      3,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "stews"
+                  ],
+                  "maxDepthReached": 6,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          3
+                        ],
+                        "to": [
+                          3,
+                          4
+                        ]
+                      },
+                      "wordsFormed": [
+                        "stars"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          4
+                        ],
+                        "to": [
+                          4,
+                          4
+                        ]
+                      },
+                      "wordsFormed": [
+                        "stash"
+                      ],
+                      "maxDepthReached": 5,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              1
+                            ],
+                            "to": [
+                              3,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "tears"
+                          ],
+                          "maxDepthReached": 4,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  0
+                                ],
+                                "to": [
+                                  3,
+                                  0
+                                ]
+                              },
+                              "wordsFormed": [
+                                "rears"
+                              ],
+                              "maxDepthReached": 3,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      3
+                                    ],
+                                    "to": [
+                                      2,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "stash"
+                                  ],
+                                  "maxDepthReached": 0
+                                },
+                                {
+                                  "move": {
+                                    "from": [
+                                      3,
+                                      3
+                                    ],
+                                    "to": [
+                                      4,
+                                      3
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "reams"
+                                  ],
+                                  "maxDepthReached": 2,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          2,
+                                          0
+                                        ],
+                                        "to": [
+                                          3,
+                                          0
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "teams"
+                                      ],
+                                      "maxDepthReached": 1,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              2,
+                                              3
+                                            ],
+                                            "to": [
+                                              2,
+                                              4
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "stash"
+                                          ],
+                                          "maxDepthReached": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "move": {
+                                        "from": [
+                                          2,
+                                          3
+                                        ],
+                                        "to": [
+                                          2,
+                                          4
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "stash"
+                                      ],
+                                      "maxDepthReached": 0
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  3
+                                ],
+                                "to": [
+                                  2,
+                                  4
+                                ]
+                              },
+                              "wordsFormed": [
+                                "stash"
+                              ],
+                              "maxDepthReached": 0
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  3
+                                ],
+                                "to": [
+                                  4,
+                                  3
+                                ]
+                              },
+                              "wordsFormed": [
+                                "teams"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      3
+                                    ],
+                                    "to": [
+                                      2,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "stash"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              3
+                            ],
+                            "to": [
+                              2,
+                              4
+                            ]
+                          },
+                          "wordsFormed": [
+                            "stash"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      3,
+                      3
+                    ],
+                    "to": [
+                      3,
+                      4
+                    ]
+                  },
+                  "wordsFormed": [
+                    "stars"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          0
+                        ],
+                        "to": [
+                          3,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "stews"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      3,
+                      4
+                    ],
+                    "to": [
+                      4,
+                      4
+                    ]
+                  },
+                  "wordsFormed": [
+                    "stash"
+                  ],
+                  "maxDepthReached": 6,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          1
+                        ],
+                        "to": [
+                          3,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "wears"
+                      ],
+                      "maxDepthReached": 3,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              0
+                            ],
+                            "to": [
+                              3,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "rears"
+                          ],
+                          "maxDepthReached": 2,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  3
+                                ],
+                                "to": [
+                                  2,
+                                  4
+                                ]
+                              },
+                              "wordsFormed": [
+                                "stash"
+                              ],
+                              "maxDepthReached": 0
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  3
+                                ],
+                                "to": [
+                                  4,
+                                  3
+                                ]
+                              },
+                              "wordsFormed": [
+                                "reams"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      3
+                                    ],
+                                    "to": [
+                                      2,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "stash"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              3
+                            ],
+                            "to": [
+                              2,
+                              4
+                            ]
+                          },
+                          "wordsFormed": [
+                            "stash"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          3
+                        ],
+                        "to": [
+                          2,
+                          4
+                        ]
+                      },
+                      "wordsFormed": [
+                        "stash"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          0
+                        ],
+                        "to": [
+                          3,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "stews"
+                      ],
+                      "maxDepthReached": 5,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              1
+                            ],
+                            "to": [
+                              3,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "tears"
+                          ],
+                          "maxDepthReached": 4,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  0
+                                ],
+                                "to": [
+                                  3,
+                                  0
+                                ]
+                              },
+                              "wordsFormed": [
+                                "rears"
+                              ],
+                              "maxDepthReached": 3,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      3
+                                    ],
+                                    "to": [
+                                      2,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "stash"
+                                  ],
+                                  "maxDepthReached": 0
+                                },
+                                {
+                                  "move": {
+                                    "from": [
+                                      3,
+                                      3
+                                    ],
+                                    "to": [
+                                      4,
+                                      3
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "reams"
+                                  ],
+                                  "maxDepthReached": 2,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          2,
+                                          0
+                                        ],
+                                        "to": [
+                                          3,
+                                          0
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "teams"
+                                      ],
+                                      "maxDepthReached": 1,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              2,
+                                              3
+                                            ],
+                                            "to": [
+                                              2,
+                                              4
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "stash"
+                                          ],
+                                          "maxDepthReached": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "move": {
+                                        "from": [
+                                          2,
+                                          3
+                                        ],
+                                        "to": [
+                                          2,
+                                          4
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "stash"
+                                      ],
+                                      "maxDepthReached": 0
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  3
+                                ],
+                                "to": [
+                                  2,
+                                  4
+                                ]
+                              },
+                              "wordsFormed": [
+                                "stash"
+                              ],
+                              "maxDepthReached": 0
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  3
+                                ],
+                                "to": [
+                                  4,
+                                  3
+                                ]
+                              },
+                              "wordsFormed": [
+                                "teams"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      3
+                                    ],
+                                    "to": [
+                                      2,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "stash"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              3
+                            ],
+                            "to": [
+                              2,
+                              4
+                            ]
+                          },
+                          "wordsFormed": [
+                            "stash"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  3,
+                  3
+                ],
+                "to": [
+                  3,
+                  4
+                ]
+              },
+              "wordsFormed": [
+                "stars"
+              ],
+              "maxDepthReached": 2,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      1
+                    ],
+                    "to": [
+                      2,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "stets"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          0
+                        ],
+                        "to": [
+                          3,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "stews"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  3,
+                  4
+                ],
+                "to": [
+                  4,
+                  4
+                ]
+              },
+              "wordsFormed": [
+                "stash"
+              ],
+              "maxDepthReached": 7,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      1
+                    ],
+                    "to": [
+                      2,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "stets"
+                  ],
+                  "maxDepthReached": 6,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          1
+                        ],
+                        "to": [
+                          3,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "wears"
+                      ],
+                      "maxDepthReached": 3,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              0
+                            ],
+                            "to": [
+                              3,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "rears"
+                          ],
+                          "maxDepthReached": 2,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  3
+                                ],
+                                "to": [
+                                  2,
+                                  4
+                                ]
+                              },
+                              "wordsFormed": [
+                                "stash"
+                              ],
+                              "maxDepthReached": 0
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  3
+                                ],
+                                "to": [
+                                  4,
+                                  3
+                                ]
+                              },
+                              "wordsFormed": [
+                                "reams"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      3
+                                    ],
+                                    "to": [
+                                      2,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "stash"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              3
+                            ],
+                            "to": [
+                              2,
+                              4
+                            ]
+                          },
+                          "wordsFormed": [
+                            "stash"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          3
+                        ],
+                        "to": [
+                          2,
+                          4
+                        ]
+                      },
+                      "wordsFormed": [
+                        "stash"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          0
+                        ],
+                        "to": [
+                          3,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "stews"
+                      ],
+                      "maxDepthReached": 5,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              1
+                            ],
+                            "to": [
+                              3,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "tears"
+                          ],
+                          "maxDepthReached": 4,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  0
+                                ],
+                                "to": [
+                                  3,
+                                  0
+                                ]
+                              },
+                              "wordsFormed": [
+                                "rears"
+                              ],
+                              "maxDepthReached": 3,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      3
+                                    ],
+                                    "to": [
+                                      2,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "stash"
+                                  ],
+                                  "maxDepthReached": 0
+                                },
+                                {
+                                  "move": {
+                                    "from": [
+                                      3,
+                                      3
+                                    ],
+                                    "to": [
+                                      4,
+                                      3
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "reams"
+                                  ],
+                                  "maxDepthReached": 2,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          2,
+                                          0
+                                        ],
+                                        "to": [
+                                          3,
+                                          0
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "teams"
+                                      ],
+                                      "maxDepthReached": 1,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              2,
+                                              3
+                                            ],
+                                            "to": [
+                                              2,
+                                              4
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "stash"
+                                          ],
+                                          "maxDepthReached": 0
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "move": {
+                                        "from": [
+                                          2,
+                                          3
+                                        ],
+                                        "to": [
+                                          2,
+                                          4
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "stash"
+                                      ],
+                                      "maxDepthReached": 0
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  3
+                                ],
+                                "to": [
+                                  2,
+                                  4
+                                ]
+                              },
+                              "wordsFormed": [
+                                "stash"
+                              ],
+                              "maxDepthReached": 0
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  3
+                                ],
+                                "to": [
+                                  4,
+                                  3
+                                ]
+                              },
+                              "wordsFormed": [
+                                "teams"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      3
+                                    ],
+                                    "to": [
+                                      2,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "stash"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              3
+                            ],
+                            "to": [
+                              2,
+                              4
+                            ]
+                          },
+                          "wordsFormed": [
+                            "stash"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      3
+                    ],
+                    "to": [
+                      2,
+                      4
+                    ]
+                  },
+                  "wordsFormed": [
+                    "stash"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              3,
+              3
+            ],
+            "to": [
+              3,
+              4
+            ]
+          },
+          "wordsFormed": [
+            "stars"
+          ],
+          "maxDepthReached": 3,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  3,
+                  1
+                ],
+                "to": [
+                  4,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "setts"
+              ],
+              "maxDepthReached": 2,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      1
+                    ],
+                    "to": [
+                      2,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "stets"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          0
+                        ],
+                        "to": [
+                          3,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "stews"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              3,
+              4
+            ],
+            "to": [
+              4,
+              4
+            ]
+          },
+          "wordsFormed": [
+            "stash"
+          ],
+          "maxDepthReached": 0
+        }
+      ]
+    }
+  ]
+}

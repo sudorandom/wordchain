@@ -1,0 +1,511 @@
+{
+  "initialGrid": [
+    [
+      "o",
+      "i",
+      "r",
+      "e"
+    ],
+    [
+      "i",
+      "a",
+      "n",
+      "e"
+    ],
+    [
+      "r",
+      "f",
+      "c",
+      "e"
+    ]
+  ],
+  "cli.WordLength": 4,
+  "cli.RequiredMinTurns": 7,
+  "cli.RequiredMaxTurns": 10,
+  "maxDepthReached": 7,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          1,
+          1
+        ],
+        "to": [
+          2,
+          1
+        ]
+      },
+      "wordsFormed": [
+        "race"
+      ],
+      "maxDepthReached": 6,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              1,
+              0
+            ],
+            "to": [
+              1,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "fine"
+          ],
+          "maxDepthReached": 5,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  0,
+                  0
+                ],
+                "to": [
+                  1,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "fire"
+              ],
+              "maxDepthReached": 2,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      1
+                    ],
+                    "to": [
+                      2,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "rice"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          1
+                        ],
+                        "to": [
+                          1,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "fare"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  0,
+                  2
+                ],
+                "to": [
+                  1,
+                  2
+                ]
+              },
+              "wordsFormed": [
+                "fire"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      0
+                    ],
+                    "to": [
+                      2,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "face"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          1
+                        ],
+                        "to": [
+                          2,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "rare"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              0
+                            ],
+                            "to": [
+                              2,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "fare",
+                            "rice"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          2
+                        ],
+                        "to": [
+                          2,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "fare",
+                        "rice"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              0
+                            ],
+                            "to": [
+                              2,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "rare"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      1
+                    ],
+                    "to": [
+                      2,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "fare",
+                    "rice"
+                  ],
+                  "maxDepthReached": 0
+                },
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      2
+                    ],
+                    "to": [
+                      2,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "rare"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  1,
+                  0
+                ],
+                "to": [
+                  2,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "face"
+              ],
+              "maxDepthReached": 1,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      2
+                    ],
+                    "to": [
+                      2,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "rice"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  1,
+                  1
+                ],
+                "to": [
+                  2,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "rice"
+              ],
+              "maxDepthReached": 4,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      0
+                    ],
+                    "to": [
+                      1,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "fire"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          1
+                        ],
+                        "to": [
+                          1,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "fare"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      2
+                    ],
+                    "to": [
+                      1,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "fare"
+                  ],
+                  "maxDepthReached": 0
+                },
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      2
+                    ],
+                    "to": [
+                      2,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "face"
+                  ],
+                  "maxDepthReached": 3,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          0
+                        ],
+                        "to": [
+                          1,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "fire"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              1,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "fare"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          2
+                        ],
+                        "to": [
+                          1,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "fare"
+                      ],
+                      "maxDepthReached": 2,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              1,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "fire"
+                          ],
+                          "maxDepthReached": 0
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              0
+                            ],
+                            "to": [
+                              2,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "rare"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  1,
+                                  2
+                                ],
+                                "to": [
+                                  2,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "fire"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              1
+                            ],
+                            "to": [
+                              2,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "fire"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  1,
+                                  2
+                                ],
+                                "to": [
+                                  2,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "rare"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

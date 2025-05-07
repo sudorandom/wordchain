@@ -1,13 +1,12 @@
 // src/components/WordGrid.tsx
 import React, { useRef } from 'react';
 import GridCell from './GridCell';
-import { CellCoordinates, areAdjacent } from '../utils/gameHelpers';
+import { CellCoordinates } from '../utils/gameHelpers';
 
 interface WordGridProps {
   grid: string[][] | null;
   selectedCell: CellCoordinates | null;
   draggedCell: CellCoordinates | null;
-  hoveredCell: CellCoordinates | null;
   animationState: { animating: boolean; from: CellCoordinates | null; to: CellCoordinates | null };
   highlightedCells: CellCoordinates[];
   hintCells: CellCoordinates[];
@@ -24,7 +23,6 @@ const WordGrid: React.FC<WordGridProps> = ({
     grid,
     selectedCell,
     draggedCell,
-    hoveredCell,
     animationState,
     highlightedCells,
     hintCells,

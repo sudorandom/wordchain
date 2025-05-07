@@ -1,11 +1,11 @@
 package main
 
 import (
-	"bytes"         // Needed for grid string representation
+	// Needed for grid string representation
+	_ "embed"       // Needed for //go:embed
 	"encoding/json" // Needed for JSON output
-	"fmt"
-	"math/rand/v2" // Using v2 rand
-	"os"           // Needed for file writing
+	"fmt"           // Using v2 rand
+	"os"            // Needed for file writing
 	"path/filepath"
 	"runtime" // For NumCPU
 	"sort"    // To print found words consistently
@@ -14,383 +14,59 @@ import (
 	"sync/atomic" // For atomic counters
 	"time"        // For status updates and timeout
 
-	_ "embed" // Needed for //go:embed
-	"maps"
+	"github.com/alecthomas/kong"
 )
 
-//go:embed data/dictionary.txt
+//go:embed data/en.txt
 var wordlistString string // Embed the word list file
 
-//go:embed data/top-1000.txt
+//go:embed data/usable.txt
 var simpleWordlistString string // Embed the word list file
 
-// --- Game Configuration ---
-const gridRows = 4   // Grid dimensions
-const gridCols = 4   // Adjusted from previous version in thought process
-const wordLength = 4 // The exact length of a word to be considered valid
-const requiredMinTurns = 7
-const requiredMaxTurns = 10
-const maxUniqueWords = 15
-const maxGridsToGenerate = 10000000 // Overall limit for attempts
-// const targetValidGrids = 10 // Optional: Stop after finding this many valid grids (-1 to disable)
+var cli CLI
 
-// --- Letter Frequencies (Approximate for English) ---
-var letterFrequencies = map[rune]float64{
-	'a': 8.167, 'b': 1.492, 'c': 2.782, 'd': 4.253, 'e': 12.702,
-	'f': 2.228, 'g': 2.015, 'h': 6.094, 'i': 6.966, 'j': 0.153,
-	'k': 0.772, 'l': 4.025, 'm': 2.406, 'n': 6.749, 'o': 7.507,
-	'p': 1.929, 'q': 0.095, 'r': 5.987, 's': 6.327, 't': 9.056,
-	'u': 2.758, 'v': 0.978, 'w': 2.360, 'x': 0.150, 'y': 1.974,
-	'z': 0.074,
+type CLI struct {
+	GridRows         int             `kong:"name='grid-rows',short='r',default:'5',help='Number of rows in the grid.'"`
+	GridCols         int             `kong:"name='grid-cols',short='c',default:'5',help='Number of columns in the grid.'"`
+	WordLength       int             `kong:"name='word-length',short='l',default:'5',help='The exact length of a word to be considered valid.'"`
+	RequiredMinTurns int             `kong:"name='min-turns',short='t',default:'7',help='Minimum number of turns required for a solvable puzzle.'"`
+	RequiredMaxTurns int             `kong:"name='max-turns',short='T',default:'15',help='Maximum number of turns allowed for a solvable puzzle.'"`
+	MaxUniqueWords   int             `kong:"name='max-unique-words',short='u',default:'15',help='Maximum number of unique words to target in a puzzle solution.'"`
+	NumGrids         int             `kong:"name='num-grids',short='n',default:'100',help='Number of grids to generate.'"`
+	Output           string          `kong:"name='output',short='o',default:'output',help='Directory to output files to'"`
+	StartDate        DefaultableDate `kong:"name='start-date',short='s',help='Date to start at',format='2006-01-02'"`
+
+	Help bool `kong:"name='help',short='h',help='Show help'"`
 }
 
-var weightedLetters []rune
-
-func init() {
-	var totalWeight float64
-	for _, freq := range letterFrequencies {
-		totalWeight += freq
-	}
-	const scaleFactor = 1000
-	weightedLetters = make([]rune, 0, int(totalWeight*scaleFactor/100))
-	for letter, freq := range letterFrequencies {
-		count := int((freq / totalWeight) * float64(len(letterFrequencies)*scaleFactor))
-		if count == 0 && freq > 0 {
-			count = 1
-		}
-		for i := 0; i < count; i++ {
-			weightedLetters = append(weightedLetters, letter)
-		}
-	}
-	if len(weightedLetters) == 0 {
-		fmt.Println("Warning: weightedLetters is empty, falling back to uniform random letters.")
-		for r := 'a'; r <= 'z'; r++ {
-			weightedLetters = append(weightedLetters, r)
-		}
-	}
+type DefaultableDate struct {
+	Time *time.Time
 }
 
-// --- Core Data Structures ---
-type Grid [][]rune
-type JsonGrid [][]string
-type Coordinates struct {
-	Row int `json:"-"`
-	Col int `json:"-"`
-}
-type Move struct {
-	Cell1 Coordinates `json:"-"`
-	Cell2 Coordinates `json:"-"`
-}
-type Dictionary map[string]struct{}
-type FoundWordsSet map[string]struct{}
-type GameState struct {
-	Grid       Grid
-	FoundWords FoundWordsSet
-}
-type ExplorationCacheEntry struct {
-	Children []ExplorationNode
-	MaxDepth int
-}
+func (d *DefaultableDate) UnmarshalText(text []byte) error {
+	s := string(text)
+	now := time.Now()
+	defaultDate := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
 
-// --- Structs for Nested JSON Output ---
-type MoveOutput struct {
-	From [2]int `json:"from"`
-	To   [2]int `json:"to"`
-}
-type ExplorationNode struct {
-	Move            *MoveOutput       `json:"move"`
-	WordsFormed     []string          `json:"wordsFormed"`
-	MaxDepthReached int               `json:"maxDepthReached"`
-	NextMoves       []ExplorationNode `json:"nextMoves,omitempty"`
-}
-type FullExplorationOutput struct {
-	InitialGrid      JsonGrid          `json:"initialGrid"`
-	WordLength       int               `json:"wordLength"`
-	RequiredMinTurns int               `json:"requiredMinTurns"`
-	RequiredMaxTurns int               `json:"requiredMaxTurns"`
-	MaxDepthReached  int               `json:"maxDepthReached"`
-	ExplorationTree  []ExplorationNode `json:"explorationTree"`
-}
-
-// WorkerResult is used to send processed grid data from workers to the main goroutine.
-type WorkerResult struct {
-	Grid            Grid
-	ExplorationTree []ExplorationNode
-	MaxDepth        int
-}
-
-// --- Helper Functions ---
-func (m Move) String() string {
-	return fmt.Sprintf("Swap (%d, %d) <-> (%d, %d)", m.Cell1.Row, m.Cell1.Col, m.Cell2.Row, m.Cell2.Col)
-}
-
-func gridToString(grid Grid) string {
-	if grid == nil {
-		return ""
-	}
-	var buf bytes.Buffer
-	for _, row := range grid {
-		buf.WriteString(string(row))
-		buf.WriteRune('|')
-	}
-	return buf.String()
-}
-
-func convertGridToJsonGrid(grid Grid) JsonGrid {
-	if grid == nil {
+	if s == "" {
+		d.Time = &defaultDate
 		return nil
 	}
-	jsonGrid := make(JsonGrid, len(grid))
-	for r, row := range grid {
-		jsonGrid[r] = make([]string, len(row))
-		for c, cell := range row {
-			jsonGrid[r][c] = string(cell)
-		}
+
+	parsedTime, err := time.Parse("2006-01-02", s)
+	if err != nil {
+		return fmt.Errorf("invalid date format for '%s': expected YYYY-MM-DD. Error: %w", s, err)
 	}
-	return jsonGrid
+	d.Time = &parsedTime
+	return nil
 }
 
-func copyFoundWords(foundWords FoundWordsSet) FoundWordsSet {
-	newSet := make(FoundWordsSet, len(foundWords))
-	maps.Copy(newSet, foundWords)
-	return newSet
-}
-
-func getRandomLetterByFrequency() rune {
-	if len(weightedLetters) == 0 {
-		return rune(rand.IntN(26) + 'a')
+// String returns the date in YYYY-MM-DD format. Useful for printing.
+func (d DefaultableDate) String() string {
+	if d.Time == nil { // Truly zero and not because it was defaulted from empty
+		return "<not set>"
 	}
-	return weightedLetters[rand.IntN(len(weightedLetters))]
-}
-
-func generateGrid(rows, cols int) Grid {
-	if rows <= 0 || cols <= 0 {
-		return nil
-	}
-	grid := make(Grid, rows)
-	for r := range grid {
-		grid[r] = make([]rune, cols)
-		for c := range grid[r] {
-			grid[r][c] = getRandomLetterByFrequency()
-		}
-	}
-	return grid
-}
-
-func printGrid(grid Grid) {
-	if grid == nil {
-		fmt.Println("Grid is empty or nil.")
-		return
-	}
-	fmt.Println("--- Grid ---")
-	for _, row := range grid {
-		for _, cell := range row {
-			fmt.Printf("%c ", cell)
-		}
-		fmt.Println()
-	}
-	fmt.Println("------------")
-}
-
-func copyGrid(grid Grid) Grid {
-	if grid == nil {
-		return nil
-	}
-	rows := len(grid)
-	if rows == 0 {
-		return Grid{}
-	}
-	if len(grid[0]) == 0 {
-		newGrid := make(Grid, rows)
-		for r := range newGrid {
-			newGrid[r] = make([]rune, 0)
-		}
-		return newGrid
-	}
-	cols := len(grid[0])
-	newGrid := make(Grid, rows)
-	for r := range grid {
-		newGrid[r] = make([]rune, cols)
-		copy(newGrid[r], grid[r])
-	}
-	return newGrid
-}
-
-func applyMove(grid Grid, move Move) Grid {
-	newGrid := copyGrid(grid)
-	if newGrid == nil {
-		return nil
-	}
-	c1, c2 := move.Cell1, move.Cell2
-	rows := len(newGrid)
-	if rows == 0 || len(newGrid[0]) == 0 {
-		return newGrid
-	}
-	cols := len(newGrid[0])
-	if !(c1.Row >= 0 && c1.Row < rows && c1.Col >= 0 && c1.Col < cols &&
-		c2.Row >= 0 && c2.Row < rows && c2.Col >= 0 && c2.Col < cols) {
-		return nil
-	}
-	newGrid[c1.Row][c1.Col], newGrid[c2.Row][c2.Col] = newGrid[c2.Row][c2.Col], newGrid[c1.Row][c1.Col]
-	return newGrid
-}
-
-func findNewWords(newGrid Grid, move Move, dict Dictionary, foundWordsBeforeMove FoundWordsSet) []string {
-	if newGrid == nil {
-		return nil
-	}
-	rows := len(newGrid)
-	if rows == 0 || len(newGrid[0]) == 0 {
-		return []string{}
-	}
-	cols := len(newGrid[0])
-	c1, c2 := move.Cell1, move.Cell2
-	newlyFound := make(map[string]struct{})
-	isNewWord := func(word string) bool {
-		if len(word) != wordLength {
-			return false
-		}
-		_, inDict := dict[word]
-		_, alreadyFound := foundWordsBeforeMove[word]
-		return inDict && !alreadyFound
-	}
-	rowsToCheck := map[int]struct{}{c1.Row: {}}
-	if c1.Row != c2.Row {
-		rowsToCheck[c2.Row] = struct{}{}
-	}
-	for r := range rowsToCheck {
-		if r < 0 || r >= rows || r >= len(newGrid) {
-			continue
-		}
-		rowStr := string(newGrid[r])
-		if cols >= wordLength {
-			for start := 0; start <= cols-wordLength; start++ {
-				sub := rowStr[start : start+wordLength]
-				if isNewWord(sub) {
-					newlyFound[sub] = struct{}{}
-				}
-			}
-		}
-	}
-	colsToCheck := map[int]struct{}{c1.Col: {}}
-	if c1.Col != c2.Col {
-		colsToCheck[c2.Col] = struct{}{}
-	}
-	for c := range colsToCheck {
-		if c < 0 || c >= cols {
-			continue
-		}
-		var colBuilder strings.Builder
-		colBuilder.Grow(rows)
-		validCol := true
-		for rIdx := 0; rIdx < rows; rIdx++ {
-			if rIdx < len(newGrid) && c < len(newGrid[rIdx]) {
-				colBuilder.WriteRune(newGrid[rIdx][c])
-			} else {
-				validCol = false
-				break
-			}
-		}
-		if !validCol {
-			continue
-		}
-		colStr := colBuilder.String()
-		if rows >= wordLength {
-			for start := 0; start <= rows-wordLength; start++ {
-				sub := colStr[start : start+wordLength]
-				if isNewWord(sub) {
-					newlyFound[sub] = struct{}{}
-				}
-			}
-		}
-	}
-	result := make([]string, 0, len(newlyFound))
-	for word := range newlyFound {
-		result = append(result, word)
-	}
-	sort.Strings(result)
-	return result
-}
-
-// --- Recursive Exploration Function ---
-func explorePaths(currentState GameState, wordMap Dictionary, pathVisited map[string]struct{}, currentDepth int, globalExplorationCache map[string]ExplorationCacheEntry) ([]ExplorationNode, int) {
-	var children []ExplorationNode
-	maxDepthFromCurrentState := 0
-	if currentDepth >= requiredMaxTurns {
-		return nil, 0
-	}
-	currentGridStr := gridToString(currentState.Grid)
-	if _, visited := pathVisited[currentGridStr]; visited {
-		return nil, 0
-	}
-	if cachedEntry, found := globalExplorationCache[currentGridStr]; found {
-		return cachedEntry.Children, cachedEntry.MaxDepth
-	}
-	pathVisited[currentGridStr] = struct{}{}
-	defer delete(pathVisited, currentGridStr)
-	rows := len(currentState.Grid)
-	if rows == 0 || len(currentState.Grid[0]) == 0 {
-		return nil, 0
-	}
-	cols := len(currentState.Grid[0])
-	for r := 0; r < rows; r++ {
-		for c := 0; c < cols; c++ {
-			currentCell := Coordinates{Row: r, Col: c}
-			neighbors := []Coordinates{}
-			if c+1 < cols {
-				neighbors = append(neighbors, Coordinates{Row: r, Col: c + 1})
-			}
-			if r+1 < rows {
-				neighbors = append(neighbors, Coordinates{Row: r + 1, Col: c})
-			}
-			for _, neighbor := range neighbors {
-				potentialMoveInternal := Move{Cell1: currentCell, Cell2: neighbor}
-				nextGrid := applyMove(currentState.Grid, potentialMoveInternal)
-				if nextGrid == nil {
-					continue
-				}
-				newlyFoundWords := findNewWords(nextGrid, potentialMoveInternal, wordMap, currentState.FoundWords)
-				if len(newlyFoundWords) > 0 {
-					moveOut := MoveOutput{From: [2]int{currentCell.Row, currentCell.Col}, To: [2]int{neighbor.Row, neighbor.Col}}
-					newFoundSet := copyFoundWords(currentState.FoundWords)
-					for _, word := range newlyFoundWords {
-						newFoundSet[word] = struct{}{}
-					}
-					nextState := GameState{Grid: nextGrid, FoundWords: newFoundSet}
-					nextPathVisited := make(map[string]struct{}, len(pathVisited)+1)
-					maps.Copy(nextPathVisited, pathVisited)
-					subMoves, depthFromSubMove := explorePaths(nextState, wordMap, nextPathVisited, currentDepth+1, globalExplorationCache)
-					currentBranchTotalDepth := 1 + depthFromSubMove
-					if currentBranchTotalDepth > maxDepthFromCurrentState {
-						maxDepthFromCurrentState = currentBranchTotalDepth
-					}
-					node := ExplorationNode{Move: &moveOut, WordsFormed: newlyFoundWords, MaxDepthReached: depthFromSubMove, NextMoves: subMoves}
-					children = append(children, node)
-				}
-			}
-		}
-	}
-	sort.Slice(children, func(i, j int) bool {
-		if children[i].Move == nil {
-			return false
-		}
-		if children[j].Move == nil {
-			return true
-		}
-		m1, m2 := children[i].Move, children[j].Move
-		if m1.From[0] != m2.From[0] {
-			return m1.From[0] < m2.From[0]
-		}
-		if m1.From[1] != m2.From[1] {
-			return m1.From[1] < m2.From[1]
-		}
-		if m1.To[0] != m2.To[0] {
-			return m1.To[0] < m2.To[0]
-		}
-		return m1.To[1] < m2.To[1]
-	})
-	globalExplorationCache[currentGridStr] = ExplorationCacheEntry{Children: children, MaxDepth: maxDepthFromCurrentState}
-	return children, maxDepthFromCurrentState
+	return d.Time.Format("2006-01-02")
 }
 
 // worker function processes grid generation and exploration.
@@ -415,22 +91,14 @@ func worker(
 			// Continue processing
 		}
 
-		currentAttemptNum := atomic.AddInt64(gridAttemptsTotal, 1)
-		if currentAttemptNum > maxGridsToGenerate {
-			// Signal main that max attempts reached if this worker is the one to hit it.
-			// This can be tricky; simpler if main goroutine primarily manages closing doneChan.
-			// For now, worker just stops itself. Main will also close doneChan.
-			// fmt.Printf("Worker %d stopping, max attempts %d reached by global counter\n", id, maxGridsToGenerate)
-			return // Stop this worker if global max attempts are exceeded
-		}
-
 		// Each worker uses its own exploration cache for the grid it's currently processing
 		currentGlobalCache := make(map[string]ExplorationCacheEntry)
-
-		initialGrid := generateGrid(gridRows, gridCols)
+		initialGrid := generateGrid(cli.GridRows, cli.GridCols)
 		if initialGrid == nil {
 			continue
 		}
+
+		atomic.AddInt64(gridAttemptsTotal, 1)
 
 		initialWordsCheck := findNewWords(initialGrid, noopMove, wordMap, make(FoundWordsSet))
 		if len(initialWordsCheck) > 0 {
@@ -442,7 +110,7 @@ func worker(
 
 		explorationTree, maxDepth := explorePaths(initialState, wordMap, pathVisited, 0, currentGlobalCache)
 
-		if maxDepth < requiredMinTurns {
+		if maxDepth < cli.RequiredMinTurns {
 			continue
 		}
 
@@ -452,7 +120,7 @@ func worker(
 			continue
 		}
 
-		if len(wordSet) > maxUniqueWords {
+		if len(wordSet) > cli.MaxUniqueWords {
 			continue
 		}
 
@@ -472,6 +140,16 @@ func worker(
 }
 
 func main() {
+	parser := kong.Must(&cli)
+	_, err := parser.Parse(os.Args[1:])
+	parser.FatalIfErrorf(err)
+
+	fmt.Printf("Grid Dimensions: %d rows, %d columns\n", cli.GridRows, cli.GridCols)
+	fmt.Printf("Word Length: %d\n", cli.WordLength)
+	fmt.Printf("Required Turns: %d-%d\n", cli.RequiredMinTurns, cli.RequiredMaxTurns)
+	fmt.Printf("Max Unique Words: %d\n", cli.MaxUniqueWords)
+	fmt.Printf("Grids to Generate: %d\n", cli.NumGrids)
+
 	// --- Load Dictionary ---
 	fmt.Println("Loading dictionary...")
 	wordList := strings.Fields(wordlistString)
@@ -483,7 +161,7 @@ func main() {
 	validWordCount := 0
 	for _, word := range wordList {
 		lowerWord := strings.ToLower(word)
-		if len(lowerWord) == wordLength {
+		if len(lowerWord) == cli.WordLength {
 			wordMap[lowerWord] = struct{}{}
 			validWordCount++
 		}
@@ -491,16 +169,16 @@ func main() {
 	simpleWordMap := make(Dictionary, len(simpleWordList)/2)
 	for _, word := range simpleWordList {
 		lowerWord := strings.ToLower(word)
-		if len(lowerWord) == wordLength {
+		if len(lowerWord) == cli.WordLength {
 			simpleWordMap[lowerWord] = struct{}{}
 		}
 	}
-	fmt.Printf("Dictionary loaded with %d words (length == %d).\n", validWordCount, wordLength)
-	fmt.Printf("Grid size: %d x %d\n", gridRows, gridCols)
-	fmt.Printf("Word length: %d\n", wordLength)
-	fmt.Printf("Required minimum game tree depth: %d\n", requiredMinTurns)
-	fmt.Printf("Maximum exploration depth: %d\n", requiredMaxTurns)
-	fmt.Printf("Maximum unique words allowed: %d\n", maxUniqueWords)
+	fmt.Printf("Dictionary loaded with %d words (length == %d).\n", validWordCount, cli.WordLength)
+	fmt.Printf("Grid size: %d x %d\n", cli.GridRows, cli.GridCols)
+	fmt.Printf("Word length: %d\n", cli.WordLength)
+	fmt.Printf("Required minimum game tree depth: %d\n", cli.RequiredMinTurns)
+	fmt.Printf("Maximum exploration depth: %d\n", cli.RequiredMaxTurns)
+	fmt.Printf("Maximum unique words allowed: %d\n", cli.MaxUniqueWords)
 
 	// --- Parallel Grid Generation and Search Loop ---
 	startTime := time.Now()
@@ -518,7 +196,7 @@ func main() {
 	noopMove := Move{Cell1: Coordinates{Row: 0, Col: 0}, Cell2: Coordinates{Row: 0, Col: 0}}
 
 	// Launch workers
-	for i := 0; i < numWorkers; i++ {
+	for i := range numWorkers {
 		wg.Add(1)
 		go worker(i, &wg, wordMap, simpleWordMap, noopMove, resultsChan, doneChan, &gridAttemptsTotal)
 	}
@@ -550,21 +228,17 @@ resultsLoop:
 			}
 			WriteOutput(validGridsFound, result.Grid, result.ExplorationTree, result.MaxDepth)
 			validGridsFound++
-			// Optional: Stop if targetValidGrids is reached
-			// if targetValidGrids != -1 && validGridsFound >= targetValidGrids {
-			// 	fmt.Printf("Target of %d valid grids reached. Signaling workers to stop.\n", targetValidGrids)
-			// 	close(doneChan) // Signal workers to stop
-			//  // Note: Workers might still send a few more results if they were already in flight.
-			// }
+			// Optional: Stop if cli.NumGrids is reached
+			if cli.NumGrids != -1 && validGridsFound >= cli.NumGrids {
+				fmt.Printf("Target of %d valid grids reached. Signaling workers to stop.\n", cli.NumGrids)
+				close(doneChan) // Signal workers to stop
+				// Note: Workers might still send a few more results if they were already in flight.
+			}
 
 		case <-ticker.C:
 			attempts := atomic.LoadInt64(&gridAttemptsTotal)
 			fmt.Printf("...elapsed: %v, checked ~%d grids (found %d valid)\n",
 				time.Since(startTime).Round(time.Second), attempts, validGridsFound)
-			if attempts >= maxGridsToGenerate {
-				fmt.Println("Max grid generation attempts reached. Signaling workers to stop.")
-				close(doneChan)
-			}
 			// Optional: Add a timeout for the whole process
 			// case <-time.After(5 * time.Minute):
 			// 	fmt.Println("Total search time limit reached. Signaling workers to stop.")
@@ -622,9 +296,9 @@ func collectAllWords(nodes []ExplorationNode, allWords FoundWordsSet) {
 func WriteOutput(gridIndex int, grid Grid, explorationTree []ExplorationNode, maxDepth int) {
 	outputData := FullExplorationOutput{
 		InitialGrid:      convertGridToJsonGrid(grid),
-		WordLength:       wordLength,
-		RequiredMinTurns: requiredMinTurns,
-		RequiredMaxTurns: requiredMaxTurns,
+		WordLength:       cli.WordLength,
+		RequiredMinTurns: cli.RequiredMinTurns,
+		RequiredMaxTurns: cli.RequiredMaxTurns,
 		MaxDepthReached:  maxDepth,
 		ExplorationTree:  explorationTree,
 	}
@@ -634,10 +308,11 @@ func WriteOutput(gridIndex int, grid Grid, explorationTree []ExplorationNode, ma
 		return
 	}
 
-	outputDir := "output"
-	outputFilename := filepath.Join(outputDir, fmt.Sprintf("%d.json", gridIndex))
-	if err := os.MkdirAll(outputDir, 0755); err != nil {
-		fmt.Printf("Error creating directory '%s': %v\n", outputDir, err)
+	gridDate := cli.StartDate.Time.Add(time.Duration(gridIndex) * 24 * time.Hour)
+
+	outputFilename := filepath.Join(cli.Output, gridDate.Format("2006/01/02.json"))
+	if err := os.MkdirAll(filepath.Dir(outputFilename), 0755); err != nil {
+		fmt.Printf("Error creating directory '%s': %v\n", cli.Output, err)
 		return
 	}
 	if err = os.WriteFile(outputFilename, jsonData, 0644); err != nil {
@@ -656,10 +331,10 @@ func WriteOutput(gridIndex int, grid Grid, explorationTree []ExplorationNode, ma
 	fmt.Printf("\n--- Found Valid Grid (%d) ---\n", gridIndex)
 	printGrid(grid)
 	fmt.Printf("  File Path:                %s\n", outputFilename)
-	fmt.Printf("  Grid Dimensions:          %d x %d\n", gridRows, gridCols)
-	fmt.Printf("  Word Length:              %d\n", wordLength)
-	fmt.Printf("  Required Min Tree Depth:  %d\n", requiredMinTurns)
-	fmt.Printf("  Max Exploration Depth:    %d\n", requiredMaxTurns)
+	fmt.Printf("  Grid Dimensions:          %d x %d\n", cli.GridRows, cli.GridCols)
+	fmt.Printf("  Word Length:              %d\n", cli.WordLength)
+	fmt.Printf("  Required Min Tree Depth:  %d\n", cli.RequiredMinTurns)
+	fmt.Printf("  Max Exploration Depth:    %d\n", cli.RequiredMaxTurns)
 	fmt.Printf("  Actual Max Depth Reached: %d\n", maxDepth)
 	fmt.Printf("  Total Unique Words Found: %d\n", len(allWordsList))
 	if len(allWordsList) > 0 {

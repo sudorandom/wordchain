@@ -1,0 +1,697 @@
+{
+  "initialGrid": [
+    [
+      "z",
+      "t",
+      "o",
+      "d",
+      "l"
+    ],
+    [
+      "s",
+      "l",
+      "a",
+      "e",
+      "s"
+    ],
+    [
+      "b",
+      "a",
+      "o",
+      "o",
+      "r"
+    ]
+  ],
+  "cli.WordLength": 5,
+  "cli.RequiredMinTurns": 7,
+  "cli.RequiredMaxTurns": 9,
+  "maxDepthReached": 7,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          0,
+          2
+        ],
+        "to": [
+          1,
+          2
+        ]
+      },
+      "wordsFormed": [
+        "sloes"
+      ],
+      "maxDepthReached": 6,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              1,
+              1
+            ],
+            "to": [
+              1,
+              2
+            ]
+          },
+          "wordsFormed": [
+            "soles"
+          ],
+          "maxDepthReached": 5,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  0
+                ],
+                "to": [
+                  2,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "boles"
+              ],
+              "maxDepthReached": 4,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      1
+                    ],
+                    "to": [
+                      2,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "bales"
+                  ],
+                  "maxDepthReached": 3,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          3
+                        ],
+                        "to": [
+                          1,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "balds"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          0
+                        ],
+                        "to": [
+                          2,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "sales"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          4
+                        ],
+                        "to": [
+                          2,
+                          4
+                        ]
+                      },
+                      "wordsFormed": [
+                        "baler"
+                      ],
+                      "maxDepthReached": 2,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              0
+                            ],
+                            "to": [
+                              1,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "abler"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  1,
+                                  2
+                                ],
+                                "to": [
+                                  2,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "solos"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              2
+                            ],
+                            "to": [
+                              2,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "solos"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  1,
+                  1
+                ],
+                "to": [
+                  2,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "sales"
+              ],
+              "maxDepthReached": 0
+            },
+            {
+              "move": {
+                "from": [
+                  1,
+                  3
+                ],
+                "to": [
+                  2,
+                  3
+                ]
+              },
+              "wordsFormed": [
+                "solos"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      2
+                    ],
+                    "to": [
+                      2,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "baler"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          4
+                        ],
+                        "to": [
+                          2,
+                          4
+                        ]
+                      },
+                      "wordsFormed": [
+                        "bales"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              0
+                            ],
+                            "to": [
+                              2,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "sales"
+                          ],
+                          "maxDepthReached": 0
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              1
+                            ],
+                            "to": [
+                              2,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "boles"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          0
+                        ],
+                        "to": [
+                          2,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "abler"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          1,
+          1
+        ],
+        "to": [
+          1,
+          2
+        ]
+      },
+      "wordsFormed": [
+        "sales"
+      ],
+      "maxDepthReached": 3,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              1,
+              0
+            ],
+            "to": [
+              2,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "bales"
+          ],
+          "maxDepthReached": 2,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  0,
+                  3
+                ],
+                "to": [
+                  1,
+                  3
+                ]
+              },
+              "wordsFormed": [
+                "balds"
+              ],
+              "maxDepthReached": 0
+            },
+            {
+              "move": {
+                "from": [
+                  1,
+                  4
+                ],
+                "to": [
+                  2,
+                  4
+                ]
+              },
+              "wordsFormed": [
+                "baler"
+              ],
+              "maxDepthReached": 1,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      0
+                    ],
+                    "to": [
+                      1,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "abler"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          1,
+          2
+        ],
+        "to": [
+          2,
+          2
+        ]
+      },
+      "wordsFormed": [
+        "sloes"
+      ],
+      "maxDepthReached": 6,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              1,
+              1
+            ],
+            "to": [
+              1,
+              2
+            ]
+          },
+          "wordsFormed": [
+            "soles"
+          ],
+          "maxDepthReached": 5,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  0
+                ],
+                "to": [
+                  2,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "boles"
+              ],
+              "maxDepthReached": 4,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      1
+                    ],
+                    "to": [
+                      2,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "bales"
+                  ],
+                  "maxDepthReached": 3,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          3
+                        ],
+                        "to": [
+                          1,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "balds"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          0
+                        ],
+                        "to": [
+                          2,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "sales"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          4
+                        ],
+                        "to": [
+                          2,
+                          4
+                        ]
+                      },
+                      "wordsFormed": [
+                        "baler"
+                      ],
+                      "maxDepthReached": 2,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              0
+                            ],
+                            "to": [
+                              1,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "abler"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  1,
+                                  2
+                                ],
+                                "to": [
+                                  2,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "solos"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              2
+                            ],
+                            "to": [
+                              2,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "solos"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  1,
+                  1
+                ],
+                "to": [
+                  2,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "sales"
+              ],
+              "maxDepthReached": 0
+            },
+            {
+              "move": {
+                "from": [
+                  1,
+                  3
+                ],
+                "to": [
+                  2,
+                  3
+                ]
+              },
+              "wordsFormed": [
+                "solos"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      2
+                    ],
+                    "to": [
+                      2,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "baler"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          4
+                        ],
+                        "to": [
+                          2,
+                          4
+                        ]
+                      },
+                      "wordsFormed": [
+                        "bales"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              0
+                            ],
+                            "to": [
+                              2,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "sales"
+                          ],
+                          "maxDepthReached": 0
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              1
+                            ],
+                            "to": [
+                              2,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "boles"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          0
+                        ],
+                        "to": [
+                          2,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "abler"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

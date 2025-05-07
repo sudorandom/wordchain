@@ -1,0 +1,220 @@
+{
+  "initialGrid": [
+    [
+      "i",
+      "r",
+      "o",
+      "a"
+    ],
+    [
+      "b",
+      "n",
+      "h",
+      "n"
+    ],
+    [
+      "m",
+      "e",
+      "t",
+      "n"
+    ]
+  ],
+  "cli.WordLength": 4,
+  "cli.RequiredMinTurns": 7,
+  "cli.RequiredMaxTurns": 10,
+  "maxDepthReached": 7,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          0,
+          3
+        ],
+        "to": [
+          1,
+          3
+        ]
+      },
+      "wordsFormed": [
+        "iron"
+      ],
+      "maxDepthReached": 6,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              1,
+              3
+            ],
+            "to": [
+              2,
+              3
+            ]
+          },
+          "wordsFormed": [
+            "meta"
+          ],
+          "maxDepthReached": 5,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  0
+                ],
+                "to": [
+                  2,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "beta"
+              ],
+              "maxDepthReached": 4,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      2
+                    ],
+                    "to": [
+                      2,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "beat"
+                  ],
+                  "maxDepthReached": 3,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          0
+                        ],
+                        "to": [
+                          2,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "meat"
+                      ],
+                      "maxDepthReached": 2,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              3
+                            ],
+                            "to": [
+                              2,
+                              3
+                            ]
+                          },
+                          "wordsFormed": [
+                            "mean"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  1,
+                                  0
+                                ],
+                                "to": [
+                                  2,
+                                  0
+                                ]
+                              },
+                              "wordsFormed": [
+                                "bean"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          3
+                        ],
+                        "to": [
+                          2,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "bean"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  2,
+                  2
+                ],
+                "to": [
+                  2,
+                  3
+                ]
+              },
+              "wordsFormed": [
+                "meat"
+              ],
+              "maxDepthReached": 2,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      3
+                    ],
+                    "to": [
+                      2,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "mean"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          0
+                        ],
+                        "to": [
+                          2,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "bean"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

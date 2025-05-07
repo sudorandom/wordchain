@@ -1,0 +1,881 @@
+{
+  "initialGrid": [
+    [
+      "t",
+      "w",
+      "a",
+      "e",
+      "e"
+    ],
+    [
+      "c",
+      "g",
+      "t",
+      "l",
+      "t"
+    ],
+    [
+      "t",
+      "o",
+      "a",
+      "s",
+      "a"
+    ],
+    [
+      "o",
+      "t",
+      "s",
+      "l",
+      "w"
+    ],
+    [
+      "s",
+      "t",
+      "s",
+      "r",
+      "b"
+    ]
+  ],
+  "cli.WordLength": 5,
+  "cli.RequiredMinTurns": 10,
+  "cli.RequiredMaxTurns": 20,
+  "maxDepthReached": 11,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          1,
+          4
+        ],
+        "to": [
+          2,
+          4
+        ]
+      },
+      "wordsFormed": [
+        "toast"
+      ],
+      "maxDepthReached": 10,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              1,
+              0
+            ],
+            "to": [
+              2,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "coast"
+          ],
+          "maxDepthReached": 9,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  2,
+                  3
+                ],
+                "to": [
+                  2,
+                  4
+                ]
+              },
+              "wordsFormed": [
+                "coats"
+              ],
+              "maxDepthReached": 8,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      3
+                    ],
+                    "to": [
+                      2,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "coals"
+                  ],
+                  "maxDepthReached": 3,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          2
+                        ],
+                        "to": [
+                          2,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "colas"
+                      ],
+                      "maxDepthReached": 2,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              3
+                            ],
+                            "to": [
+                              2,
+                              3
+                            ]
+                          },
+                          "wordsFormed": [
+                            "colts"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  1
+                                ],
+                                "to": [
+                                  2,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "clots"
+                              ],
+                              "maxDepthReached": 0
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  2
+                                ],
+                                "to": [
+                                  3,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "costs"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      2
+                    ],
+                    "to": [
+                      3,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "costs"
+                  ],
+                  "maxDepthReached": 0
+                },
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      3
+                    ],
+                    "to": [
+                      3,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "coals"
+                  ],
+                  "maxDepthReached": 7,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          2
+                        ],
+                        "to": [
+                          2,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "colas"
+                      ],
+                      "maxDepthReached": 6,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              3
+                            ],
+                            "to": [
+                              3,
+                              3
+                            ]
+                          },
+                          "wordsFormed": [
+                            "colts"
+                          ],
+                          "maxDepthReached": 5,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  0,
+                                  2
+                                ],
+                                "to": [
+                                  0,
+                                  3
+                                ]
+                              },
+                              "wordsFormed": [
+                                "altar"
+                              ],
+                              "maxDepthReached": 4,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      1,
+                                      2
+                                    ],
+                                    "to": [
+                                      1,
+                                      3
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "attar"
+                                  ],
+                                  "maxDepthReached": 3,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          0,
+                                          3
+                                        ],
+                                        "to": [
+                                          1,
+                                          3
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "tatar"
+                                      ],
+                                      "maxDepthReached": 2,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              0,
+                                              3
+                                            ],
+                                            "to": [
+                                              0,
+                                              4
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "tweet"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  2,
+                                                  1
+                                                ],
+                                                "to": [
+                                                  2,
+                                                  2
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "clots"
+                                              ],
+                                              "maxDepthReached": 0
+                                            },
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  2,
+                                                  2
+                                                ],
+                                                "to": [
+                                                  3,
+                                                  2
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "costs"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "move": {
+                                            "from": [
+                                              2,
+                                              1
+                                            ],
+                                            "to": [
+                                              2,
+                                              2
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "clots"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  0,
+                                                  3
+                                                ],
+                                                "to": [
+                                                  0,
+                                                  4
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "tweet"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "move": {
+                                            "from": [
+                                              2,
+                                              2
+                                            ],
+                                            "to": [
+                                              3,
+                                              2
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "costs"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  0,
+                                                  3
+                                                ],
+                                                "to": [
+                                                  0,
+                                                  4
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "tweet"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "move": {
+                                        "from": [
+                                          2,
+                                          1
+                                        ],
+                                        "to": [
+                                          2,
+                                          2
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "clots"
+                                      ],
+                                      "maxDepthReached": 2,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              0,
+                                              3
+                                            ],
+                                            "to": [
+                                              1,
+                                              3
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "tatar"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  0,
+                                                  3
+                                                ],
+                                                "to": [
+                                                  0,
+                                                  4
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "tweet"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "move": {
+                                        "from": [
+                                          2,
+                                          2
+                                        ],
+                                        "to": [
+                                          3,
+                                          2
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "costs"
+                                      ],
+                                      "maxDepthReached": 2,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              0,
+                                              3
+                                            ],
+                                            "to": [
+                                              1,
+                                              3
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "tatar"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  0,
+                                                  3
+                                                ],
+                                                "to": [
+                                                  0,
+                                                  4
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "tweet"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      1
+                                    ],
+                                    "to": [
+                                      2,
+                                      2
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "clots"
+                                  ],
+                                  "maxDepthReached": 3,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          1,
+                                          2
+                                        ],
+                                        "to": [
+                                          1,
+                                          3
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "attar"
+                                      ],
+                                      "maxDepthReached": 2,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              0,
+                                              3
+                                            ],
+                                            "to": [
+                                              1,
+                                              3
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "tatar"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  0,
+                                                  3
+                                                ],
+                                                "to": [
+                                                  0,
+                                                  4
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "tweet"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      2
+                                    ],
+                                    "to": [
+                                      3,
+                                      2
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "costs"
+                                  ],
+                                  "maxDepthReached": 3,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          1,
+                                          2
+                                        ],
+                                        "to": [
+                                          1,
+                                          3
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "attar"
+                                      ],
+                                      "maxDepthReached": 2,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              0,
+                                              3
+                                            ],
+                                            "to": [
+                                              1,
+                                              3
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "tatar"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  0,
+                                                  3
+                                                ],
+                                                "to": [
+                                                  0,
+                                                  4
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "tweet"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  1
+                                ],
+                                "to": [
+                                  2,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "clots"
+                              ],
+                              "maxDepthReached": 4,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      0,
+                                      2
+                                    ],
+                                    "to": [
+                                      0,
+                                      3
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "altar"
+                                  ],
+                                  "maxDepthReached": 3,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          1,
+                                          2
+                                        ],
+                                        "to": [
+                                          1,
+                                          3
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "attar"
+                                      ],
+                                      "maxDepthReached": 2,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              0,
+                                              3
+                                            ],
+                                            "to": [
+                                              1,
+                                              3
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "tatar"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  0,
+                                                  3
+                                                ],
+                                                "to": [
+                                                  0,
+                                                  4
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "tweet"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  2
+                                ],
+                                "to": [
+                                  3,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "costs"
+                              ],
+                              "maxDepthReached": 4,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      0,
+                                      2
+                                    ],
+                                    "to": [
+                                      0,
+                                      3
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "altar"
+                                  ],
+                                  "maxDepthReached": 3,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          1,
+                                          2
+                                        ],
+                                        "to": [
+                                          1,
+                                          3
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "attar"
+                                      ],
+                                      "maxDepthReached": 2,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              0,
+                                              3
+                                            ],
+                                            "to": [
+                                              1,
+                                              3
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "tatar"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  0,
+                                                  3
+                                                ],
+                                                "to": [
+                                                  0,
+                                                  4
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "tweet"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  2
+                                ],
+                                "to": [
+                                  3,
+                                  3
+                                ]
+                              },
+                              "wordsFormed": [
+                                "atlas"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      1
+                                    ],
+                                    "to": [
+                                      2,
+                                      2
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "clots"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
