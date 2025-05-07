@@ -43,9 +43,9 @@ type ExplorationNode struct {
 }
 type FullExplorationOutput struct {
 	InitialGrid      JsonGrid          `json:"initialGrid"`
-	WordLength       int               `json:"cli.WordLength"`
-	RequiredMinTurns int               `json:"cli.RequiredMinTurns"`
-	RequiredMaxTurns int               `json:"cli.RequiredMaxTurns"`
+	WordLength       int               `json:"wordLength"`
+	RequiredMinTurns int               `json:"requiredMinTurns"`
+	RequiredMaxTurns int               `json:"requiredMaxTurns"`
 	MaxDepthReached  int               `json:"maxDepthReached"`
 	ExplorationTree  []ExplorationNode `json:"explorationTree"`
 }
