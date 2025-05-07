@@ -586,6 +586,11 @@ function App() {
        <div className="h-6 mb-2 text-center">
             {isInvalidMove && <p className="text-red-600 dark:text-red-400 font-semibold">{invalidMoveMessage}</p>}
        </div>
+        <div className="h-6 mb-2 text-center">
+            <p className={`text-sm ${hasDeviated ? 'text-red-600 dark:text-red-400 font-bold' : 'text-green-600 dark:text-green-400 font-semibold'}`}>
+                {hasDeviated ? "Deviated from optimal path!" : "On the optimal path."}
+            </p>
+        </div>
 
        <div className="relative inline-flex flex-col items-center mb-1">
             {turnFailedAttempts > 0 && (
@@ -602,6 +607,7 @@ function App() {
             >
                 {currentDepth}/{maxDepthAttainable}
             </div>
+
            <WordGrid
                 grid={grid}
                 selectedCell={selectedCell}
@@ -635,12 +641,6 @@ function App() {
                 </div>
             </div>
        </div>
-
-        <div className="h-6 mt-2 text-center">
-            <p className={`text-sm ${hasDeviated ? 'text-red-600 dark:text-red-400 font-bold' : 'text-green-600 dark:text-green-400 font-semibold'}`}>
-                {hasDeviated ? "Deviated from optimal path!" : "On the optimal path."}
-            </p>
-        </div>
 
        {renderWordChain()}
        {isDebugMode && <ExplorationTreeView treeData={gameData?.explorationTree} />}

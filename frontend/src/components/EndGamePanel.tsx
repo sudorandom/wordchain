@@ -45,7 +45,6 @@ const EndGamePanel: React.FC<EndGamePanelProps> = ({
         <div className="fixed inset-0 bg-black bg-opacity-75 flex flex-col items-center justify-center z-20 p-4">
             <div className="bg-white dark:bg-gray-800 p-6 md:p-8 rounded-lg shadow-xl text-center w-full max-w-2xl">
                 <h2 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">{title}</h2>
-                <p className="text-lg mb-2 text-gray-700 dark:text-gray-300">You found <span className="font-semibold">{playerWords.size}</span> unique words.</p>
 
                 <div className="flex flex-col md:flex-row justify-around gap-4 mb-6 max-h-60 overflow-y-auto">
                     <div className="flex-1 border rounded p-3 bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
@@ -55,11 +54,15 @@ const EndGamePanel: React.FC<EndGamePanelProps> = ({
                     {
                         score != maxScore &&
                         <div className="flex-1 border rounded p-3 bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                            <h3 className="text-lg font-semibold mb-2 text-blue-700 dark:text-blue-400">There are {optimalPathWords.length} words possible.</h3>
+                            <h3 className="text-lg font-semibold mb-2 text-purple-700 dark:text-red-400">There are {optimalPathWords.length} words possible.</h3>
                             {optimalPathWords.length > 0 ? <ol className="text-left text-sm space-y-1 list-decimal list-inside text-gray-700 dark:text-gray-300">{optimalPathWords.map((word, index) => <li key={`${word}-${index}`}>{word.toUpperCase()}</li>)}</ol> : <p className="text-sm text-gray-500 dark:text-gray-400 italic">No optimal path defined.</p>}
                         </div>
                     }
                 </div>
+
+                {score != maxScore && (
+                    <p className="text-lg mb-2 text-gray-700 dark:text-gray-300">There is a different set of moves that get <i>more words</i>. Try again and look for different valid moves!</p>
+                )}
 
                 {showPlayHardButton && (
                     <button onClick={onPlayHardMode} className="mt-4 px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:ring-offset-gray-800 mr-3">
