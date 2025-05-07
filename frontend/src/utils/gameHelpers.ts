@@ -34,6 +34,39 @@ export interface CellCoordinates {
     turnFailedAttempts: number; // Persist turn fails for back button
   }
   
+  export const getFriendlyDate = (
+    date: Date | undefined | null,
+    options: { includeWeekday?: boolean; locale?: string } = {}
+): string => {
+    // Destructure options with default values
+    const { locale = undefined } = options;
+
+    // Check if the date is valid and is an instance of Date
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+        console.warn("getFriendlyDate was called with an invalid date:", date);
+        return "Invalid Date"; // Or return an empty string, or throw an error
+    }
+
+    try {
+        // Define formatting options for Intl.DateTimeFormat
+        const intlOptions: Intl.DateTimeFormatOptions = {
+            year: 'numeric',  // "2025"
+            month: 'long',    // "May"
+            day: 'numeric',   // "7"
+            weekday: 'long', // "Wednesday"
+        };
+
+        // Create a formatter and format the date
+        // If locale is undefined, Intl.DateTimeFormat uses the runtime's default locale.
+        return new Intl.DateTimeFormat(locale, intlOptions).format(date);
+
+    } catch (error) {
+        console.error("Error formatting date:", error);
+        // Fallback for any unexpected errors during formatting
+        // You might want a simpler fallback like date.toDateString() if Intl fails
+        return date.toDateString(); // Example: "Wed May 07 2025"
+    }
+};
   
   export const getFormattedDate = (date: Date): string => {
     if (date === undefined) {

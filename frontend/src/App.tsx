@@ -5,6 +5,7 @@ import ProgressBar from './components/ProgressBar';
 import EndGamePanel from './components/EndGamePanel';
 import ExplorationTreeView from './components/ExplorationTreeView';
 import {
+    getFriendlyDate,
     getFormattedDate,
     getDataFilePath,
     findLongestWordChain,
@@ -543,16 +544,16 @@ function App() {
             )}
         </button>
 
-       <h1 className="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-flow font-bungee">
+       <h1 className="text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-flow font-bungee">
             <a href="/">Word Chain</a>
        </h1>
        <h2 className="text-2xl mb-1 text-gray-700 dark:text-gray-300">
-            {getFormattedDate(currentDate)} <span className="capitalize">{difficulty != 'simple' && `(${difficulty}) `}</span>
+            {getFriendlyDate(currentDate)} <span className="capitalize">{difficulty != 'simple' && `(${difficulty}) `}</span>
             { currentLevelCompleted && <i className="fas fa-check text-green-600"></i>}
        </h2>
 
        <div className="text-center max-w-xl mb-2 text-sm text-gray-600 dark:text-gray-400">
-            <p><span className="font-semibold mb-1">How to Play: </span>This is hard mode. You no longer have hints but you still need to find the optimal move sequence to win! Every move <i>must</i> make a new {wordLength}-letter word.</p>
+            <p><span className="font-semibold mb-1">How to Play: </span>This is hard mode. You no longer have hints but you still need to find the optimal move sequence to win! Every move <i>must</i> make a new <i>{wordLength}-letter</i> word.</p>
        </div>
 
        <div className="h-6 mb-2 text-center">

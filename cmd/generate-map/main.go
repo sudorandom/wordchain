@@ -2,17 +2,17 @@ package main
 
 import (
 	// Needed for grid string representation
-	_ "embed"       // Needed for //go:embed
-	"encoding/json" // Needed for JSON output
-	"fmt"           // Using v2 rand
-	"os"            // Needed for file writing
+	_ "embed" // Needed for //go:embed
+	"encoding/json"
+	"fmt"
+	"os"
 	"path/filepath"
-	"runtime" // For NumCPU
-	"sort"    // To print found words consistently
+	"runtime"
+	"sort"
 	"strings"
-	"sync"        // For WaitGroup and Mutex (though Mutex not strictly needed for current cache)
-	"sync/atomic" // For atomic counters
-	"time"        // For status updates and timeout
+	"sync"
+	"sync/atomic"
+	"time"
 
 	"github.com/alecthomas/kong"
 )
@@ -232,7 +232,6 @@ resultsLoop:
 			if cli.NumGrids != -1 && validGridsFound >= cli.NumGrids {
 				fmt.Printf("Target of %d valid grids reached. Signaling workers to stop.\n", cli.NumGrids)
 				close(doneChan) // Signal workers to stop
-				// Note: Workers might still send a few more results if they were already in flight.
 			}
 
 		case <-ticker.C:
@@ -264,16 +263,6 @@ resultsLoop:
 		fmt.Printf("\nSearch finished after %v (~%d attempts).\n", elapsedTime, finalAttempts)
 		fmt.Printf("Found and saved %d grids meeting all criteria.\n", validGridsFound)
 	}
-}
-
-// isOnlySimpleWords checks if all words found in the exploration tree exist in the simpleWordMap.
-func isOnlySimpleWords(simpleWordMap Dictionary, wordSet map[string]struct{}) bool {
-	for word := range wordSet {
-		if _, ok := simpleWordMap[word]; !ok {
-			return false
-		}
-	}
-	return true
 }
 
 // collectAllWords recursively traverses the exploration tree and gathers all unique words.

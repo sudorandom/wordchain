@@ -1,285 +1,80 @@
 {
   "initialGrid": [
     [
-      "h",
-      "h",
-      "s",
-      "e",
-      "m"
-    ],
-    [
       "f",
-      "e",
-      "a",
-      "t",
+      "n",
+      "l",
       "h"
     ],
     [
       "t",
-      "e",
       "i",
+      "n",
+      "l"
+    ],
+    [
+      "u",
+      "i",
+      "o",
+      "e"
+    ],
+    [
+      "e",
       "c",
+      "h",
       "s"
     ]
   ],
-  "WordLength": 5,
-  "RequiredMinTurns": 7,
-  "RequiredMaxTurns": 9,
-  "maxDepthReached": 7,
+  "wordLength": 4,
+  "requiredMinTurns": 6,
+  "requiredMaxTurns": 9,
+  "maxDepthReached": 6,
   "explorationTree": [
     {
       "move": {
         "from": [
           0,
-          0
+          2
         ],
         "to": [
           1,
-          0
+          2
         ]
       },
       "wordsFormed": [
-        "heath"
+        "till"
       ],
-      "maxDepthReached": 6,
+      "maxDepthReached": 5,
       "nextMoves": [
         {
           "move": {
             "from": [
-              1,
-              4
+              0,
+              0
             ],
             "to": [
-              2,
-              4
+              1,
+              0
             ]
           },
           "wordsFormed": [
-            "heats"
+            "fill"
           ],
-          "maxDepthReached": 5,
+          "maxDepthReached": 4,
           "nextMoves": [
             {
               "move": {
                 "from": [
-                  0,
-                  0
-                ],
-                "to": [
                   1,
-                  0
-                ]
-              },
-              "wordsFormed": [
-                "feats"
-              ],
-              "maxDepthReached": 4,
-              "nextMoves": [
-                {
-                  "move": {
-                    "from": [
-                      0,
-                      2
-                    ],
-                    "to": [
-                      1,
-                      2
-                    ]
-                  },
-                  "wordsFormed": [
-                    "fests"
-                  ],
-                  "maxDepthReached": 2,
-                  "nextMoves": [
-                    {
-                      "move": {
-                        "from": [
-                          1,
-                          0
-                        ],
-                        "to": [
-                          2,
-                          0
-                        ]
-                      },
-                      "wordsFormed": [
-                        "tests"
-                      ],
-                      "maxDepthReached": 1,
-                      "nextMoves": [
-                        {
-                          "move": {
-                            "from": [
-                              0,
-                              2
-                            ],
-                            "to": [
-                              1,
-                              2
-                            ]
-                          },
-                          "wordsFormed": [
-                            "teats"
-                          ],
-                          "maxDepthReached": 0
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "move": {
-                    "from": [
-                      1,
-                      0
-                    ],
-                    "to": [
-                      2,
-                      0
-                    ]
-                  },
-                  "wordsFormed": [
-                    "teats"
-                  ],
-                  "maxDepthReached": 0
-                },
-                {
-                  "move": {
-                    "from": [
-                      1,
-                      2
-                    ],
-                    "to": [
-                      2,
-                      2
-                    ]
-                  },
-                  "wordsFormed": [
-                    "teach"
-                  ],
-                  "maxDepthReached": 3,
-                  "nextMoves": [
-                    {
-                      "move": {
-                        "from": [
-                          0,
-                          2
-                        ],
-                        "to": [
-                          1,
-                          2
-                        ]
-                      },
-                      "wordsFormed": [
-                        "fests"
-                      ],
-                      "maxDepthReached": 2,
-                      "nextMoves": [
-                        {
-                          "move": {
-                            "from": [
-                              1,
-                              0
-                            ],
-                            "to": [
-                              2,
-                              0
-                            ]
-                          },
-                          "wordsFormed": [
-                            "tests"
-                          ],
-                          "maxDepthReached": 1,
-                          "nextMoves": [
-                            {
-                              "move": {
-                                "from": [
-                                  1,
-                                  2
-                                ],
-                                "to": [
-                                  2,
-                                  2
-                                ]
-                              },
-                              "wordsFormed": [
-                                "teats"
-                              ],
-                              "maxDepthReached": 0
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "move": {
-                    "from": [
-                      1,
-                      3
-                    ],
-                    "to": [
-                      1,
-                      4
-                    ]
-                  },
-                  "wordsFormed": [
-                    "feast"
-                  ],
-                  "maxDepthReached": 2,
-                  "nextMoves": [
-                    {
-                      "move": {
-                        "from": [
-                          1,
-                          2
-                        ],
-                        "to": [
-                          2,
-                          2
-                        ]
-                      },
-                      "wordsFormed": [
-                        "teach"
-                      ],
-                      "maxDepthReached": 1,
-                      "nextMoves": [
-                        {
-                          "move": {
-                            "from": [
-                              0,
-                              0
-                            ],
-                            "to": [
-                              1,
-                              0
-                            ]
-                          },
-                          "wordsFormed": [
-                            "heist"
-                          ],
-                          "maxDepthReached": 0
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "move": {
-                "from": [
-                  1,
-                  0
+                  3
                 ],
                 "to": [
                   2,
-                  0
+                  3
                 ]
               },
               "wordsFormed": [
-                "teats"
+                "file"
               ],
               "maxDepthReached": 3,
               "nextMoves": [
@@ -295,7 +90,7 @@
                     ]
                   },
                   "wordsFormed": [
-                    "feats"
+                    "tile"
                   ],
                   "maxDepthReached": 2,
                   "nextMoves": [
@@ -311,7 +106,7 @@
                         ]
                       },
                       "wordsFormed": [
-                        "fests"
+                        "tine"
                       ],
                       "maxDepthReached": 1,
                       "nextMoves": [
@@ -327,27 +122,11 @@
                             ]
                           },
                           "wordsFormed": [
-                            "tests"
+                            "fine"
                           ],
                           "maxDepthReached": 0
                         }
                       ]
-                    },
-                    {
-                      "move": {
-                        "from": [
-                          1,
-                          3
-                        ],
-                        "to": [
-                          1,
-                          4
-                        ]
-                      },
-                      "wordsFormed": [
-                        "feast"
-                      ],
-                      "maxDepthReached": 0
                     }
                   ]
                 },
@@ -363,149 +142,29 @@
                     ]
                   },
                   "wordsFormed": [
-                    "tests"
-                  ],
-                  "maxDepthReached": 0
-                }
-              ]
-            },
-            {
-              "move": {
-                "from": [
-                  1,
-                  2
-                ],
-                "to": [
-                  2,
-                  2
-                ]
-              },
-              "wordsFormed": [
-                "teach"
-              ],
-              "maxDepthReached": 1,
-              "nextMoves": [
-                {
-                  "move": {
-                    "from": [
-                      1,
-                      3
-                    ],
-                    "to": [
-                      1,
-                      4
-                    ]
-                  },
-                  "wordsFormed": [
-                    "heist"
+                    "fine"
                   ],
                   "maxDepthReached": 0
                 }
               ]
             }
           ]
-        }
-      ]
-    },
-    {
-      "move": {
-        "from": [
-          1,
-          4
-        ],
-        "to": [
-          2,
-          4
-        ]
-      },
-      "wordsFormed": [
-        "feats"
-      ],
-      "maxDepthReached": 4,
-      "nextMoves": [
+        },
         {
           "move": {
             "from": [
-              0,
-              2
+              1,
+              3
             ],
             "to": [
-              1,
-              2
+              2,
+              3
             ]
           },
           "wordsFormed": [
-            "fests"
+            "tile"
           ],
           "maxDepthReached": 2,
-          "nextMoves": [
-            {
-              "move": {
-                "from": [
-                  1,
-                  0
-                ],
-                "to": [
-                  2,
-                  0
-                ]
-              },
-              "wordsFormed": [
-                "tests"
-              ],
-              "maxDepthReached": 1,
-              "nextMoves": [
-                {
-                  "move": {
-                    "from": [
-                      0,
-                      2
-                    ],
-                    "to": [
-                      1,
-                      2
-                    ]
-                  },
-                  "wordsFormed": [
-                    "teats"
-                  ],
-                  "maxDepthReached": 0
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "move": {
-            "from": [
-              1,
-              0
-            ],
-            "to": [
-              2,
-              0
-            ]
-          },
-          "wordsFormed": [
-            "teats"
-          ],
-          "maxDepthReached": 0
-        },
-        {
-          "move": {
-            "from": [
-              1,
-              2
-            ],
-            "to": [
-              2,
-              2
-            ]
-          },
-          "wordsFormed": [
-            "teach"
-          ],
-          "maxDepthReached": 3,
           "nextMoves": [
             {
               "move": {
@@ -519,77 +178,7 @@
                 ]
               },
               "wordsFormed": [
-                "fests"
-              ],
-              "maxDepthReached": 2,
-              "nextMoves": [
-                {
-                  "move": {
-                    "from": [
-                      1,
-                      0
-                    ],
-                    "to": [
-                      2,
-                      0
-                    ]
-                  },
-                  "wordsFormed": [
-                    "tests"
-                  ],
-                  "maxDepthReached": 1,
-                  "nextMoves": [
-                    {
-                      "move": {
-                        "from": [
-                          1,
-                          2
-                        ],
-                        "to": [
-                          2,
-                          2
-                        ]
-                      },
-                      "wordsFormed": [
-                        "teats"
-                      ],
-                      "maxDepthReached": 0
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "move": {
-            "from": [
-              1,
-              3
-            ],
-            "to": [
-              1,
-              4
-            ]
-          },
-          "wordsFormed": [
-            "feast"
-          ],
-          "maxDepthReached": 2,
-          "nextMoves": [
-            {
-              "move": {
-                "from": [
-                  1,
-                  2
-                ],
-                "to": [
-                  2,
-                  2
-                ]
-              },
-              "wordsFormed": [
-                "teach"
+                "tine"
               ],
               "maxDepthReached": 1,
               "nextMoves": [
@@ -605,13 +194,47 @@
                     ]
                   },
                   "wordsFormed": [
-                    "heist"
+                    "fine"
                   ],
                   "maxDepthReached": 0
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          1,
+          3
+        ],
+        "to": [
+          2,
+          3
+        ]
+      },
+      "wordsFormed": [
+        "tine"
+      ],
+      "maxDepthReached": 1,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              0
+            ],
+            "to": [
+              1,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "fine"
+          ],
+          "maxDepthReached": 0
         }
       ]
     }

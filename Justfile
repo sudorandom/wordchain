@@ -18,12 +18,12 @@ gen-simple $date='':
 
 gen-hard $date='':
   go run ./cmd/generate-map \
-    --grid-rows=3 \
-    --grid-cols=5 \
-    --word-length=5 \
-    --min-turns=7 \
+    --grid-rows=4 \
+    --grid-cols=4 \
+    --word-length=4 \
+    --min-turns=6 \
     --max-turns=9 \
-    --max-unique-words=15 \
+    --max-unique-words=10 \
     --num-grids=100 \
     --output=output/hard \
     --start-date=${date}

@@ -8,20 +8,20 @@ interface ExplorationTreeNodeProps {
 }
 
 const ExplorationTreeNode: React.FC<ExplorationTreeNodeProps> = ({ node, level = 0 }) => {
-    const [isExpanded, setIsExpanded] = useState(level < 1);
-    const handleToggle = () => setIsExpanded(!isExpanded);
+    const [isCollapsed, setIsCollapsed] = useState(false);
+    const handleToggle = () => setIsCollapsed(!isCollapsed);
     const hasChildren = node.nextMoves && node.nextMoves.length > 0;
 
     return (
-        <div style={{ marginLeft: `${level * 20}px` }} className="my-1">
+        <div style={{ marginLeft: `${level * 5}px` }} className="my-1">
             <div className={`flex items-center p-1 rounded ${hasChildren ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700' : ''} ${level === 0 ? 'bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700' : ''}`} onClick={hasChildren ? handleToggle : undefined}>
-                {hasChildren && <span className="text-xs mr-1 w-4 text-center text-gray-600 dark:text-gray-400">{isExpanded ? '▼' : '▶'}</span>}
+                {hasChildren && <span className="text-xs mr-1 w-4 text-center text-gray-600 dark:text-gray-400">{isCollapsed ? '▶' : '▼'}</span>}
                 {!hasChildren && <span className="w-4 mr-1"></span>}
                 <span className="text-xs font-mono mr-2 text-purple-700 dark:text-purple-400">{node.move ? `[${node.move.from.join(',')}]↔[${node.move.to.join(',')}]` : 'Start'}</span>
                 <span className="text-xs font-semibold mr-2 text-green-700 dark:text-green-400">[{node.wordsFormed?.join(', ').toUpperCase() || ''}]</span>
                 <span className="text-xs text-gray-500 dark:text-gray-400">(Depth Left: {node.maxDepthReached})</span>
             </div>
-            {isExpanded && hasChildren && (
+            {!isCollapsed && hasChildren && (
                 <div className="border-l-2 border-gray-300 dark:border-gray-600 pl-2 ml-2">
                     {node.nextMoves?.map((childNode, index) => <ExplorationTreeNode key={`${childNode.move?.from?.join('-')}-${childNode.move?.to?.join('-')}-${index}-${level}-${Math.random()}`} node={childNode} level={level + 1} />)}
                 </div>

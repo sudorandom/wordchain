@@ -1,63 +1,66 @@
 {
   "initialGrid": [
     [
-      "o",
-      "s",
-      "r",
-      "e",
-      "e"
-    ],
-    [
-      "s",
-      "r",
-      "f",
-      "e",
-      "s"
-    ],
-    [
-      "w",
       "a",
-      "l",
+      "h",
+      "n",
+      "t"
+    ],
+    [
+      "h",
+      "b",
       "t",
+      "w"
+    ],
+    [
+      "a",
+      "c",
+      "r",
       "u"
+    ],
+    [
+      "f",
+      "r",
+      "b",
+      "e"
     ]
   ],
-  "WordLength": 5,
-  "RequiredMinTurns": 7,
-  "RequiredMaxTurns": 9,
-  "maxDepthReached": 7,
+  "wordLength": 4,
+  "requiredMinTurns": 6,
+  "requiredMaxTurns": 9,
+  "maxDepthReached": 6,
   "explorationTree": [
     {
       "move": {
         "from": [
-          1,
-          1
+          2,
+          3
         ],
         "to": [
-          2,
-          1
+          3,
+          3
         ]
       },
       "wordsFormed": [
-        "safes"
+        "acre"
       ],
-      "maxDepthReached": 6,
+      "maxDepthReached": 5,
       "nextMoves": [
         {
           "move": {
             "from": [
-              1,
-              2
+              2,
+              0
             ],
             "to": [
               2,
-              2
+              1
             ]
           },
           "wordsFormed": [
-            "sales"
+            "care"
           ],
-          "maxDepthReached": 5,
+          "maxDepthReached": 4,
           "nextMoves": [
             {
               "move": {
@@ -71,39 +74,39 @@
                 ]
               },
               "wordsFormed": [
-                "wales"
+                "hare"
               ],
               "maxDepthReached": 3,
               "nextMoves": [
                 {
                   "move": {
                     "from": [
-                      0,
+                      1,
                       2
                     ],
                     "to": [
-                      1,
+                      2,
                       2
                     ]
                   },
                   "wordsFormed": [
-                    "wares"
+                    "hate"
                   ],
                   "maxDepthReached": 2,
                   "nextMoves": [
                     {
                       "move": {
                         "from": [
-                          1,
-                          3
+                          2,
+                          0
                         ],
                         "to": [
-                          2,
-                          3
+                          3,
+                          0
                         ]
                       },
                       "wordsFormed": [
-                        "warts"
+                        "fate"
                       ],
                       "maxDepthReached": 1,
                       "nextMoves": [
@@ -119,101 +122,115 @@
                             ]
                           },
                           "wordsFormed": [
-                            "wafts"
+                            "fare"
                           ],
                           "maxDepthReached": 0
                         }
                       ]
                     }
                   ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      0
+                    ],
+                    "to": [
+                      3,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "fare"
+                  ],
+                  "maxDepthReached": 0
                 }
               ]
             },
             {
               "move": {
                 "from": [
-                  1,
-                  3
+                  2,
+                  0
                 ],
                 "to": [
-                  2,
-                  3
+                  3,
+                  0
                 ]
               },
               "wordsFormed": [
-                "salts"
+                "fare"
               ],
-              "maxDepthReached": 4,
+              "maxDepthReached": 3,
               "nextMoves": [
                 {
                   "move": {
                     "from": [
                       1,
-                      1
+                      0
                     ],
                     "to": [
-                      1,
-                      2
+                      2,
+                      0
                     ]
                   },
                   "wordsFormed": [
-                    "slats"
+                    "hare"
                   ],
-                  "maxDepthReached": 3,
+                  "maxDepthReached": 2,
                   "nextMoves": [
                     {
                       "move": {
                         "from": [
-                          0,
-                          4
+                          1,
+                          2
                         ],
                         "to": [
-                          1,
-                          4
+                          2,
+                          2
                         ]
                       },
                       "wordsFormed": [
-                        "slate"
+                        "hate"
                       ],
-                      "maxDepthReached": 2,
+                      "maxDepthReached": 1,
                       "nextMoves": [
                         {
                           "move": {
                             "from": [
-                              0,
+                              1,
                               0
                             ],
                             "to": [
-                              0,
-                              1
+                              2,
+                              0
                             ]
                           },
                           "wordsFormed": [
-                            "sores"
+                            "fate"
                           ],
-                          "maxDepthReached": 1,
-                          "nextMoves": [
-                            {
-                              "move": {
-                                "from": [
-                                  0,
-                                  3
-                                ],
-                                "to": [
-                                  1,
-                                  3
-                                ]
-                              },
-                              "wordsFormed": [
-                                "sorts"
-                              ],
-                              "maxDepthReached": 0
-                            }
-                          ]
+                          "maxDepthReached": 0
                         }
                       ]
                     }
                   ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      2
+                    ],
+                    "to": [
+                      2,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "fate"
+                  ],
+                  "maxDepthReached": 0
                 }
               ]
             }
