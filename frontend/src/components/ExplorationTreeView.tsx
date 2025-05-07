@@ -39,7 +39,7 @@ const ExplorationTreeView: React.FC<ExplorationTreeViewProps> = ({ treeData }) =
     if (!treeData) return null;
 
     return (
-        <div className="w-full max-w-2xl mt-6 border rounded p-3 bg-white dark:bg-gray-800 shadow dark:border-gray-700">
+        <div className="max-w-2xl mt-6 border rounded p-3 bg-white dark:bg-gray-800 shadow dark:border-gray-700">
              <button onClick={() => setIsVisible(!isVisible)} className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-semibold mb-2 w-full text-left">
                 {isVisible ? 'Hide' : 'Show'} Full Move Tree {isVisible ? '▼' : '▶'}
             </button>
