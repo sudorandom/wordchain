@@ -1122,7 +1122,7 @@ function App() {
                 {difficulty === 'normal' &&
                     <p><span className="font-semibold mb-1">How to Play: </span>Click adjacent cells or drag-and-drop letters to swap them. Find the optimal move sequence to win! Every move <i>must</i> make a new {wordLength}-letter word. Click the light bulb button <i className="fas fa-lightbulb"></i> to get a hint about the next move.</p>}
                 {difficulty === 'hard' &&
-                    <p><span className="font-semibold mb-1">How to Play: </span>This is hard mode. It is the same rules as normal mode, just with a bigger grid. This means words can be made vertically or horizontally. Also, no hints. You still need to find the optimal move sequence to win. Remember that every move <i>must</i> make a new <i>{wordLength}-letter</i> word.</p>}
+                    <p><span className="font-semibold mb-1">How to Play: </span>This is hard mode. It is the same rules as normal mode, just with a bigger grid. This means words can be made vertically or horizontally. You still need to find the optimal move sequence to win. Remember that every move <i>must</i> make a new <i>{wordLength}-letter</i> word.</p>}
                  {difficulty === 'impossible' &&
                     <p><span className="font-semibold mb-1">How to Play: </span>This is impossible mode. Bigger grid, no hints, and the optimal path might be very tricky. Good luck! Every move <i>must</i> make a new <i>{wordLength}-letter</i> word.</p>}
             </div>

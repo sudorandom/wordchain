@@ -162,7 +162,7 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
 
                 <div className="mb-4 border-t pt-3 dark:border-gray-600">
                     <h4 className={`text-md font-semibold mb-2 ${foundWordsColor}`}>
-                        Your Path ({history.length} moves, {sortedPlayerWords.length} unique words)
+                        Your Path ({history.length} moves)
                     </h4>
                     <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm max-h-36 overflow-y-auto pr-2">
                         {history.map((histEntry, index) => {
