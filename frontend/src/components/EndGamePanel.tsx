@@ -241,7 +241,7 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
                 <h2 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100 text-center">
                     {title}
                 </h2>
-                <div className="flex flex-col md:flex-row gap-6">
+                <div className="flex flex-col md:flex-row justify-between gap-6">
                     {/* Left Column: Results */}
                     <div className="md:w-1/2">
                         <div className="flex flex-col gap-4">
@@ -252,7 +252,7 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
                     </div>
 
                     {/* Right Column: Share, Message, Close */}
-                    <div className="md:w-1/2 flex flex-col items-start">
+                    <div className="md:w-1/2 flex flex-col items-start justify-start">
                         {canShare && (
                             <div className="mb-6 w-full">
                                 <div className="p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700">
@@ -272,13 +272,13 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
                             </div>
                         )}
                         {(hasNormalData || hasHardData || hasImpossibleData) && (
-                            <div className="w-full flex flex-col items-end">
+                            <div className="w-full flex flex-col items-end justify-end ">
                                 {showComeBackMessage && (
                                     <p className="text-xl font-semibold text-green-600 dark:text-green-400 my-4 text-left">
                                         You've completed all challenges! Come back tomorrow!
                                     </p>
                                 )}
-                                <div className="mt-4 flex justify-end">
+                                <div className="mt-auto">
                                     <button
                                         onClick={onClose}
                                         className="px-8 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md shadow focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:bg-gray-600 dark:hover:bg-gray-500 dark:focus:ring-gray-500 dark:ring-offset-gray-800"
@@ -296,4 +296,3 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
 };
 
 export default EndGamePanel;
-
