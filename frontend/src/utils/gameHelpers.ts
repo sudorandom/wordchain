@@ -21,7 +21,7 @@ export interface GameData {
     initialGrid: string[][];
     minWordLength: number;
     requiredMinTurns: number; // This might be deprecated if maxDepthReached is primary
-    maxDepthReached: number; // Max depth for the current level (simple or hard)
+    maxDepthReached: number; // Max depth for the current level (normal or hard)
     explorationTree: ExplorationNodeData[];
 }
 

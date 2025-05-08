@@ -1,10 +1,10 @@
 all $date='':
     just expand-dictionary
-    just gen-simple ${date}
+    just gen-normal ${date}
     just gen-hard ${date}
     just gen-impossible ${date}
 
-gen-simple $date='':
+gen-normal $date='':
   go run ./cmd/generate-map \
     --grid-rows=3 \
     --grid-cols=4 \
@@ -13,7 +13,7 @@ gen-simple $date='':
     --max-turns=10 \
     --max-unique-words=12 \
     --num-grids=100 \
-    --output=output/simple \
+    --output=output/normal \
     --start-date=${date}
 
 gen-hard $date='':
