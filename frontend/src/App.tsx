@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import WordGrid from './components/WordGrid';
 import ProgressBar from './components/ProgressBar';
-import EndGamePanel from './components/EndGamePanel'; // Assuming this path points to the combined panel
+import EndGamePanel from './components/EndGamePanel';
 import ExplorationTreeView from './components/ExplorationTreeView';
 import {
     getFriendlyDate,
@@ -70,7 +70,13 @@ function App() {
     const [reloadTrigger, setReloadTrigger] = useState(0);
 
     // Memoized initial game states
-    const initialStates = useMemo(() => getInitialGameState(gameData), [gameData]);
+      const initialStates = useMemo(() => {
+        const initial = getInitialGameState(gameData);
+        return {
+          ...initial,
+          grid: initial.grid || (gameData?.initialGrid || null), // Ensure grid is not undefined
+        };
+      }, [gameData]);
 
     // Core Game State (live play)
     const [grid, setGrid] = useState<string[][] | null>(initialStates.grid);
@@ -183,11 +189,11 @@ function App() {
         const loadLevelDataInternal = async (date: Date, diff: DifficultyLevel) => {
             if (!date) return;
 
-            if (!loading) setLoading(true);
+            if (!loading) setLoading(true); // Keep loading true during fetch
 
             setError(null);
             setShowEndGamePanelOverride(false);
-            setCombinedSummaryData({}); // Clear combined summary data
+            setCombinedSummaryData({});
             setHasAcknowledgedGameOver(false);
 
             const freshInitialStates = getInitialGameState(null);
@@ -207,23 +213,42 @@ function App() {
             setAnimationState(freshInitialStates.animationState);
             setIsGameOver(freshInitialStates.isGameOver);
 
+
             try {
                 const basePath = '';
                 const response = await fetch(`${basePath}/levels/${diff}/${getDataFilePath(date)}`);
                 if (!response.ok) {
-                    if (response.status === 404) throw new Error(`Today's ${diff} level is not available yet. Please check back later!`);
-                    throw new Error(`Failed to fetch ${diff} level for ${getFormattedDate(date)} (HTTP ${response.status})`);
+                    if (response.status === 404)
+                        throw new Error(
+                            `Today's ${diff} level is not available yet. Please check back later!`
+                        );
+                    throw new Error(
+                        `Failed to fetch ${diff} level for ${getFormattedDate(
+                            date
+                        )} (HTTP ${response.status})`
+                    );
                 }
-                const contentType = response.headers.get("content-type");
-                if (!contentType || !contentType.includes("application/json")) {
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
                     const textResponse = await response.text();
-                    console.error("Received non-JSON content type:", contentType, "Response text:", textResponse);
-                    throw new Error(`Received non-JSON response for ${diff} level ${getFormattedDate(date)}.`);
+                    console.error(
+                        'Received non-JSON content type:',
+                        contentType,
+                        'Response text:',
+                        textResponse
+                    );
+                    throw new Error(
+                        `Received non-JSON response for ${diff} level ${getFormattedDate(
+                            date
+                        )}.`
+                    );
                 }
                 const fetchedGameData: GameData = await response.json();
                 setGameData(fetchedGameData);
 
-                const savedGameStateString = localStorage.getItem(`wordChainsState-${getFormattedDate(date)}-${diff}`);
+                const savedGameStateString = localStorage.getItem(
+                    `wordChainsState-${getFormattedDate(date)}-${diff}`
+                );
                 let loadedDepth = 0;
                 if (savedGameStateString) {
                     const savedState = JSON.parse(savedGameStateString);
@@ -238,29 +263,41 @@ function App() {
                 }
                 setCurrentPossibleMoves(fetchedGameData.explorationTree || []);
 
-                if (fetchedGameData && loadedDepth === fetchedGameData.maxDepthReached && loadedDepth > 0) {
+                if (
+                    fetchedGameData &&
+                    loadedDepth === fetchedGameData.maxDepthReached &&
+                    loadedDepth > 0
+                ) {
                     setHasAcknowledgedGameOver(true);
                     setIsGameOver(true);
                 }
-
             } catch (err: any) {
                 setError(err.message);
                 setGameData(null);
                 setGrid(null);
                 setCurrentPossibleMoves([]);
             } finally {
-                setLoading(false);
+                setLoading(false); // Set loading to false after fetch
             }
         };
 
         if (currentDate) {
             loadLevelDataInternal(currentDate, difficulty);
         }
-
     }, [currentDate, difficulty, reloadTrigger]);
 
     // Memoized live game values
-    const liveOptimalPathWords = useMemo(() => gameData ? findLongestWordChain(gameData.explorationTree, history) : [], [gameData, history]);
+      const liveOptimalPathWords = useMemo(() => {
+        if (gameData) {
+          try {
+            return findLongestWordChain(gameData.explorationTree, history);
+          } catch (error) {
+            console.error("Error in findLongestWordChain:", error);
+            return [];
+          }
+        }
+        return [];
+      }, [gameData, history]);
     const livePlayerUniqueWordsFound = useMemo(() => {
         const words = new Set<string>();
         history.forEach(state => { if (Array.isArray(state.wordsFormedByMove)) { state.wordsFormedByMove.forEach(word => words.add(word)); } });
@@ -273,15 +310,23 @@ function App() {
     useEffect(() => {
         if (!loading && gameData && currentDate && difficulty && grid && history) {
             const gameStateToSave = {
-                lastGrid: grid, history, currentDepth, turnFailedAttempts, hasDeviated,
+                lastGrid: grid,
+                history,
+                currentDepth,
+                turnFailedAttempts,
+                hasDeviated,
             };
-            localStorage.setItem(`wordChainsState-${getFormattedDate(currentDate)}-${difficulty}`, JSON.stringify(gameStateToSave));
+            localStorage.setItem(
+                `wordChainsState-${getFormattedDate(currentDate)}-${difficulty}`,
+                JSON.stringify(gameStateToSave)
+            );
         }
     }, [grid, history, currentDepth, turnFailedAttempts, hasDeviated, currentDate, difficulty, gameData, loading]);
 
     // Effect to determine natural game over state
     useEffect(() => {
-        if (showEndGamePanelOverride || loading || !gameData || animationState.animating) return;
+        if (showEndGamePanelOverride || loading || !gameData || animationState.animating)
+            return;
 
         if (currentDepth === 0 && history.length === 0) {
             if (isGameOver) setIsGameOver(false);
@@ -289,7 +334,8 @@ function App() {
         }
 
         const levelCompleted = currentDepth === liveMaxDepthAttainable;
-        const stuck = !levelCompleted && currentDepth > 0 && currentPossibleMoves && currentPossibleMoves.length === 0;
+        const stuck =
+            !levelCompleted && currentDepth > 0 && currentPossibleMoves && currentPossibleMoves.length === 0;
         const shouldBeGameOver = levelCompleted || stuck;
 
         if (shouldBeGameOver) {
@@ -304,15 +350,28 @@ function App() {
             }
         }
     }, [
-        gameData, animationState.animating, showEndGamePanelOverride,
-        currentDepth, history.length,
-        liveMaxDepthAttainable, currentPossibleMoves,
-        isGameOver, loading
+        gameData,
+        animationState.animating,
+        showEndGamePanelOverride,
+        currentDepth,
+        history.length,
+        liveMaxDepthAttainable,
+        currentPossibleMoves,
+        isGameOver,
+        loading,
     ]);
 
     // Effect to save detailed summary on level completion
     useEffect(() => {
-        if (isGameOver && !hasAcknowledgedGameOver && !showEndGamePanelOverride && currentDepth === liveMaxDepthAttainable && currentDate && gameData && !loading) {
+        if (
+            isGameOver &&
+            !hasAcknowledgedGameOver &&
+            !showEndGamePanelOverride &&
+            currentDepth === liveMaxDepthAttainable &&
+            currentDate &&
+            gameData &&
+            !loading
+        ) {
             const progressKey = `wordChainsProgress-${getFormattedDate(currentDate)}`;
             const existingProgressString = localStorage.getItem(progressKey);
             let dailyProgressData: DailyProgressStorage = {};
@@ -320,7 +379,7 @@ function App() {
 
             // Check if this difficulty is already marked completed to avoid re-saving
             if (dailyProgressData[difficulty]?.completed) {
-                 return;
+                return;
             }
 
             const summaryToSave: LevelCompletionSummary = {
@@ -329,21 +388,31 @@ function App() {
                 playerWords: Array.from(livePlayerUniqueWordsFound),
                 maxScore: liveMaxDepthAttainable,
                 optimalPathWords: liveOptimalPathWords,
-                difficultyForSummary: difficulty
+                difficultyForSummary: difficulty,
             };
 
             // Update the specific difficulty entry
             dailyProgressData[difficulty] = { completed: true, summary: summaryToSave };
-            
+
             // Update the state for immediate UI feedback
-            setDailyProgress(prev => ({ ...prev, [difficulty]: true }));
-            
+            setDailyProgress((prev) => ({ ...prev, [difficulty]: true }));
+
             // Save the updated structure back to localStorage
             localStorage.setItem(progressKey, JSON.stringify(dailyProgressData));
         }
     }, [
-        isGameOver, hasAcknowledgedGameOver, showEndGamePanelOverride, currentDepth, liveMaxDepthAttainable, currentDate, gameData,
-        difficulty, history, livePlayerUniqueWordsFound, liveOptimalPathWords, loading
+        isGameOver,
+        hasAcknowledgedGameOver,
+        showEndGamePanelOverride,
+        currentDepth,
+        liveMaxDepthAttainable,
+        currentDate,
+        gameData,
+        difficulty,
+        history,
+        livePlayerUniqueWordsFound,
+        liveOptimalPathWords,
+        loading,
     ]);
 
 
@@ -360,7 +429,10 @@ function App() {
             if (coordinates.length > 0) {
                 setHintCells(coordinates);
                 if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
-                hintTimeoutRef.current = window.setTimeout(() => { setHintCells([]); hintTimeoutRef.current = null; }, 3000);
+                hintTimeoutRef.current = window.setTimeout(() => {
+                    setHintCells([]);
+                    hintTimeoutRef.current = null;
+                }, 3000);
             }
         }
     }, [turnFailedAttempts, currentPossibleMoves, grid, calculateHintCoordinates, isGameOver, showEndGamePanelOverride, loading, difficulty]); // Added difficulty
@@ -379,109 +451,284 @@ function App() {
     const triggerWiggle = useCallback((cell1: CellCoordinates, cell2: CellCoordinates) => {
         if (wiggleTimeoutRef.current) clearTimeout(wiggleTimeoutRef.current);
         setWiggleCells([cell1, cell2]);
-        wiggleTimeoutRef.current = window.setTimeout(() => { setWiggleCells([]); wiggleTimeoutRef.current = null; }, 500);
+        wiggleTimeoutRef.current = window.setTimeout(() => {
+            setWiggleCells([]);
+            wiggleTimeoutRef.current = null;
+        }, 500);
     }, []);
 
-    const incrementFailedAttempts = useCallback(() => { setTurnFailedAttempts(prev => prev + 1); }, []);
+    const incrementFailedAttempts = useCallback(() => {
+        setTurnFailedAttempts((prev) => prev + 1);
+    }, []);
 
-    const performSwap = useCallback((cell1: CellCoordinates, cell2: CellCoordinates) => {
-        if (!cell1 || !cell2 || animationState.animating || (isGameOver && !hasAcknowledgedGameOver) || !gameData || !grid || showEndGamePanelOverride || loading) return;
+    const performSwap = useCallback(
+        (cell1: CellCoordinates, cell2: CellCoordinates) => {
+            if (
+                !cell1 ||
+                !cell2 ||
+                animationState.animating ||
+                (isGameOver && !hasAcknowledgedGameOver) ||
+                !gameData ||
+                !grid ||
+                showEndGamePanelOverride ||
+                loading
+            )
+                return;
 
-        setSelectedCell(null); setDraggedCell(null); setHoveredCell(null);
-        let matchedNode: ExplorationNodeData | null = null;
-        const moveOption1 = { from: [cell1.row, cell1.col], to: [cell2.row, cell2.col] };
-        const moveOption2 = { from: [cell2.row, cell2.col], to: [cell1.row, cell1.col] };
-        if (currentPossibleMoves && currentPossibleMoves.length > 0) {
-            for (const node of currentPossibleMoves) {
-                if (!node.move) continue;
-                const fromMatch1 = node.move.from[0] === moveOption1.from[0] && node.move.from[1] === moveOption1.from[1];
-                const toMatch1 = node.move.to[0] === moveOption1.to[0] && node.move.to[1] === moveOption1.to[1];
-                const fromMatch2 = node.move.from[0] === moveOption2.from[0] && node.move.from[1] === moveOption2.from[1];
-                const toMatch2 = node.move.to[0] === moveOption2.to[0] && node.move.to[1] === moveOption2.to[1];
-                if ((fromMatch1 && toMatch1) || (fromMatch2 && toMatch2)) { matchedNode = node; break; }
-            }
-        }
-        if (matchedNode) {
-            const moveMadeCoords = { from: { row: cell1.row, col: cell1.col }, to: { row: cell2.row, col: cell2.col } };
-            const wordsFormedByMove = matchedNode.wordsFormed || [];
-            let isDeviatedMove = false;
-            let maxDepthPossibleFromCurrentState = -1;
+            setSelectedCell(null);
+            setDraggedCell(null);
+            setHoveredCell(null);
+            let matchedNode: ExplorationNodeData | null = null;
+            const moveOption1 = { from: [cell1.row, cell1.col], to: [cell2.row, cell2.col] };
+            const moveOption2 = { from: [cell2.row, cell2.col], to: [cell1.row, cell1.col] };
             if (currentPossibleMoves && currentPossibleMoves.length > 0) {
-                const validNodes = currentPossibleMoves.filter(node => typeof node.maxDepthReached === 'number');
-                if (validNodes.length > 0) maxDepthPossibleFromCurrentState = Math.max(...validNodes.map(node => node.maxDepthReached!));
+                for (const node of currentPossibleMoves) {
+                    if (!node.move) continue;
+                    const fromMatch1 =
+                        node.move.from[0] === moveOption1.from[0] &&
+                        node.move.from[1] === moveOption1.from[1];
+                    const toMatch1 =
+                        node.move.to[0] === moveOption1.to[0] &&
+                        node.move.to[1] === moveOption1.to[1];
+                    const fromMatch2 =
+                        node.move.from[0] === moveOption2.from[0] &&
+                        node.move.from[1] === moveOption2.from[1];
+                    const toMatch2 =
+                        node.move.to[0] === moveOption2.to[0] &&
+                        node.move.to[1] === moveOption2.to[1];
+                    if ((fromMatch1 && toMatch1) || (fromMatch2 && toMatch2)) {
+                        matchedNode = node;
+                        break;
+                    }
+                }
             }
-            if (typeof matchedNode.maxDepthReached === 'number' && matchedNode.maxDepthReached < maxDepthPossibleFromCurrentState) isDeviatedMove = true;
-            setHasDeviated(isDeviatedMove); setTurnFailedAttempts(0); setHintCells([]);
+            if (matchedNode) {
+                const moveMadeCoords = {
+                    from: { row: cell1.row, col: cell1.col },
+                    to: { row: cell2.row, col: cell2.col },
+                };
+                const wordsFormedByMove = matchedNode.wordsFormed || [];
+                let isDeviatedMove = false;
+                let maxDepthPossibleFromCurrentState = -1;
+                if (currentPossibleMoves && currentPossibleMoves.length > 0) {
+                    const validNodes = currentPossibleMoves.filter(
+                        (node) => typeof node.maxDepthReached === 'number'
+                    );
+                    if (validNodes.length > 0)
+                        maxDepthPossibleFromCurrentState = Math.max(
+                            ...validNodes.map((node) => node.maxDepthReached!)
+                        );
+                }
+                if (
+                    typeof matchedNode.maxDepthReached === 'number' &&
+                    matchedNode.maxDepthReached < maxDepthPossibleFromCurrentState
+                )
+                    isDeviatedMove = true;
+                setHasDeviated(isDeviatedMove);
+                setTurnFailedAttempts(0);
+                setHintCells([]);
+                if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
+                setHistory((prevHistory) => [
+                    ...prevHistory,
+                    {
+                        grid: grid!,
+                        currentPossibleMoves,
+                        currentDepth,
+                        moveMade: moveMadeCoords,
+                        wordsFormedByMove,
+                        turnFailedAttempts,
+                    },
+                ]);
+                setAnimationState({ animating: true, from: cell1, to: cell2 });
+                setIsInvalidMove(false);
+                setInvalidMoveMessage('');
+                if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current);
+                if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current);
+                setHighlightedCells([]);
+                animationTimeoutRef.current = window.setTimeout(() => {
+                    const newGrid = grid!.map((r) => [...r]);
+                    const temp = newGrid[cell1.row][cell1.col];
+                    newGrid[cell1.row][cell1.col] = newGrid[cell2.row][cell2.col];
+                    newGrid[cell2.row][cell2.col] = temp;
+                    const nextDepth = currentDepth + 1;
+                    setGrid(newGrid);
+                    setCurrentPossibleMoves(matchedNode!.nextMoves || []);
+                    setCurrentDepth(nextDepth);
+                    setAnimationState({ animating: false, from: null, to: null });
+                    animationTimeoutRef.current = null;
+                    let allCoords: CellCoordinates[] = [];
+                    wordsFormedByMove.forEach((word: string) => {
+                        const coords = findWordCoordinates(newGrid, word, matchedNode!.move!);
+                        allCoords = [...allCoords, ...coords];
+                    });
+                    const uniqueCoords = Array.from(
+                        new Map(allCoords.map((item) => `${item.row}-${item.col}`, item)).values()
+                    );
+                    setHighlightedCells(uniqueCoords);
+                    highlightTimeoutRef.current = window.setTimeout(() => {
+                        setHighlightedCells([]);
+                        highlightTimeoutRef.current = null;
+                    }, 1500);
+                }, 300);
+            } else {
+                setIsInvalidMove(true);
+                setInvalidMoveMessage('Invalid Move! No new word found!');
+                triggerWiggle(cell1, cell2);
+                incrementFailedAttempts();
+            }
+        },
+        [
+            grid,
+            currentPossibleMoves,
+            currentDepth,
+            animationState.animating,
+            isGameOver,
+            gameData,
+            history,
+            triggerWiggle,
+            incrementFailedAttempts,
+            showEndGamePanelOverride,
+            loading,
+            hasAcknowledgedGameOver,
+        ]
+    );
+
+    const handleDragStart = useCallback(
+        (cellCoords: CellCoordinates) => {
+            if (
+                animationState.animating ||
+                (isGameOver && !hasAcknowledgedGameOver) ||
+                !gameData ||
+                showEndGamePanelOverride ||
+                loading
+            )
+                return;
+            setDraggedCell(cellCoords);
+            setSelectedCell(null);
+            setIsInvalidMove(false);
+            setInvalidMoveMessage('');
+            setHoveredCell(null);
+            if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current);
+            setHighlightedCells([]);
+            if (wiggleTimeoutRef.current) clearTimeout(wiggleTimeoutRef.current);
+            setWiggleCells([]);
             if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
-            setHistory(prevHistory => [...prevHistory, { grid: grid!, currentPossibleMoves, currentDepth, moveMade: moveMadeCoords, wordsFormedByMove, turnFailedAttempts }]);
-            setAnimationState({ animating: true, from: cell1, to: cell2 });
-            setIsInvalidMove(false); setInvalidMoveMessage('');
-            if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current);
-            if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current); setHighlightedCells([]);
-            animationTimeoutRef.current = window.setTimeout(() => {
-                const newGrid = grid!.map(r => [...r]);
-                const temp = newGrid[cell1.row][cell1.col];
-                newGrid[cell1.row][cell1.col] = newGrid[cell2.row][cell2.col]; newGrid[cell2.row][cell2.col] = temp;
-                const nextDepth = currentDepth + 1;
-                setGrid(newGrid); setCurrentPossibleMoves(matchedNode!.nextMoves || []); setCurrentDepth(nextDepth);
-                setAnimationState({ animating: false, from: null, to: null }); animationTimeoutRef.current = null;
-                let allCoords: CellCoordinates[] = [];
-                wordsFormedByMove.forEach((word: string) => { const coords = findWordCoordinates(newGrid, word, matchedNode!.move!); allCoords = [...allCoords, ...coords]; });
-                const uniqueCoords = Array.from(new Map(allCoords.map(item => [`${item.row}-${item.col}`, item])).values());
-                setHighlightedCells(uniqueCoords);
-                highlightTimeoutRef.current = window.setTimeout(() => { setHighlightedCells([]); highlightTimeoutRef.current = null; }, 1500);
-            }, 300);
-        } else {
-            setIsInvalidMove(true); setInvalidMoveMessage('Invalid Move! No new word found!');
-            triggerWiggle(cell1, cell2); incrementFailedAttempts();
-        }
-    }, [grid, currentPossibleMoves, currentDepth, animationState.animating, isGameOver, gameData, history, triggerWiggle, incrementFailedAttempts, showEndGamePanelOverride, loading, hasAcknowledgedGameOver]);
+            setHintCells([]);
+        },
+        [
+            animationState.animating,
+            isGameOver,
+            gameData,
+            showEndGamePanelOverride,
+            loading,
+            hasAcknowledgedGameOver,
+        ]
+    );
 
-    const handleDragStart = useCallback((cellCoords: CellCoordinates) => {
-        if (animationState.animating || (isGameOver && !hasAcknowledgedGameOver) || !gameData || showEndGamePanelOverride || loading) return;
-        setDraggedCell(cellCoords); setSelectedCell(null); setIsInvalidMove(false); setInvalidMoveMessage(''); setHoveredCell(null);
-        if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current); setHighlightedCells([]);
-        if (wiggleTimeoutRef.current) clearTimeout(wiggleTimeoutRef.current); setWiggleCells([]);
-        if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current); setHintCells([]);
-    }, [animationState.animating, isGameOver, gameData, showEndGamePanelOverride, loading, hasAcknowledgedGameOver]);
+    const handleDragEnter = useCallback(
+        (cellCoords: CellCoordinates) => {
+            if (
+                draggedCell &&
+                (draggedCell.row !== cellCoords.row || draggedCell.col !== cellCoords.col)
+            ) {
+                if (areAdjacent(draggedCell, cellCoords)) setHoveredCell(cellCoords);
+                else setHoveredCell(null);
+            }
+        },
+        [draggedCell]
+    );
 
-    const handleDragEnter = useCallback((cellCoords: CellCoordinates) => {
-        if (draggedCell && (draggedCell.row !== cellCoords.row || draggedCell.col !== cellCoords.col)) {
-            if (areAdjacent(draggedCell, cellCoords)) setHoveredCell(cellCoords); else setHoveredCell(null);
-        }
-    }, [draggedCell]);
+    const handleDragLeave = useCallback(
+        (cellCoords: CellCoordinates) => {
+            if (
+                hoveredCell &&
+                hoveredCell.row === cellCoords.row &&
+                hoveredCell.col === cellCoords.col
+            )
+                setHoveredCell(null);
+        },
+        [hoveredCell]
+    );
 
-    const handleDragLeave = useCallback((cellCoords: CellCoordinates) => {
-        if (hoveredCell && hoveredCell.row === cellCoords.row && hoveredCell.col === cellCoords.col) setHoveredCell(null);
-    }, [hoveredCell]);
+    const handleDragEnd = useCallback(() => {
+        setDraggedCell(null);
+        setHoveredCell(null);
+    }, []);
 
-    const handleDragEnd = useCallback(() => { setDraggedCell(null); setHoveredCell(null); }, []);
+    const handleDrop = useCallback(
+        (targetCellCoords: CellCoordinates) => {
+            if (
+                !draggedCell ||
+                showEndGamePanelOverride ||
+                loading ||
+                (isGameOver && !hasAcknowledgedGameOver)
+            )
+                return;
+            const sourceCell = draggedCell;
+            setHoveredCell(null);
+            if (sourceCell.row === targetCellCoords.row && sourceCell.col === targetCellCoords.col)
+                return;
+            if (!areAdjacent(sourceCell, targetCellCoords)) {
+                setIsInvalidMove(true);
+                setInvalidMoveMessage('Must swap adjacent cells.');
+                triggerWiggle(sourceCell, targetCellCoords);
+                incrementFailedAttempts();
+                return;
+            }
+            performSwap(sourceCell, targetCellCoords);
+        },
+        [
+            draggedCell,
+            performSwap,
+            triggerWiggle,
+            incrementFailedAttempts,
+            showEndGamePanelOverride,
+            loading,
+            isGameOver,
+            hasAcknowledgedGameOver,
+        ]
+    );
 
-    const handleDrop = useCallback((targetCellCoords: CellCoordinates) => {
-        if (!draggedCell || showEndGamePanelOverride || loading || (isGameOver && !hasAcknowledgedGameOver)) return;
-        const sourceCell = draggedCell; setHoveredCell(null);
-        if (sourceCell.row === targetCellCoords.row && sourceCell.col === targetCellCoords.col) return;
-        if (!areAdjacent(sourceCell, targetCellCoords)) {
-            setIsInvalidMove(true); setInvalidMoveMessage('Must swap adjacent cells.');
-            triggerWiggle(sourceCell, targetCellCoords); incrementFailedAttempts(); return;
-        }
-        performSwap(sourceCell, targetCellCoords);
-    }, [draggedCell, performSwap, triggerWiggle, incrementFailedAttempts, showEndGamePanelOverride, loading, isGameOver, hasAcknowledgedGameOver]);
-
-    const handleCellClick = useCallback((cellCoords: CellCoordinates) => {
-        if (animationState.animating || (isGameOver && !hasAcknowledgedGameOver) || !gameData || draggedCell || showEndGamePanelOverride || loading) return;
-        setIsInvalidMove(false); setInvalidMoveMessage('');
-        if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current); setHighlightedCells([]);
-        if (wiggleTimeoutRef.current) clearTimeout(wiggleTimeoutRef.current); setWiggleCells([]);
-        if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current); setHintCells([]);
-        if (!selectedCell) setSelectedCell(cellCoords);
-        else {
-            const firstCell = selectedCell;
-            if (firstCell.row === cellCoords.row && firstCell.col === cellCoords.col) setSelectedCell(null);
-            else if (areAdjacent(firstCell, cellCoords)) performSwap(firstCell, cellCoords);
-            else setSelectedCell(cellCoords);
-        }
-    }, [selectedCell, animationState.animating, isGameOver, gameData, performSwap, draggedCell, showEndGamePanelOverride, loading, hasAcknowledgedGameOver]);
+    const handleCellClick = useCallback(
+        (cellCoords: CellCoordinates) => {
+            if (
+                animationState.animating ||
+                (isGameOver && !hasAcknowledgedGameOver) ||
+                !gameData ||
+                draggedCell ||
+                showEndGamePanelOverride ||
+                loading
+            )
+                return;
+            setIsInvalidMove(false);
+            setInvalidMoveMessage('');
+            if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current);
+            setHighlightedCells([]);
+            if (wiggleTimeoutRef.current) clearTimeout(wiggleTimeoutRef.current);
+            setWiggleCells([]);
+            if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
+            setHintCells([]);
+            if (!selectedCell) setSelectedCell(cellCoords);
+            else {
+                const firstCell = selectedCell;
+                if (firstCell.row === cellCoords.row && firstCell.col === cellCoords.col)
+                    setSelectedCell(null);
+                else if (areAdjacent(firstCell, cellCoords)) performSwap(firstCell, cellCoords);
+                else setSelectedCell(cellCoords);
+            }
+        },
+        [
+            selectedCell,
+            animationState.animating,
+            isGameOver,
+            gameData,
+            performSwap,
+            draggedCell,
+            showEndGamePanelOverride,
+            loading,
+            hasAcknowledgedGameOver,
+        ]
+    );
 
     // Resets all volatile game states and sets gameData to null to trigger reload
     const masterResetGameStates = useCallback(() => {
@@ -491,12 +738,19 @@ function App() {
         if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
 
         const initial = getInitialGameState(null); // Get pure defaults
-        setGrid(initial.grid); setCurrentPossibleMoves(initial.currentPossibleMoves);
-        setCurrentDepth(initial.currentDepth); setHistory(initial.history);
-        setHasDeviated(initial.hasDeviated); setIsInvalidMove(initial.isInvalidMove);
-        setInvalidMoveMessage(initial.invalidMoveMessage); setSelectedCell(initial.selectedCell);
-        setHoveredCell(initial.hoveredCell); setDraggedCell(initial.draggedCell);
-        setWiggleCells([]); setTurnFailedAttempts(0); setHintCells([]);
+        setGrid(initial.grid);
+        setCurrentPossibleMoves(initial.currentPossibleMoves);
+        setCurrentDepth(initial.currentDepth);
+        setHistory(initial.history);
+        setHasDeviated(initial.hasDeviated);
+        setIsInvalidMove(initial.isInvalidMove);
+        setInvalidMoveMessage(initial.invalidMoveMessage);
+        setSelectedCell(initial.selectedCell);
+        setHoveredCell(initial.hoveredCell);
+        setDraggedCell(initial.draggedCell);
+        setWiggleCells([]);
+        setTurnFailedAttempts(0);
+        setHintCells([]);
         setAnimationState(initial.animationState);
 
         setIsGameOver(false);
@@ -517,64 +771,139 @@ function App() {
 
         setLoading(true);
         masterResetGameStates();
-        setReloadTrigger(prev => prev + 1); // Trigger data load for current difficulty
+        setReloadTrigger((prev) => prev + 1); // Trigger data load for current difficulty
     }, [currentDate, difficulty, masterResetGameStates, loading, showEndGamePanelOverride]);
 
     // Handles undoing the last move
-    const handleBack = useCallback(() => {
+      const handleBack = useCallback(() => {
         // Disable if history empty, animating, game over and not acknowledged, panel override active, or loading
-        if (history.length === 0 || animationState.animating || (isGameOver && !hasAcknowledgedGameOver) || showEndGamePanelOverride || loading) return;
+        if (
+          history.length === 0 ||
+          animationState.animating ||
+          (isGameOver && !hasAcknowledgedGameOver) ||
+          showEndGamePanelOverride ||
+          loading
+        )
+          return;
 
         if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current);
         if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current);
         if (wiggleTimeoutRef.current) clearTimeout(wiggleTimeoutRef.current);
         if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
 
-        setShowEndGamePanelOverride(false); setCombinedSummaryData(null);
+        setShowEndGamePanelOverride(false);
+        setCombinedSummaryData(null);
         setHasAcknowledgedGameOver(false); // Going back means any game over state is no longer relevant
 
         const previousState = history[history.length - 1];
         const moveToundo = previousState.moveMade;
-        if (!moveToundo || !previousState.grid) { console.error("Cannot undo: History data missing.", previousState); handleReset(); return; }
+        if (!moveToundo || !previousState.grid) {
+          console.error("Cannot undo: History data missing.", previousState);
+          handleReset();
+          return;
+        }
         const previousTurnFailedAttempts = previousState.turnFailedAttempts ?? 0;
         let previousStateWasDeviated = false;
         if (history.length > 1) {
-            const stateBeforePrevious = history[history.length - 2];
-            const movesFromBeforePrevious = stateBeforePrevious.currentPossibleMoves;
-            const moveThatLedToPrevious = previousState.moveMade;
-            let nodeOfPreviousMove = null;
-            if (movesFromBeforePrevious && moveThatLedToPrevious) {
-                const prevMoveOpt1 = { from: [moveThatLedToPrevious.from.row, moveThatLedToPrevious.from.col], to: [moveThatLedToPrevious.to.row, moveThatLedToPrevious.to.col] };
-                const prevMoveOpt2 = { from: [moveThatLedToPrevious.to.row, moveThatLedToPrevious.to.col], to: [moveThatLedToPrevious.from.row, moveThatLedToPrevious.from.col] };
-                for (const node of movesFromBeforePrevious) {
-                    if (!node.move) continue;
-                    const fromMatch1 = node.move.from[0] === prevMoveOpt1.from[0] && node.move.from[1] === prevMoveOpt1.from[1];
-                    const toMatch1 = node.move.to[0] === prevMoveOpt1.to[0] && node.move.to[1] === prevMoveOpt1.to[1];
-                    const fromMatch2 = node.move.from[0] === prevMoveOpt2.from[0] && node.move.from[1] === prevMoveOpt2.from[1];
-                    const toMatch2 = node.move.to[0] === prevMoveOpt2.to[0] && node.move.to[1] === prevMoveOpt2.to[1];
-                    if ((fromMatch1 && toMatch1) || (fromMatch2 && toMatch2)) { nodeOfPreviousMove = node; break; }
-                }
+          const stateBeforePrevious = history[history.length - 2];
+          const movesFromBeforePrevious =
+            stateBeforePrevious.currentPossibleMoves;
+          const moveThatLedToPrevious = previousState.moveMade;
+          let nodeOfPreviousMove = null;
+          if (movesFromBeforePrevious && moveThatLedToPrevious) {
+            const prevMoveOpt1 = {
+              from: [
+                moveThatLedToPrevious.from.row,
+                moveThatLedToPrevious.from.col,
+              ],
+              to: [moveThatLedToPrevious.to.row, moveThatLedToPrevious.to.col],
+            };
+            const prevMoveOpt2 = {
+              from: [
+                moveThatLedToPrevious.to.row,
+                moveThatLedToPrevious.to.col,
+              ],
+              to: [
+                moveThatLedToPrevious.from.row,
+                moveThatLedToPrevious.from.col,
+              ],
+            };
+            for (const node of movesFromBeforePrevious) {
+              if (!node.move) continue;
+              const fromMatch1 =
+                node.move.from[0] === prevMoveOpt1.from[0] &&
+                node.move.from[1] === prevMoveOpt1.from[1];
+              const toMatch1 =
+                node.move.to[0] === prevMoveOpt1.to[0] &&
+                node.move.to[1] === prevMoveOpt1.to[1];
+              const fromMatch2 =
+                node.move.from[0] === prevMoveOpt2.from[0] &&
+                node.move.from[1] === prevMoveOpt2.from[1];
+              const toMatch2 =
+                node.move.to[0] === prevMoveOpt2.to[0] &&
+                node.move.to[1] === prevMoveOpt2.to[1];
+              if ((fromMatch1 && toMatch1) || (fromMatch2 && toMatch2)) {
+                nodeOfPreviousMove = node;
+                break;
+              }
             }
-            if (nodeOfPreviousMove && movesFromBeforePrevious && movesFromBeforePrevious.length > 0) {
-                const validNodes = movesFromBeforePrevious.filter((node: ExplorationNodeData) => typeof node.maxDepthReached === 'number');
-                if (validNodes.length > 0) {
-                    const maxDepthPossibleBeforePrevious = Math.max(...validNodes.map((node: ExplorationNodeData) => node.maxDepthReached!));
-                    if (typeof nodeOfPreviousMove.maxDepthReached === 'number' && nodeOfPreviousMove.maxDepthReached < maxDepthPossibleBeforePrevious) previousStateWasDeviated = true;
-                }
+          }
+          if (
+            nodeOfPreviousMove &&
+            movesFromBeforePrevious &&
+            movesFromBeforePrevious.length > 0
+          ) {
+            const validNodes = movesFromBeforePrevious.filter(
+              (node: ExplorationNodeData) =>
+                typeof node.maxDepthReached === "number"
+            );
+            if (validNodes.length > 0) {
+              const maxDepthPossibleBeforePrevious = Math.max(
+                ...validNodes.map((node: ExplorationNodeData) => node.maxDepthReached!)
+              );
+              if (
+                typeof nodeOfPreviousMove.maxDepthReached === "number" &&
+                nodeOfPreviousMove.maxDepthReached <
+                  maxDepthPossibleBeforePrevious
+              )
+                previousStateWasDeviated = true;
             }
+          }
         }
-        setAnimationState({ animating: true, from: moveToundo.to, to: moveToundo.from });
-        setIsInvalidMove(false); setInvalidMoveMessage(''); setHighlightedCells([]);
+        setAnimationState({
+          animating: true,
+          from:moveToundo.to,
+          to: moveToundo.from,
+        });
+        setIsInvalidMove(false);
+        setInvalidMoveMessage("");
+        setHighlightedCells([]);
         setIsGameOver(false); // Game is definitely not over if we are undoing
-        setSelectedCell(null); setDraggedCell(null); setHoveredCell(null); setWiggleCells([]); setHintCells([]);
+        setSelectedCell(null);
+        setDraggedCell(null);
+        setHoveredCell(null);
+        setWiggleCells([]);
+        setHintCells([]);
         animationTimeoutRef.current = window.setTimeout(() => {
-            setGrid(previousState.grid); setCurrentPossibleMoves(previousState.currentPossibleMoves);
-            setCurrentDepth(previousState.currentDepth); setHistory(prevHistory => prevHistory.slice(0, -1));
-            setAnimationState({ animating: false, from: null, to: null });
-            setHasDeviated(previousStateWasDeviated); setTurnFailedAttempts(previousTurnFailedAttempts);
-            animationTimeoutRef.current = null;
+          setGrid(previousState.grid);
+          setCurrentPossibleMoves(previousState.currentPossibleMoves);
+          setCurrentDepth(previousState.currentDepth);
+          setHistory((prevHistory) => prevHistory.slice(0, -1));
+          setAnimationState({ animating: false, from: null, to: null });
+          setHasDeviated(previousStateWasDeviated);
+          setTurnFailedAttempts(previousTurnFailedAttempts);
+          animationTimeoutRef.current = null;
         }, 300);
-    }, [history, animationState.animating, isGameOver, handleReset, gameData, showEndGamePanelOverride, loading, hasAcknowledgedGameOver]);
+      }, [
+        history,
+        animationState.animating,
+        isGameOver,
+        handleReset,
+        gameData,
+        showEndGamePanelOverride,
+        loading,
+        hasAcknowledgedGameOver,
+      ]);
 
     // Handles closing the EndGamePanel
     const handleCloseGameOver = useCallback(() => {
@@ -584,17 +913,21 @@ function App() {
     }, []);
 
     // Generalized handler for switching difficulty
-    const handlePlayMode = useCallback((newDifficulty: DifficultyLevel) => {
-        if (loading || showEndGamePanelOverride || difficulty === newDifficulty) return; // Prevent action if loading, panel shown, or already on this difficulty
-        
-        // Check prerequisites
-        if (newDifficulty === 'hard' && !dailyProgress.normal) return;
-        if (newDifficulty === 'impossible' && !dailyProgress.hard) return;
+     const handlePlayMode = useCallback(
+        (newDifficulty: DifficultyLevel) => {
+            if (loading || showEndGamePanelOverride || difficulty === newDifficulty)
+                return; // Prevent action if loading, panel shown, or already on this difficulty
 
-        setLoading(true);
-        masterResetGameStates();
-        setDifficulty(newDifficulty);
-    }, [masterResetGameStates, loading, showEndGamePanelOverride, difficulty, dailyProgress]); // Added difficulty and dailyProgress
+            // Check prerequisites
+            if (newDifficulty === 'hard' && !dailyProgress.normal) return;
+            if (newDifficulty === 'impossible' && !dailyProgress.hard) return;
+
+            setLoading(true);
+            masterResetGameStates();
+            setDifficulty(newDifficulty);
+        },
+        [masterResetGameStates, loading, showEndGamePanelOverride, difficulty, dailyProgress]
+    );
 
 
     // Handles the hint button click
@@ -672,7 +1005,7 @@ function App() {
     };
 
     // --- Conditional Rendering for Loading/Error States ---
-    if (loading) return <div className="flex justify-center items-center min-h-screen text-gray-700 dark:text-gray-300">Loading {difficulty} level for {currentDate ? getFormattedDate(currentDate) : 'today'}...</div>;
+    if (loading) return <div className={`flex justify-center items-center min-h-screen text-gray-700 dark:text-gray-300 ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>Loading {difficulty} level for {currentDate ? getFormattedDate(currentDate) : 'today'}...</div>;
     if (error) return (
         <div className="flex flex-col justify-center items-center min-h-screen text-center px-4">
             <p className="text-red-600 dark:text-red-400 text-xl font-semibold">Error</p>
@@ -740,21 +1073,21 @@ function App() {
                     normalDataForPanel = {
                         ...parsedProgress.normal.summary,
                         playerWords: new Set(parsedProgress.normal.summary.playerWords),
-                        levelCompleted: parsedProgress.normal.summary.score === parsedProgress.normal.summary.maxScore,
+                        levelCompleted: parsedProgress.normal.summary.score === parsedProgress.normal.maxScore,
                     };
                 }
                 if (difficulty !== 'hard' && parsedProgress.hard?.summary) {
                     hardDataForPanel = {
                         ...parsedProgress.hard.summary,
-                        playerWords: new Set(parsedProgress.hard.summary.playerWords),
-                        levelCompleted: parsedProgress.hard.summary.score === parsedProgress.hard.summary.maxScore,
+                        playerWords: new Set(parsedProgress.hard.playerWords),
+                        levelCompleted: parsedProgress.hard.summary.score === parsedProgress.hard.maxScore,
                     };
                 }
                  if (difficulty !== 'impossible' && parsedProgress.impossible?.summary) { // Load impossible if not current
                     impossibleDataForPanel = {
                         ...parsedProgress.impossible.summary,
                         playerWords: new Set(parsedProgress.impossible.summary.playerWords),
-                        levelCompleted: parsedProgress.impossible.summary.score === parsedProgress.impossible.summary.maxScore,
+                        levelCompleted: parsedProgress.impossible.summary.score === parsedProgress.impossible.maxScore,
                     };
                 }
             }
@@ -924,3 +1257,4 @@ function App() {
 }
 
 export default App;
+
