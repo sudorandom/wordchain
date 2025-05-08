@@ -140,7 +140,7 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
 
         // Determine deviation point
         let deviationIndex = -1;
-        if (optimalPathWords && history) {
+        if (optimalPathWords && history && optimalPathWords.length != history.length+1) {
             for (let i = 0; i < Math.min(history.length, optimalPathWords.length); i++) {
                 if (history[i]?.wordsFormedByMove?.[0]?.toUpperCase() !== optimalPathWords[i]?.toUpperCase()) {
                     deviationIndex = i;
@@ -207,11 +207,6 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
                     {deviationIndex !== -1 && (
                         <p className="text-sm mt-2 text-gray-500 dark:text-gray-400 italic">
                             (Your path matched the first {deviationIndex} optimal moves)
-                        </p>
-                    )}
-                    {deviationIndex === -1 && optimalPathWords.length > history.length && (
-                        <p className="text-sm mt-2 text-gray-500 dark:text-gray-400 italic">
-                            (Your path matched the optimal path, which continues for {optimalPathWords.length - history.length} more moves)
                         </p>
                     )}
                     {score !== maxScore && optimalPathWords.length === 0 && (
