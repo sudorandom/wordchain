@@ -88,36 +88,55 @@ export const getDataFilePath = (date: Date): string => {
     return `${year}/${month}/${day}.json`;
 };
 
-export const findLongestWordChain = (nodes?: ExplorationNodeData[]): string[] => {
+
+export const findLongestWordChain = (nodes: ExplorationNodeData[] = [], history: HistoryEntry[] = []): string[] => {
     if (!nodes || nodes.length === 0) return [];
 
-    let startingNodeOfLongestPath: ExplorationNodeData | null = null;
-    let overallMaxDepth = -1;
+    let longestPath: string[] = [];
+    let bestStartingMatchCount = -1;
 
-    const validNodes = nodes.filter(n => typeof n.maxDepthReached === 'number');
-    if (validNodes.length > 0) {
-        overallMaxDepth = Math.max(...validNodes.map(n => n.maxDepthReached));
-        startingNodeOfLongestPath = validNodes.find(n => n.maxDepthReached === overallMaxDepth) || null;
-    }
+    const tracePath = (node: ExplorationNodeData | undefined, currentPath: string[]): { path: string[]; matchCount: number } => {
+        if (!node) {
+            const matchCount = calculateInitialMatch(currentPath);
+            return { path: currentPath, matchCount };
+        }
 
-    const tracePath = (startNode: ExplorationNodeData | null): string[] => {
-        if (!startNode) return [];
-        const currentPathWords = startNode.wordsFormed || [];
-        let nextNode: ExplorationNodeData | null = null;
-        if (startNode.nextMoves && startNode.nextMoves.length > 0) {
-            const validNextNodes = startNode.nextMoves.filter(n => typeof n.maxDepthReached === 'number');
-            if (validNextNodes.length > 0) {
-                const maxDepthBelow = Math.max(...validNextNodes.map(n => n.maxDepthReached));
-                nextNode = validNextNodes.find(n => n.maxDepthReached === maxDepthBelow) || null;
+        const newPath = [...currentPath, ...(node.wordsFormed || [])];
+        let bestResult = { path: newPath, matchCount: calculateInitialMatch(newPath) };
+
+        if (node.nextMoves && node.nextMoves.length > 0) {
+            for (const nextNode of node.nextMoves) {
+                const result = tracePath(nextNode, newPath);
+                if (result.path.length > bestResult.path.length || (result.path.length === bestResult.path.length && result.matchCount > bestResult.matchCount)) {
+                    bestResult = result;
+                }
             }
         }
-        if (nextNode) {
-            return [...currentPathWords, ...tracePath(nextNode)];
-        } else {
-            return currentPathWords;
-        }
+        return bestResult;
     };
-    return tracePath(startingNodeOfLongestPath);
+
+    const calculateInitialMatch = (path: string[]): number => {
+        let matchCount = 0;
+        for (let i = 0; i < Math.min(path.length, history.length); i++) {
+            const historyWord = history[i]?.wordsFormedByMove?.[0];
+            if (historyWord && path[i]?.toUpperCase() === historyWord?.toUpperCase()) {
+                matchCount++;
+            } else {
+                break;
+            }
+        }
+        return matchCount;
+    };
+
+    for (const startNode of nodes) {
+        const result = tracePath(startNode, []);
+        if (result.path.length > longestPath.length || (result.path.length === longestPath.length && result.matchCount > bestStartingMatchCount)) {
+            longestPath = result.path;
+            bestStartingMatchCount = result.matchCount;
+        }
+    }
+
+    return longestPath;
 };
 
 export const areAdjacent = (cell1: CellCoordinates | null, cell2: CellCoordinates | null): boolean => {

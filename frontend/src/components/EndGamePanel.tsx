@@ -92,83 +92,108 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
     const allCompleted = normalModeData?.levelCompleted && hardModeData?.levelCompleted && impossibleModeData?.levelCompleted;
     const title = allCompleted ? "Daily Challenge Complete!" : "Today's Results";
     
-    // Helper component to render results for one level (excluding share section)
     const renderLevelResult = (
-        mode: DifficultyLevel, // Use DifficultyLevel type
+        mode: DifficultyLevel,
         data: LevelResultData | null | undefined
     ) => {
-        if (!data) return null; // Don't render if no data for this mode
+        if (!data) return null;
 
         const { history, score, maxScore, playerWords, optimalPathWords, levelCompleted } = data;
         const sortedPlayerWords = [...playerWords].sort();
         const modeName = mode.charAt(0).toUpperCase() + mode.slice(1);
-        
+
         // Define colors based on mode
         let titleColor = 'text-gray-700 dark:text-gray-400';
         let bgColor = 'bg-gray-50 dark:bg-gray-900';
         let borderColor = 'border-gray-200 dark:border-gray-700';
         if (mode === 'normal') {
-             titleColor = 'text-blue-700 dark:text-blue-400';
-             bgColor = 'bg-blue-50 dark:bg-blue-900';
-             borderColor = 'border-blue-200 dark:border-blue-700';
+            titleColor = 'text-blue-700 dark:text-blue-400';
+            bgColor = 'bg-blue-50 dark:bg-blue-900';
+            borderColor = 'border-blue-200 dark:border-blue-700';
         } else if (mode === 'hard') {
-             titleColor = 'text-purple-700 dark:text-purple-400';
-             bgColor = 'bg-purple-50 dark:bg-purple-900';
-             borderColor = 'border-purple-200 dark:border-purple-700';
+            titleColor = 'text-purple-700 dark:text-purple-400';
+            bgColor = 'bg-purple-50 dark:bg-purple-900';
+            borderColor = 'border-purple-200 dark:border-purple-700';
         } else if (mode === 'impossible') {
-             titleColor = 'text-red-700 dark:text-red-400';
-             bgColor = 'bg-red-50 dark:bg-red-900';
-             borderColor = 'border-red-200 dark:border-red-700';
+            titleColor = 'text-red-700 dark:text-red-400';
+            bgColor = 'bg-red-50 dark:bg-red-900';
+            borderColor = 'border-red-200 dark:border-red-700';
         }
 
-        const foundWordsColor = 'text-green-700 dark:text-green-400'; 
-        const optimalWordsColor = 'text-orange-700 dark:text-orange-400'; 
+        const foundWordsColor = 'text-green-700 dark:text-green-400';
+        const optimalWordsColor = 'text-orange-700 dark:text-orange-400';
+
+        // Determine deviation point
+        let deviationIndex = -1;
+        for (let i = 0; i < Math.min(history.length, optimalPathWords.length); i++) {
+            if (history[i]?.wordsFormedByMove?.[0]?.toUpperCase() !== optimalPathWords[i]?.toUpperCase()) {
+                deviationIndex = i;
+                break;
+            }
+        }
 
         return (
-            // Added flex-basis for better control on different screen sizes
-            <div className={`flex-1 border rounded-lg p-4 ${bgColor} ${borderColor} min-w-0 md:basis-1/3`}> 
+            <div className={`flex-1 border rounded-lg p-4 ${bgColor} ${borderColor} min-w-0 md:basis-1/3`}>
                 <h3 className={`text-xl font-bold mb-3 ${titleColor}`}>{modeName} Mode {levelCompleted ? <i className="fas fa-check text-green-500"></i> : ''}</h3>
-                
+
                 <p className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-200">Score: {score} / {maxScore}</p>
 
-                 <div className="mb-4 border-t pt-3 dark:border-gray-600">
-                     <h4 className={`text-md font-semibold mb-2 ${foundWordsColor}`}>Your Path ({history.length} moves, {sortedPlayerWords.length} unique words)</h4>
-                     <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm max-h-24 overflow-y-auto pr-2">
-                         {history.map((histEntry, index) => (
-                             <div key={`history-${mode}-${index}`} className="inline-flex items-baseline"> 
-                                 <span className="px-1.5 py-0.5 bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 rounded font-medium text-xs">
-                                     {histEntry.wordsFormedByMove?.[0]?.toUpperCase() || '???'}
-                                     {histEntry.wordsFormedByMove && histEntry.wordsFormedByMove.length > 1 ? '…' : ''}
-                                 </span>
-                                 {index < history.length - 1 && (
-                                     <span className="text-gray-500 dark:text-gray-400 font-bold mx-0.5 text-xs">→</span>
-                                 )}
-                             </div>
-                         ))}
-                     </div>
-                 </div>
+                <div className="mb-4 border-t pt-3 dark:border-gray-600">
+                    <h4 className={`text-md font-semibold mb-2 ${foundWordsColor}`}>Your Path ({history.length} moves, {sortedPlayerWords.length} unique words)</h4>
+                    <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm max-h-36 overflow-y-auto pr-2">
+                        {history.map((histEntry, index) => {
+                            const word = histEntry.wordsFormedByMove?.[0]?.toUpperCase() || '???';
+                            const deviated = index >= deviationIndex && deviationIndex !== -1;
+                            const isOptimalUpToDeviation = index < deviationIndex;
 
-                {score !== maxScore && optimalPathWords.length > 0 && (
-                    <div className="mb-4 border-t pt-3 dark:border-gray-600">
-                        <h4 className={`text-md font-semibold mb-2 ${optimalWordsColor}`}>Optimal Path ({optimalPathWords.length} words)</h4>
-                         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm max-h-24 overflow-y-auto pr-2">
-                            {optimalPathWords.map((word, index) => (
-                                <span 
-                                    key={`optimal-${mode}-${word}-${index}`} 
-                                    className="px-1.5 py-0.5 bg-orange-100 dark:bg-orange-800 text-orange-800 dark:text-orange-200 rounded font-medium text-xs"
-                                >
-                                    {word.toUpperCase()}
-                                </span>
-                            ))}
-                        </div>
+                            return (
+                                <div key={`history-${mode}-${index}`} className="inline-flex items-baseline">
+                                    <span
+                                        className={`px-1.5 py-0.5 rounded font-medium text-xs
+                                            ${isOptimalUpToDeviation ? 'bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200' : ''}
+                                            ${deviated ? 'bg-red-200 dark:bg-red-700' : 'bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200'}
+                                        `}
+                                        style={{
+                                            textDecoration: deviated ? 'line-through' : 'none',
+                                        }}
+                                    >
+                                        {word}
+                                        {histEntry.wordsFormedByMove && histEntry.wordsFormedByMove.length > 1 ? '…' : ''}
+                                    </span>
+                                    {index < history.length - 1 && (
+                                        <span className="text-gray-500 dark:text-gray-400 font-bold mx-0.5 text-xs ml-2">→</span>
+                                    )}
+                                </div>
+                            );
+                        })}
+                        {/* Display optimal path differences */}
+                        {deviationIndex !== -1 && optimalPathWords.slice(deviationIndex).map((word, index) => (
+                            <span
+                                key={`optimal-${mode}-${word}-${index + deviationIndex}`}
+                                className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded font-medium text-xs"
+                            >
+                                {word.toUpperCase()}
+                            </span>
+                        ))}
                     </div>
-                )}
-                {score !== maxScore && optimalPathWords.length === 0 && (
-                     <div className="mb-4 border-t pt-3 dark:border-gray-600">
-                         <h4 className={`text-md font-semibold mb-2 ${optimalWordsColor}`}>Optimal Path</h4>
-                         <p className="text-sm text-gray-500 dark:text-gray-400 italic">No optimal path defined.</p>
-                     </div>
-                )}
+                    {/* Informative text about matching moves */}
+                    {deviationIndex !== -1 && (
+                        <p className="text-sm mt-2 text-gray-500 dark:text-gray-400 italic">
+                            (Your path matched the first {deviationIndex} optimal moves)
+                        </p>
+                    )}
+                    {deviationIndex === -1 && optimalPathWords.length > history.length && (
+                        <p className="text-sm mt-2 text-gray-500 dark:text-gray-400 italic">
+                            (Your path matched the optimal path, which continues for {optimalPathWords.length - history.length} more moves)
+                        </p>
+                    )}
+                    {score !== maxScore && optimalPathWords.length === 0 && (
+                        <div className="mt-4">
+                            <h4 className={`text-md font-semibold mb-2 ${optimalWordsColor}`}>Optimal Path</h4>
+                            <p className="text-sm text-gray-500 dark:text-gray-400 italic">No optimal path defined.</p>
+                        </div>
+                    )}
+                </div>
             </div>
         );
     };

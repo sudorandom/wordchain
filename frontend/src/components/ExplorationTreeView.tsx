@@ -1,11 +1,5 @@
 import React, { useState, useMemo } from 'react';
 
-// Define the types directly within the file
-interface CellCoordinates {
-    row: number;
-    col: number;
-}
-
 interface ExplorationNodeData {
     move?: { from: number[]; to: number[] };
     maxDepthReached?: number;
@@ -15,6 +9,7 @@ interface ExplorationNodeData {
 
 interface ExplorationTreeViewProps {
     treeData?: ExplorationNodeData[] | null;
+    optimalPathWords: string[];
 }
 
 // Helper component for rendering a single node and its children recursively
@@ -77,7 +72,7 @@ const TreeNode: React.FC<{ node: ExplorationNodeData; level: number; isOptimalPa
 };
 
 // Main Tree View component
-const ExplorationTreeView: React.FC<ExplorationTreeViewProps> = ({ treeData }) => {
+const ExplorationTreeView: React.FC<ExplorationTreeViewProps> = ({ treeData, optimalPathWords }) => {
     if (!treeData || treeData.length === 0) {
         return (
             <div className="text-gray-500 dark:text-gray-400 italic mt-4">
@@ -111,6 +106,19 @@ const ExplorationTreeView: React.FC<ExplorationTreeViewProps> = ({ treeData }) =
                     Clear Local Storage
                 </button>
             </h3>
+            <div className="mb-4">
+                <h4 className="text-md font-semibold mb-2 text-blue-600 dark:text-blue-400">Optimal Path:</h4>
+                <div className="flex flex-wrap gap-2">
+                    {optimalPathWords.map((word, index) => (
+                        <span
+                            key={`optimal-word-${index}`}
+                            className="px-2 py-1 rounded-md bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 font-medium text-sm"
+                        >
+                            {word}
+                        </span>
+                    ))}
+                </div>
+            </div>
             <div className="max-h-96 overflow-y-auto text-sm text-gray-700 dark:text-gray-300">
                 {sortedTopLevelNodes.map((node, index) => {
                     // For simplicity, assume the first node is on the deepest path

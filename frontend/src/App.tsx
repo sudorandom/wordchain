@@ -260,7 +260,7 @@ function App() {
     }, [currentDate, difficulty, reloadTrigger]);
 
     // Memoized live game values
-    const liveOptimalPathWords = useMemo(() => gameData ? findLongestWordChain(gameData.explorationTree) : [], [gameData]);
+    const liveOptimalPathWords = useMemo(() => gameData ? findLongestWordChain(gameData.explorationTree, history) : [], [gameData, history]);
     const livePlayerUniqueWordsFound = useMemo(() => {
         const words = new Set<string>();
         history.forEach(state => { if (Array.isArray(state.wordsFormedByMove)) { state.wordsFormedByMove.forEach(word => words.add(word)); } });
@@ -682,9 +682,6 @@ function App() {
     );
     if (!gameData && !loading) return <div className="flex justify-center items-center min-h-screen text-gray-500 dark:text-gray-400">Game data could not be loaded. Please ensure levels are available.</div>;
 
-
-    const currentLevelOverallCompleted = dailyProgress.normal && dailyProgress.hard && dailyProgress.impossible; // Check all levels
-
     // Determine props for EndGamePanel
     // Prepare data for the panel, converting loaded summary or using live data
     let normalDataForPanel: LevelResultData | null = null;
@@ -778,7 +775,7 @@ function App() {
             </button>
 
             <h1 className="text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-flow font-bungee">
-                <a href="/">Word Chain</a>
+                <a href="/">Word Chain 🔗</a>
             </h1>
             <h2 className="text-2xl mb-1 text-gray-700 dark:text-gray-300">
                 {currentDate ? getFriendlyDate(currentDate) : 'Loading date...'} 
@@ -913,7 +910,7 @@ function App() {
 
             {renderWordChain()}
 
-            {isDebugMode && gameData && <ExplorationTreeView treeData={gameData.explorationTree} />}
+            {isDebugMode && gameData && <ExplorationTreeView treeData={gameData.explorationTree} optimalPathWords={liveOptimalPathWords} />}
             {shouldShowEndGamePanel && (normalDataForPanel || hardDataForPanel || impossibleDataForPanel) && ( // Check if any data exists for panel
                 <EndGamePanel
                     normalModeData={normalDataForPanel}
