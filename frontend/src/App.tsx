@@ -1120,11 +1120,11 @@ function App() {
             {/* How to Play Instructions */}
             <div className="text-center max-w-xl mb-2 text-sm text-gray-600 dark:text-gray-400">
                 {difficulty === 'normal' &&
-                    <p><span className="font-semibold mb-1">How to Play: </span>Click adjacent cells or drag-and-drop letters to swap them. Find the optimal move sequence to win! Every move <i>must</i> make a new {wordLength}-letter word. Click the light bulb button <i className="fas fa-lightbulb"></i> to get a hint about the next move.</p>}
+                    <p><span className="font-semibold mb-1">How to Play:</span> Click two adjacent letters to swap their positions. Every move <i>must</i> make a new {wordLength}-letter word. Find the longest move sequence to win! Tap the light bulb button <i className="fas fa-lightbulb"></i> to get a hint about the next move.</p>}
                 {difficulty === 'hard' &&
-                    <p><span className="font-semibold mb-1">How to Play: </span>This is hard mode. It is the same rules as normal mode, just with a bigger grid. This means words can be made vertically or horizontally. You still need to find the optimal move sequence to win. Remember that every move <i>must</i> make a new <i>{wordLength}-letter</i> word.</p>}
+                    <p><span className="font-semibold mb-1">How to Play:</span> Prepare for a greater challenge! Hard Mode expands the puzzle to a larger grid. The core rule remains the same: every move must create a new <strong>{wordLength}-letter</strong> word. However, on this bigger grid, you can now form words both <i>horizontally and vertically</i>, significantly increasing the possibilities and complexity. Find the optimal sequence of moves to conquer this enhanced challenge!</p>}
                  {difficulty === 'impossible' &&
-                    <p><span className="font-semibold mb-1">How to Play: </span>This is impossible mode. Bigger grid, no hints, and the optimal path might be very tricky. Good luck! Every move <i>must</i> make a new <i>{wordLength}-letter</i> word.</p>}
+                    <p><span className="font-semibold mb-1">How to Play: Impossible Mode</span> - The ultimate test! Face a sprawling grid with <strong>no hints</strong> to guide you. The optimal path is likely a labyrinthine filled with wrong turns. Good luck, you'll need it! Every move <i>must</i> make a new <i>{wordLength}-letter</i> word.</p>}
             </div>
 
             {/* Messages for Daily Progress */}
