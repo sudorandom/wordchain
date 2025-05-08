@@ -804,10 +804,9 @@ function App() {
                     <p>Come back tomorrow for another challenge.</p>
                 </div>
             )}
-            {/* Add more specific progress messages if needed */}
-
 
             {/* Combined Daily Status & Navigation Section */}
+            {Object.values(dailyProgress).some(value => value === true) &&
             <div className="text-center max-w-2xl w-full my-4 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700 shadow-sm">
                 <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">Today's Status</h3>
                 {/* Status Display */}
@@ -823,10 +822,6 @@ function App() {
                         
                         const isDisabled = isCurrentDifficulty || !canPlay || loading || showEndGamePanelOverride;
                         const isClickable = !isDisabled; // Clickable if not disabled
-
-                        // Check if a summary actually exists in localStorage for this difficulty
-                        const summaryExists = localStorage.getItem(`wordChainsProgress-${getFormattedDate(currentDate)}`)?.includes(`"difficultyForSummary":"${diffLevel}"`);
-                        const canShowSummary = isCompleted && summaryExists;
 
                         return (
                             <div 
@@ -856,18 +851,16 @@ function App() {
                         );
                     })}
                 </div>
-                {Object.values(dailyProgress).some(value => value === true) &&
-                    <button
-                        onClick={(e) => { e.stopPropagation(); handleShowGameSummary(); }} // Stop propagation to prevent div click
-                        disabled={showEndGamePanelOverride || loading}
-                        className="mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center self-center"
-                        title={'View Summary'}
-                    >
-                        <i className="fas fa-eye mr-1"></i> View Summary
-                    </button>
-                }
+                <button
+                    onClick={(e) => { e.stopPropagation(); handleShowGameSummary(); }} // Stop propagation to prevent div click
+                    disabled={showEndGamePanelOverride || loading}
+                    className="mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center self-center"
+                    title={'View Summary'}
+                >
+                    <i className="fas fa-eye mr-1"></i> View Summary
+                </button>
             </div>
-
+            }
 
             <div className="h-6 mb-2 text-center">
                 {isInvalidMove && <p className="text-red-600 dark:text-red-400 font-semibold">{invalidMoveMessage}</p>}

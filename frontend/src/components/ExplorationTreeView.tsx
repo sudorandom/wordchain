@@ -1,51 +1,128 @@
-// src/components/ExplorationTreeView.tsx
-import React, { useState } from 'react';
-import { ExplorationNodeData } from '../utils/gameHelpers'; // Assuming types are here
+import React, { useState, useMemo } from 'react';
 
-interface ExplorationTreeNodeProps {
-    node: ExplorationNodeData;
-    level?: number;
+// Define the types directly within the file
+interface CellCoordinates {
+    row: number;
+    col: number;
 }
 
-const ExplorationTreeNode: React.FC<ExplorationTreeNodeProps> = ({ node, level = 0 }) => {
-    const [isCollapsed, setIsCollapsed] = useState(false);
-    const handleToggle = () => setIsCollapsed(!isCollapsed);
+interface ExplorationNodeData {
+    move?: { from: number[]; to: number[] };
+    maxDepthReached?: number;
+    wordsFormed: string[];
+    nextMoves?: ExplorationNodeData[];
+}
+
+interface ExplorationTreeViewProps {
+    treeData?: ExplorationNodeData[] | null;
+}
+
+// Helper component for rendering a single node and its children recursively
+const TreeNode: React.FC<{ node: ExplorationNodeData; level: number; isOptimalPath: boolean }> = ({ node, level, isOptimalPath }) => {
+    const [isOpen, setIsOpen] = useState(false); // State to toggle children visibility
     const hasChildren = node.nextMoves && node.nextMoves.length > 0;
+    const indent = level * 2;
+
+    // Sort children by maxDepthReached (descending) before rendering
+    const sortedChildren = useMemo(() => {
+        if (!hasChildren) return [];
+        return [...node.nextMoves!].sort((a, b) => {
+            const depthA = a.maxDepthReached ?? -1;
+            const depthB = b.maxDepthReached ?? -1;
+            return depthB - depthA;
+        });
+    }, [node.nextMoves, hasChildren]);
+
+    const formatMove = (move: { from: number[]; to: number[] } | undefined): string => {
+        if (!move) return 'Initial';
+        return `(${move.from.join(',')})->(${move.to.join(',')})`;
+    };
 
     return (
-        <div style={{ marginLeft: `${level * 5}px` }} className="my-1">
-            <div className={`flex items-center p-1 rounded ${hasChildren ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700' : ''} ${level === 0 ? 'bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700' : ''}`} onClick={hasChildren ? handleToggle : undefined}>
-                {hasChildren && <span className="text-xs mr-1 w-4 text-center text-gray-600 dark:text-gray-400">{isCollapsed ? '▶' : '▼'}</span>}
-                {!hasChildren && <span className="w-4 mr-1"></span>}
-                <span className="text-xs font-mono mr-2 text-purple-700 dark:text-purple-400">{node.move ? `[${node.move.from.join(',')}]↔[${node.move.to.join(',')}]` : 'Start'}</span>
-                <span className="text-xs font-semibold mr-2 text-green-700 dark:text-green-400">[{node.wordsFormed?.join(', ').toUpperCase() || ''}]</span>
-                <span className="text-xs text-gray-500 dark:text-gray-400">(Depth Left: {node.maxDepthReached})</span>
+        <div style={{ marginLeft: `${indent}px` }} className="my-2">
+            <div
+                className="flex items-center cursor-pointer group"
+                onClick={() => hasChildren && setIsOpen(!isOpen)}
+            >
+                {hasChildren && (
+                    <span className="text-xs mr-2 transition-transform duration-150 group-hover:scale-110">
+                        {isOpen ? '▼' : '▶'}
+                    </span>
+                )}
+                <span className={`text-sm font-mono p-2 rounded border border-gray-300 ${isOptimalPath ? 'bg-green-100 dark:bg-green-700' : 'bg-gray-100 dark:bg-gray-700'} dark:border-gray-600`}>
+                    {formatMove(node.move)} |
+                    <span className="font-semibold ml-2">depth</span>={node.maxDepthReached ?? 'N/A'} |
+                    <span className="font-semibold ml-2"></span>
+                    <span className={`font-semibold ml-1 ${isOptimalPath ? 'text-green-800 dark:text-green-200' : 'text-gray-600 dark:text-gray-400'}`}>{node.wordsFormed.join(', ')}</span>
+                </span>
             </div>
-            {!isCollapsed && hasChildren && (
-                <div className="border-l-2 border-gray-300 dark:border-gray-600 pl-2 ml-2">
-                    {node.nextMoves?.map((childNode, index) => <ExplorationTreeNode key={`${childNode.move?.from?.join('-')}-${childNode.move?.to?.join('-')}-${index}-${level}-${Math.random()}`} node={childNode} level={level + 1} />)}
+            {isOpen && hasChildren && (
+                <div className="mt-2 border-l-2 border-gray-300 dark:border-gray-600 pl-4">
+                    {sortedChildren.map((childNode, index) => {
+                        // Determine if this child is on the optimal path (for simplicity, assume the first child is optimal)
+                        const isChildOptimal = isOptimalPath && index === 0;
+                        return (
+                            <TreeNode
+                                key={`${formatMove(node.move)}-${index}`}
+                                node={childNode}
+                                level={level + 1}
+                                isOptimalPath={isChildOptimal}
+                            />
+                        );
+                    })}
                 </div>
             )}
         </div>
     );
 };
 
-interface ExplorationTreeViewProps {
-    treeData?: ExplorationNodeData[];
-}
-
+// Main Tree View component
 const ExplorationTreeView: React.FC<ExplorationTreeViewProps> = ({ treeData }) => {
-    const [isVisible, setIsVisible] = useState(false);
-    if (!treeData) return null;
+    if (!treeData || treeData.length === 0) {
+        return (
+            <div className="text-gray-500 dark:text-gray-400 italic mt-4">
+                No exploration tree data available.
+            </div>
+        );
+    }
+
+    // Sort the top-level nodes by maxDepthReached (descending)
+    const sortedTopLevelNodes = useMemo(() => {
+        return [...treeData].sort((a, b) => {
+            const depthA = a.maxDepthReached ?? -1;
+            const depthB = b.maxDepthReached ?? -1;
+            return depthB - depthA;
+        });
+    }, [treeData]);
+
+    const clearLocalStorage = () => {
+        localStorage.clear();
+        alert('Local storage has been cleared. Please refresh the page.'); // Provide user feedback
+    };
 
     return (
-        <div className="max-w-2xl mt-6 border rounded p-3 bg-white dark:bg-gray-800 shadow dark:border-gray-700">
-            <button onClick={() => setIsVisible(!isVisible)} className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-semibold mb-2 w-full text-left">
-                {isVisible ? 'Hide' : 'Show'} Full Move Tree {isVisible ? '▼' : '▶'}
-            </button>
-            {isVisible && <div className="mt-2 max-h-80 overflow-y-auto border-t pt-2 dark:border-gray-700">{treeData.map((rootNode, index) => <ExplorationTreeNode key={`${rootNode.move?.from?.join('-')}-${rootNode.move?.to?.join('-')}-${index}-root`} node={rootNode} level={0} />)}</div>}
+        <div className="mt-6 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 w-full max-w-4xl mx-auto">
+            <h3 className="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-100 flex justify-between items-center">
+                Debug View
+                <button
+                    onClick={clearLocalStorage}
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-sm" // Adjusted button size
+                >
+                    Clear Local Storage
+                </button>
+            </h3>
+            <div className="max-h-96 overflow-y-auto text-sm text-gray-700 dark:text-gray-300">
+                {sortedTopLevelNodes.map((node, index) => {
+                    // For simplicity, assume the first node is on the deepest path
+                    const isOptimalPath = index === 0;
+                    return (
+                        <TreeNode key={index} node={node} level={0} isOptimalPath={isOptimalPath} />
+                    );
+                })}
+            </div>
         </div>
     );
 };
 
 export default ExplorationTreeView;
+
