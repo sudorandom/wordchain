@@ -22,22 +22,22 @@ interface GridCellProps {
 }
 
 const GridCell: React.FC<GridCellProps> = ({
-    letter,
-    row,
-    col,
-    gridRows,
-    gridCols,
-    onClick,
-    onDragStart,
-    onDrop,
-    onDragEnter,
-    onDragLeave,
-    onDragEnd,
-    isDraggingSource,
-    isHighlighted,
-    isSelected,
-    isWiggling,
-    isHintHighlighted
+  letter,
+  row,
+  col,
+  gridRows,
+  gridCols,
+  onClick,
+  onDragStart,
+  onDrop,
+  onDragEnter,
+  onDragLeave,
+  onDragEnd,
+  isDraggingSource,
+  isHighlighted,
+  isSelected,
+  isWiggling,
+  isHintHighlighted
 }) => {
   // Drag event handlers
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
@@ -49,7 +49,7 @@ const GridCell: React.FC<GridCellProps> = ({
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault(); 
+    e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
   };
 
@@ -83,7 +83,7 @@ const GridCell: React.FC<GridCellProps> = ({
   // Removed overflow-hidden to allow arrows to be visible outside the cell bounds
   let cellClasses = `border w-16 h-16 flex items-center justify-center
                    text-2xl font-bold select-none rounded-md shadow-sm
-                   transition-all duration-200 ease-in-out relative`; 
+                   transition-all duration-200 ease-in-out relative`;
 
   // Theme-dependent classes
   cellClasses += ' border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-100';
@@ -99,7 +99,7 @@ const GridCell: React.FC<GridCellProps> = ({
 
   // Wiggle animation for invalid moves
   if (isWiggling) {
-      cellClasses += ' animate-wiggle';
+    cellClasses += ' animate-wiggle';
   }
 
   // Arrow SVG components (strokeWidth adjusted for better visibility if smaller)
@@ -126,7 +126,7 @@ const GridCell: React.FC<GridCellProps> = ({
 
   return (
     <div
-      draggable 
+      draggable
       onClick={handleClick}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
@@ -135,7 +135,7 @@ const GridCell: React.FC<GridCellProps> = ({
       onDragLeave={handleDragLeave}
       onDragEnd={handleDragEnd}
       className={cellClasses}
-      role="button" 
+      role="button"
       aria-pressed={isSelected}
       aria-label={`Cell ${row}, ${col} containing letter ${letter}`}
     >

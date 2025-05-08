@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { ExplorationNodeData } from '../utils/gameHelpers'; // Assuming types are here
 
 interface ExplorationTreeNodeProps {
-  node: ExplorationNodeData;
-  level?: number;
+    node: ExplorationNodeData;
+    level?: number;
 }
 
 const ExplorationTreeNode: React.FC<ExplorationTreeNodeProps> = ({ node, level = 0 }) => {
@@ -31,7 +31,7 @@ const ExplorationTreeNode: React.FC<ExplorationTreeNodeProps> = ({ node, level =
 };
 
 interface ExplorationTreeViewProps {
-  treeData?: ExplorationNodeData[];
+    treeData?: ExplorationNodeData[];
 }
 
 const ExplorationTreeView: React.FC<ExplorationTreeViewProps> = ({ treeData }) => {
@@ -40,10 +40,10 @@ const ExplorationTreeView: React.FC<ExplorationTreeViewProps> = ({ treeData }) =
 
     return (
         <div className="max-w-2xl mt-6 border rounded p-3 bg-white dark:bg-gray-800 shadow dark:border-gray-700">
-             <button onClick={() => setIsVisible(!isVisible)} className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-semibold mb-2 w-full text-left">
+            <button onClick={() => setIsVisible(!isVisible)} className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-semibold mb-2 w-full text-left">
                 {isVisible ? 'Hide' : 'Show'} Full Move Tree {isVisible ? '▼' : '▶'}
             </button>
-             {isVisible && <div className="mt-2 max-h-80 overflow-y-auto border-t pt-2 dark:border-gray-700">{treeData.map((rootNode, index) => <ExplorationTreeNode key={`${rootNode.move?.from?.join('-')}-${rootNode.move?.to?.join('-')}-${index}-root`} node={rootNode} level={0} />)}</div>}
+            {isVisible && <div className="mt-2 max-h-80 overflow-y-auto border-t pt-2 dark:border-gray-700">{treeData.map((rootNode, index) => <ExplorationTreeNode key={`${rootNode.move?.from?.join('-')}-${rootNode.move?.to?.join('-')}-${index}-root`} node={rootNode} level={0} />)}</div>}
         </div>
     );
 };
