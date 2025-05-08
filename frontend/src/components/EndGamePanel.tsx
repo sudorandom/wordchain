@@ -294,7 +294,7 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
                 <div className="absolute bottom-6 right-6">
                     <button
                         onClick={onClose}
-                        className="cursor-pointer px-8 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md shadow focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:bg-gray-600 dark:hover:bg-gray-500 dark:focus:ring-gray-500 dark:ring-offset-gray-800"
+                        className="cursor-pointer px-8 py-2 bg-gray-500 hover:bg-blue-600 text-white rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 dark:bg-blue-600 dark:hover:bg-blue-500 dark:focus:ring-blue-500 dark:ring-offset-blue-800"
                     >
                         Close
                     </button>
