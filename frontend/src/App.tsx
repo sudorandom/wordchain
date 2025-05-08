@@ -1010,7 +1010,7 @@ function App() {
         <div className="flex flex-col justify-center items-center min-h-screen text-center px-4">
             <p className="text-red-600 dark:text-red-400 text-xl font-semibold">Error</p>
             <p className="text-gray-700 dark:text-gray-300 mt-2">{error}</p>
-            <button onClick={() => { setLoading(true); masterResetGameStates(); setDifficulty('normal'); setCurrentDate(new Date()); }} className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600">Try Again</button>
+            <button onClick={() => { setLoading(true); masterResetGameStates(); setDifficulty('normal'); setCurrentDate(new Date()); }} className="cursor-pointer mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600">Try Again</button>
         </div>
     );
     if (!gameData && !loading) return <div className="flex justify-center items-center min-h-screen text-gray-500 dark:text-gray-400">Game data could not be loaded. Please ensure levels are available.</div>;
@@ -1101,7 +1101,7 @@ function App() {
         <div className={`flex flex-col items-center justify-start min-h-screen p-4 font-sans pt-8 ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
             <button
                 onClick={() => setDarkMode(!darkMode)}
-                className="absolute top-4 right-4 p-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="cursor-pointer absolute top-4 right-4 p-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
             >
                 {darkMode ? <i className="fas fa-sun"></i> : <i className="fas fa-moon"></i>}
@@ -1184,7 +1184,7 @@ function App() {
                 <button
                     onClick={(e) => { e.stopPropagation(); handleShowGameSummary(); }} // Stop propagation to prevent div click
                     disabled={showEndGamePanelOverride || loading}
-                    className="mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center self-center"
+                    className="cursor-pointer mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center self-center"
                     title={'View Summary'}
                 >
                     <i className="fas fa-eye mr-1"></i> View Summary
@@ -1225,15 +1225,15 @@ function App() {
                         maxScore={liveMaxDepthAttainable} 
                     />
                     <div className="flex space-x-1 ml-2">
-                        <button onClick={handleBack} disabled={history.length === 0 || animationState.animating || (isGameOver && !hasAcknowledgedGameOver) || showEndGamePanelOverride || loading} className={`p-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md shadow hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed`} title="Back (Undo last move)">
+                        <button onClick={handleBack} disabled={history.length === 0 || animationState.animating || (isGameOver && !hasAcknowledgedGameOver) || showEndGamePanelOverride || loading} className={`cursor-pointer p-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md shadow hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed`} title="Back (Undo last move)">
                             <i className="fas fa-step-backward"></i>
                         </button>
-                        <button onClick={handleReset} disabled={animationState.animating || showEndGamePanelOverride || loading} className={`p-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md shadow hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-500 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed`} title="Reset Game">
+                        <button onClick={handleReset} disabled={animationState.animating || showEndGamePanelOverride || loading} className={`cursor-pointer p-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md shadow hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-500 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed`} title="Reset Game">
                             <i className="fas fa-redo"></i>
                         </button>
                         {/* Hint button disabled for impossible mode */}
                         {difficulty !== 'impossible' &&
-                            <button onClick={handleHintButtonClick} disabled={animationState.animating || isGameOver || (currentPossibleMoves && currentPossibleMoves.length === 0) || showEndGamePanelOverride || loading} className={`p-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md shadow hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 dark:focus:ring-yellow-500 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed`} title="Get a Hint">
+                            <button onClick={handleHintButtonClick} disabled={animationState.animating || isGameOver || (currentPossibleMoves && currentPossibleMoves.length === 0) || showEndGamePanelOverride || loading} className={`cursor-pointer p-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md shadow hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 dark:focus:ring-yellow-500 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed`} title="Get a Hint">
                                 <i className="fas fa-lightbulb"></i>
                             </button>
                         }

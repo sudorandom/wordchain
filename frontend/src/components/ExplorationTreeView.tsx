@@ -101,7 +101,7 @@ const ExplorationTreeView: React.FC<ExplorationTreeViewProps> = ({ treeData, opt
                 Debug View
                 <button
                     onClick={clearLocalStorage}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-sm" // Adjusted button size
+                    className="cursor-pointer bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-sm" // Adjusted button size
                 >
                     Clear Local Storage
                 </button>

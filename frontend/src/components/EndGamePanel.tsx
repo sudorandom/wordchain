@@ -27,13 +27,13 @@ const generateEmojiLine = (data: LevelResultData | null | undefined): string => 
     const { score, maxScore } = data;
     const goodEmoji = '🔗'; // Chain link for successful words
     const badEmoji = '⛓️‍💥'; // Broken chain for missed optimal words (U+26D3 U+200D U+1F4A5)
-    
+
     let emojisArray = [];
     for (let i = 0; i < maxScore; i++) {
         emojisArray.push(i < score ? goodEmoji : badEmoji);
     }
-    
-    return emojisArray.join(''); 
+
+    return emojisArray.join('');
 };
 
 
@@ -238,6 +238,12 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
     return (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex flex-col items-center justify-center z-20 p-4 font-sans">
             <div className="bg-white dark:bg-gray-800 p-6 md:p-8 rounded-lg shadow-xl text-center w-full max-w-6xl max-h-[90vh] overflow-y-auto relative">
+                <button
+                    onClick={onClose}
+                    className="cursor-pointer absolute top-4 right-5 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 focus:outline-none transition-colors duration-150 ease-in-out"
+                >
+                    <i className="fas fa-x"></i>
+                </button>
                 <h2 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100 text-center">
                     {title}
                 </h2>
@@ -260,7 +266,7 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
                                         <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Share Results!</h3>
                                         <button
                                             onClick={handleCopyToClipboard}
-                                            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:ring-offset-gray-800 transition-colors duration-150 ease-in-out"
+                                            className="cursor-pointer px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:ring-offset-gray-800 transition-colors duration-150 ease-in-out"
                                         >
                                             {copied ? 'Copied!' : 'Copy'}
                                         </button>
@@ -279,12 +285,7 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
                                     </p>
                                 )}
                                 <div className="mt-auto">
-                                    <button
-                                        onClick={onClose}
-                                        className="px-8 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md shadow focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:bg-gray-600 dark:hover:bg-gray-500 dark:focus:ring-gray-500 dark:ring-offset-gray-800"
-                                    >
-                                        Close
-                                    </button>
+                                    {/* The close button is now the X at the top right */}
                                 </div>
                             </div>
                         )}
