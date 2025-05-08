@@ -1,72 +1,88 @@
 {
   "initialGrid": [
     [
-      "i",
+      "g",
+      "m",
       "o",
-      "r",
-      "g"
-    ],
-    [
-      "i",
-      "w",
-      "c",
-      "t"
+      "s"
     ],
     [
       "t",
-      "a",
-      "i",
-      "e"
+      "p",
+      "h",
+      "o"
     ],
     [
-      "i",
-      "n",
       "h",
-      "r"
+      "i",
+      "i",
+      "n"
+    ],
+    [
+      "t",
+      "e",
+      "p",
+      "w"
     ]
   ],
   "wordLength": 4,
   "requiredMinTurns": 6,
   "requiredMaxTurns": 9,
-  "maxDepthReached": 7,
+  "maxDepthReached": 6,
   "explorationTree": [
     {
       "move": {
         "from": [
-          1,
+          0,
           2
         ],
         "to": [
-          2,
-          2
+          0,
+          3
         ]
       },
       "wordsFormed": [
-        "rich"
+        "ship"
       ],
-      "maxDepthReached": 6,
+      "maxDepthReached": 0
+    },
+    {
+      "move": {
+        "from": [
+          1,
+          3
+        ],
+        "to": [
+          2,
+          3
+        ]
+      },
+      "wordsFormed": [
+        "snow"
+      ],
+      "maxDepthReached": 5,
       "nextMoves": [
         {
           "move": {
             "from": [
-              1,
-              0
+              0,
+              2
             ],
             "to": [
-              2,
-              0
+              0,
+              3
             ]
           },
           "wordsFormed": [
-            "twit"
+            "ship"
           ],
-          "maxDepthReached": 5,
+          "maxDepthReached": 4,
           "nextMoves": [
             {
               "move": {
                 "from": [
-                  0,
-                  3
+                  1,
+                  2
                 ],
                 "to": [
                   1,
@@ -74,273 +90,31 @@
                 ]
               },
               "wordsFormed": [
-                "twig"
+                "snip"
               ],
-              "maxDepthReached": 4,
+              "maxDepthReached": 2,
               "nextMoves": [
                 {
                   "move": {
                     "from": [
                       0,
-                      0
-                    ],
-                    "to": [
-                      1,
-                      0
-                    ]
-                  },
-                  "wordsFormed": [
-                    "tort"
-                  ],
-                  "maxDepthReached": 3,
-                  "nextMoves": [
-                    {
-                      "move": {
-                        "from": [
-                          0,
-                          1
-                        ],
-                        "to": [
-                          0,
-                          2
-                        ]
-                      },
-                      "wordsFormed": [
-                        "trot"
-                      ],
-                      "maxDepthReached": 2,
-                      "nextMoves": [
-                        {
-                          "move": {
-                            "from": [
-                              1,
-                              2
-                            ],
-                            "to": [
-                              1,
-                              3
-                            ]
-                          },
-                          "wordsFormed": [
-                            "tier"
-                          ],
-                          "maxDepthReached": 1,
-                          "nextMoves": [
-                            {
-                              "move": {
-                                "from": [
-                                  2,
-                                  3
-                                ],
-                                "to": [
-                                  3,
-                                  3
-                                ]
-                              },
-                              "wordsFormed": [
-                                "tire"
-                              ],
-                              "maxDepthReached": 0
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "move": {
-                        "from": [
-                          1,
-                          2
-                        ],
-                        "to": [
-                          1,
-                          3
-                        ]
-                      },
-                      "wordsFormed": [
-                        "tier"
-                      ],
-                      "maxDepthReached": 2,
-                      "nextMoves": [
-                        {
-                          "move": {
-                            "from": [
-                              0,
-                              1
-                            ],
-                            "to": [
-                              0,
-                              2
-                            ]
-                          },
-                          "wordsFormed": [
-                            "trot"
-                          ],
-                          "maxDepthReached": 1,
-                          "nextMoves": [
-                            {
-                              "move": {
-                                "from": [
-                                  2,
-                                  3
-                                ],
-                                "to": [
-                                  3,
-                                  3
-                                ]
-                              },
-                              "wordsFormed": [
-                                "tire"
-                              ],
-                              "maxDepthReached": 0
-                            }
-                          ]
-                        },
-                        {
-                          "move": {
-                            "from": [
-                              2,
-                              3
-                            ],
-                            "to": [
-                              3,
-                              3
-                            ]
-                          },
-                          "wordsFormed": [
-                            "tire"
-                          ],
-                          "maxDepthReached": 1,
-                          "nextMoves": [
-                            {
-                              "move": {
-                                "from": [
-                                  0,
-                                  1
-                                ],
-                                "to": [
-                                  0,
-                                  2
-                                ]
-                              },
-                              "wordsFormed": [
-                                "trot"
-                              ],
-                              "maxDepthReached": 0
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "move": {
-                    "from": [
-                      1,
                       2
                     ],
                     "to": [
-                      1,
+                      0,
                       3
                     ]
                   },
                   "wordsFormed": [
-                    "tier"
+                    "show"
                   ],
-                  "maxDepthReached": 3,
+                  "maxDepthReached": 1,
                   "nextMoves": [
                     {
                       "move": {
                         "from": [
-                          0,
-                          0
-                        ],
-                        "to": [
-                          1,
-                          0
-                        ]
-                      },
-                      "wordsFormed": [
-                        "tort"
-                      ],
-                      "maxDepthReached": 2,
-                      "nextMoves": [
-                        {
-                          "move": {
-                            "from": [
-                              0,
-                              1
-                            ],
-                            "to": [
-                              0,
-                              2
-                            ]
-                          },
-                          "wordsFormed": [
-                            "trot"
-                          ],
-                          "maxDepthReached": 1,
-                          "nextMoves": [
-                            {
-                              "move": {
-                                "from": [
-                                  2,
-                                  3
-                                ],
-                                "to": [
-                                  3,
-                                  3
-                                ]
-                              },
-                              "wordsFormed": [
-                                "tire"
-                              ],
-                              "maxDepthReached": 0
-                            }
-                          ]
-                        },
-                        {
-                          "move": {
-                            "from": [
-                              2,
-                              3
-                            ],
-                            "to": [
-                              3,
-                              3
-                            ]
-                          },
-                          "wordsFormed": [
-                            "tire"
-                          ],
-                          "maxDepthReached": 1,
-                          "nextMoves": [
-                            {
-                              "move": {
-                                "from": [
-                                  0,
-                                  1
-                                ],
-                                "to": [
-                                  0,
-                                  2
-                                ]
-                              },
-                              "wordsFormed": [
-                                "trot"
-                              ],
-                              "maxDepthReached": 0
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "move": {
-                        "from": [
-                          2,
-                          3
+                          3,
+                          2
                         ],
                         "to": [
                           3,
@@ -348,43 +122,127 @@
                         ]
                       },
                       "wordsFormed": [
-                        "tire"
+                        "shop"
                       ],
-                      "maxDepthReached": 2,
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  2,
+                  2
+                ],
+                "to": [
+                  2,
+                  3
+                ]
+              },
+              "wordsFormed": [
+                "shop"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      3,
+                      1
+                    ],
+                    "to": [
+                      3,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "shoe"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          2
+                        ],
+                        "to": [
+                          3,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "show"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      3,
+                      2
+                    ],
+                    "to": [
+                      3,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "show"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          2
+                        ],
+                        "to": [
+                          0,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "snip"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          1
+                        ],
+                        "to": [
+                          3,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "shoe"
+                      ],
+                      "maxDepthReached": 1,
                       "nextMoves": [
                         {
                           "move": {
                             "from": [
                               0,
-                              0
+                              2
                             ],
                             "to": [
-                              1,
-                              0
+                              0,
+                              3
                             ]
                           },
                           "wordsFormed": [
-                            "tort"
+                            "snip"
                           ],
-                          "maxDepthReached": 1,
-                          "nextMoves": [
-                            {
-                              "move": {
-                                "from": [
-                                  0,
-                                  1
-                                ],
-                                "to": [
-                                  0,
-                                  2
-                                ]
-                              },
-                              "wordsFormed": [
-                                "trot"
-                              ],
-                              "maxDepthReached": 0
-                            }
-                          ]
+                          "maxDepthReached": 0
                         }
                       ]
                     }
@@ -398,17 +256,105 @@
           "move": {
             "from": [
               1,
-              3
+              2
             ],
             "to": [
-              2,
+              1,
               3
             ]
           },
           "wordsFormed": [
-            "tact"
+            "show"
           ],
-          "maxDepthReached": 0
+          "maxDepthReached": 1,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  3,
+                  2
+                ],
+                "to": [
+                  3,
+                  3
+                ]
+              },
+              "wordsFormed": [
+                "shop"
+              ],
+              "maxDepthReached": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          2,
+          3
+        ],
+        "to": [
+          3,
+          3
+        ]
+      },
+      "wordsFormed": [
+        "sown"
+      ],
+      "maxDepthReached": 3,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              2
+            ],
+            "to": [
+              0,
+              3
+            ]
+          },
+          "wordsFormed": [
+            "ship"
+          ],
+          "maxDepthReached": 2,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  3,
+                  2
+                ],
+                "to": [
+                  3,
+                  3
+                ]
+              },
+              "wordsFormed": [
+                "shin"
+              ],
+              "maxDepthReached": 1,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      1
+                    ],
+                    "to": [
+                      1,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "spin"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            }
+          ]
         }
       ]
     }

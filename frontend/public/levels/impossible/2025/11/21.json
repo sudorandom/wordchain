@@ -1,0 +1,699 @@
+{
+  "initialGrid": [
+    [
+      "s",
+      "x",
+      "f",
+      "a",
+      "b"
+    ],
+    [
+      "r",
+      "l",
+      "a",
+      "t",
+      "e"
+    ],
+    [
+      "e",
+      "n",
+      "p",
+      "s",
+      "s"
+    ],
+    [
+      "h",
+      "h",
+      "s",
+      "d",
+      "l"
+    ],
+    [
+      "n",
+      "u",
+      "r",
+      "s",
+      "d"
+    ]
+  ],
+  "wordLength": 5,
+  "requiredMinTurns": 10,
+  "requiredMaxTurns": 20,
+  "maxDepthReached": 11,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          0,
+          0
+        ],
+        "to": [
+          1,
+          0
+        ]
+      },
+      "wordsFormed": [
+        "slate"
+      ],
+      "maxDepthReached": 9,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              1,
+              0
+            ],
+            "to": [
+              2,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "elate"
+          ],
+          "maxDepthReached": 0
+        },
+        {
+          "move": {
+            "from": [
+              1,
+              4
+            ],
+            "to": [
+              2,
+              4
+            ]
+          },
+          "wordsFormed": [
+            "slats"
+          ],
+          "maxDepthReached": 8,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  1
+                ],
+                "to": [
+                  1,
+                  2
+                ]
+              },
+              "wordsFormed": [
+                "salts"
+              ],
+              "maxDepthReached": 7,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      3
+                    ],
+                    "to": [
+                      1,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "salas"
+                  ],
+                  "maxDepthReached": 6,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          3
+                        ],
+                        "to": [
+                          1,
+                          4
+                        ]
+                      },
+                      "wordsFormed": [
+                        "salsa"
+                      ],
+                      "maxDepthReached": 5,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              4
+                            ],
+                            "to": [
+                              3,
+                              4
+                            ]
+                          },
+                          "wordsFormed": [
+                            "baled"
+                          ],
+                          "maxDepthReached": 4,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  3
+                                ],
+                                "to": [
+                                  2,
+                                  4
+                                ]
+                              },
+                              "wordsFormed": [
+                                "based"
+                              ],
+                              "maxDepthReached": 3,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      3,
+                                      4
+                                    ],
+                                    "to": [
+                                      4,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "nurse"
+                                  ],
+                                  "maxDepthReached": 0
+                                },
+                                {
+                                  "move": {
+                                    "from": [
+                                      4,
+                                      3
+                                    ],
+                                    "to": [
+                                      4,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "bases"
+                                  ],
+                                  "maxDepthReached": 2,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          2,
+                                          3
+                                        ],
+                                        "to": [
+                                          2,
+                                          4
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "bales"
+                                      ],
+                                      "maxDepthReached": 1,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              0,
+                                              3
+                                            ],
+                                            "to": [
+                                              0,
+                                              4
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "tales"
+                                          ],
+                                          "maxDepthReached": 0
+                                        },
+                                        {
+                                          "move": {
+                                            "from": [
+                                              3,
+                                              3
+                                            ],
+                                            "to": [
+                                              3,
+                                              4
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "balds"
+                                          ],
+                                          "maxDepthReached": 0
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  3,
+                                  4
+                                ],
+                                "to": [
+                                  4,
+                                  4
+                                ]
+                              },
+                              "wordsFormed": [
+                                "nurse"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      1,
+                                      4
+                                    ],
+                                    "to": [
+                                      2,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "blade"
+                                  ],
+                                  "maxDepthReached": 0
+                                },
+                                {
+                                  "move": {
+                                    "from": [
+                                      4,
+                                      3
+                                    ],
+                                    "to": [
+                                      4,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "balds"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  4,
+                                  3
+                                ],
+                                "to": [
+                                  4,
+                                  4
+                                ]
+                              },
+                              "wordsFormed": [
+                                "bales"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      0,
+                                      3
+                                    ],
+                                    "to": [
+                                      0,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "tales"
+                                  ],
+                                  "maxDepthReached": 0
+                                },
+                                {
+                                  "move": {
+                                    "from": [
+                                      3,
+                                      3
+                                    ],
+                                    "to": [
+                                      3,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "balds"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          1,
+          0
+        ],
+        "to": [
+          2,
+          0
+        ]
+      },
+      "wordsFormed": [
+        "elate"
+      ],
+      "maxDepthReached": 10,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              0
+            ],
+            "to": [
+              1,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "slate"
+          ],
+          "maxDepthReached": 9,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  4
+                ],
+                "to": [
+                  2,
+                  4
+                ]
+              },
+              "wordsFormed": [
+                "slats"
+              ],
+              "maxDepthReached": 8,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      1
+                    ],
+                    "to": [
+                      1,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "salts"
+                  ],
+                  "maxDepthReached": 7,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          3
+                        ],
+                        "to": [
+                          1,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "salas"
+                      ],
+                      "maxDepthReached": 6,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              3
+                            ],
+                            "to": [
+                              1,
+                              4
+                            ]
+                          },
+                          "wordsFormed": [
+                            "salsa"
+                          ],
+                          "maxDepthReached": 5,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  4
+                                ],
+                                "to": [
+                                  3,
+                                  4
+                                ]
+                              },
+                              "wordsFormed": [
+                                "baled"
+                              ],
+                              "maxDepthReached": 4,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      3
+                                    ],
+                                    "to": [
+                                      2,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "based"
+                                  ],
+                                  "maxDepthReached": 3,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          3,
+                                          4
+                                        ],
+                                        "to": [
+                                          4,
+                                          4
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "nurse"
+                                      ],
+                                      "maxDepthReached": 0
+                                    },
+                                    {
+                                      "move": {
+                                        "from": [
+                                          4,
+                                          3
+                                        ],
+                                        "to": [
+                                          4,
+                                          4
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "bases"
+                                      ],
+                                      "maxDepthReached": 2,
+                                      "nextMoves": [
+                                        {
+                                          "move": {
+                                            "from": [
+                                              2,
+                                              3
+                                            ],
+                                            "to": [
+                                              2,
+                                              4
+                                            ]
+                                          },
+                                          "wordsFormed": [
+                                            "bales"
+                                          ],
+                                          "maxDepthReached": 1,
+                                          "nextMoves": [
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  0,
+                                                  3
+                                                ],
+                                                "to": [
+                                                  0,
+                                                  4
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "tales"
+                                              ],
+                                              "maxDepthReached": 0
+                                            },
+                                            {
+                                              "move": {
+                                                "from": [
+                                                  3,
+                                                  3
+                                                ],
+                                                "to": [
+                                                  3,
+                                                  4
+                                                ]
+                                              },
+                                              "wordsFormed": [
+                                                "balds"
+                                              ],
+                                              "maxDepthReached": 0
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "move": {
+                                    "from": [
+                                      3,
+                                      4
+                                    ],
+                                    "to": [
+                                      4,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "nurse"
+                                  ],
+                                  "maxDepthReached": 1,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          1,
+                                          4
+                                        ],
+                                        "to": [
+                                          2,
+                                          4
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "blade"
+                                      ],
+                                      "maxDepthReached": 0
+                                    },
+                                    {
+                                      "move": {
+                                        "from": [
+                                          4,
+                                          3
+                                        ],
+                                        "to": [
+                                          4,
+                                          4
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "balds"
+                                      ],
+                                      "maxDepthReached": 0
+                                    }
+                                  ]
+                                },
+                                {
+                                  "move": {
+                                    "from": [
+                                      4,
+                                      3
+                                    ],
+                                    "to": [
+                                      4,
+                                      4
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "bales"
+                                  ],
+                                  "maxDepthReached": 1,
+                                  "nextMoves": [
+                                    {
+                                      "move": {
+                                        "from": [
+                                          0,
+                                          3
+                                        ],
+                                        "to": [
+                                          0,
+                                          4
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "tales"
+                                      ],
+                                      "maxDepthReached": 0
+                                    },
+                                    {
+                                      "move": {
+                                        "from": [
+                                          3,
+                                          3
+                                        ],
+                                        "to": [
+                                          3,
+                                          4
+                                        ]
+                                      },
+                                      "wordsFormed": [
+                                        "balds"
+                                      ],
+                                      "maxDepthReached": 0
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

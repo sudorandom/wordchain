@@ -1,22 +1,22 @@
 {
   "initialGrid": [
     [
-      "r",
-      "t",
-      "r",
-      "d"
-    ],
-    [
-      "w",
-      "r",
       "i",
-      "e"
+      "h",
+      "o",
+      "t"
     ],
     [
-      "t",
-      "d",
+      "m",
+      "e",
+      "e",
+      "r"
+    ],
+    [
+      "e",
       "a",
-      "a"
+      "e",
+      "k"
     ]
   ],
   "wordLength": 4,
@@ -27,16 +27,102 @@
     {
       "move": {
         "from": [
-          1,
-          1
+          0,
+          3
         ],
         "to": [
           1,
-          2
+          3
         ]
       },
       "wordsFormed": [
-        "wire"
+        "meet"
+      ],
+      "maxDepthReached": 3,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              1,
+              2
+            ],
+            "to": [
+              1,
+              3
+            ]
+          },
+          "wordsFormed": [
+            "mete"
+          ],
+          "maxDepthReached": 2,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  1
+                ],
+                "to": [
+                  2,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "mate"
+              ],
+              "maxDepthReached": 1,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      0
+                    ],
+                    "to": [
+                      2,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "meek"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              1,
+              3
+            ],
+            "to": [
+              2,
+              3
+            ]
+          },
+          "wordsFormed": [
+            "meek"
+          ],
+          "maxDepthReached": 0
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          1,
+          2
+        ],
+        "to": [
+          1,
+          3
+        ]
+      },
+      "wordsFormed": [
+        "mere"
       ],
       "maxDepthReached": 6,
       "nextMoves": [
@@ -44,23 +130,23 @@
           "move": {
             "from": [
               1,
-              0
+              1
             ],
             "to": [
               2,
-              0
+              1
             ]
           },
           "wordsFormed": [
-            "tire"
+            "mare"
           ],
           "maxDepthReached": 5,
           "nextMoves": [
             {
               "move": {
                 "from": [
-                  1,
-                  2
+                  0,
+                  3
                 ],
                 "to": [
                   1,
@@ -68,23 +154,23 @@
                 ]
               },
               "wordsFormed": [
-                "tier"
+                "mart"
               ],
               "maxDepthReached": 4,
               "nextMoves": [
                 {
                   "move": {
                     "from": [
-                      0,
-                      3
+                      1,
+                      0
                     ],
                     "to": [
-                      1,
-                      3
+                      2,
+                      0
                     ]
                   },
                   "wordsFormed": [
-                    "tied"
+                    "meek"
                   ],
                   "maxDepthReached": 3,
                   "nextMoves": [
@@ -92,31 +178,47 @@
                       "move": {
                         "from": [
                           1,
-                          2
+                          3
                         ],
                         "to": [
-                          1,
+                          2,
                           3
                         ]
                       },
                       "wordsFormed": [
-                        "tide"
+                        "meet"
                       ],
                       "maxDepthReached": 2,
                       "nextMoves": [
                         {
                           "move": {
                             "from": [
-                              0,
+                              1,
                               0
                             ],
                             "to": [
-                              1,
+                              2,
                               0
                             ]
                           },
                           "wordsFormed": [
-                            "ride"
+                            "mark"
+                          ],
+                          "maxDepthReached": 0
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              2
+                            ],
+                            "to": [
+                              2,
+                              3
+                            ]
+                          },
+                          "wordsFormed": [
+                            "mete"
                           ],
                           "maxDepthReached": 1,
                           "nextMoves": [
@@ -132,41 +234,23 @@
                                 ]
                               },
                               "wordsFormed": [
-                                "wide"
+                                "mark"
                               ],
                               "maxDepthReached": 0
-                            }
-                          ]
-                        },
-                        {
-                          "move": {
-                            "from": [
-                              1,
-                              0
-                            ],
-                            "to": [
-                              2,
-                              0
-                            ]
-                          },
-                          "wordsFormed": [
-                            "wide"
-                          ],
-                          "maxDepthReached": 1,
-                          "nextMoves": [
+                            },
                             {
                               "move": {
                                 "from": [
-                                  0,
-                                  0
+                                  1,
+                                  1
                                 ],
                                 "to": [
-                                  1,
-                                  0
+                                  2,
+                                  1
                                 ]
                               },
                               "wordsFormed": [
-                                "ride"
+                                "mate"
                               ],
                               "maxDepthReached": 0
                             }
@@ -175,6 +259,142 @@
                       ]
                     }
                   ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      3
+                    ],
+                    "to": [
+                      2,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "mark"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  1,
+                  0
+                ],
+                "to": [
+                  2,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "meek"
+              ],
+              "maxDepthReached": 0
+            },
+            {
+              "move": {
+                "from": [
+                  1,
+                  3
+                ],
+                "to": [
+                  2,
+                  3
+                ]
+              },
+              "wordsFormed": [
+                "mark"
+              ],
+              "maxDepthReached": 1,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      3
+                    ],
+                    "to": [
+                      1,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "mart"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          1,
+          3
+        ],
+        "to": [
+          2,
+          3
+        ]
+      },
+      "wordsFormed": [
+        "meek"
+      ],
+      "maxDepthReached": 3,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              3
+            ],
+            "to": [
+              1,
+              3
+            ]
+          },
+          "wordsFormed": [
+            "meet"
+          ],
+          "maxDepthReached": 2,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  2
+                ],
+                "to": [
+                  1,
+                  3
+                ]
+              },
+              "wordsFormed": [
+                "mete"
+              ],
+              "maxDepthReached": 1,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      1
+                    ],
+                    "to": [
+                      2,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "mate"
+                  ],
+                  "maxDepthReached": 0
                 }
               ]
             }

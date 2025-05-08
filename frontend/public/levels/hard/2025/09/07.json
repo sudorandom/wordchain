@@ -1,0 +1,424 @@
+{
+  "initialGrid": [
+    [
+      "h",
+      "h",
+      "r",
+      "l"
+    ],
+    [
+      "s",
+      "o",
+      "m",
+      "i"
+    ],
+    [
+      "a",
+      "o",
+      "t",
+      "h"
+    ],
+    [
+      "i",
+      "f",
+      "t",
+      "h"
+    ]
+  ],
+  "wordLength": 4,
+  "requiredMinTurns": 6,
+  "requiredMaxTurns": 9,
+  "maxDepthReached": 6,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          0,
+          0
+        ],
+        "to": [
+          0,
+          1
+        ]
+      },
+      "wordsFormed": [
+        "hoof"
+      ],
+      "maxDepthReached": 0
+    },
+    {
+      "move": {
+        "from": [
+          0,
+          1
+        ],
+        "to": [
+          0,
+          2
+        ]
+      },
+      "wordsFormed": [
+        "roof"
+      ],
+      "maxDepthReached": 5,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              0
+            ],
+            "to": [
+              0,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "hoof"
+          ],
+          "maxDepthReached": 4,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  2,
+                  0
+                ],
+                "to": [
+                  2,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "oath"
+              ],
+              "maxDepthReached": 0
+            },
+            {
+              "move": {
+                "from": [
+                  3,
+                  1
+                ],
+                "to": [
+                  3,
+                  2
+                ]
+              },
+              "wordsFormed": [
+                "hoot"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      0
+                    ],
+                    "to": [
+                      0,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "root"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          0
+                        ],
+                        "to": [
+                          2,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "oath"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              1
+                            ],
+                            "to": [
+                              3,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "rota"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      0
+                    ],
+                    "to": [
+                      2,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "oath"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              0,
+              1
+            ],
+            "to": [
+              0,
+              2
+            ]
+          },
+          "wordsFormed": [
+            "hoof"
+          ],
+          "maxDepthReached": 0
+        },
+        {
+          "move": {
+            "from": [
+              2,
+              0
+            ],
+            "to": [
+              2,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "oath"
+          ],
+          "maxDepthReached": 0
+        },
+        {
+          "move": {
+            "from": [
+              3,
+              1
+            ],
+            "to": [
+              3,
+              2
+            ]
+          },
+          "wordsFormed": [
+            "root"
+          ],
+          "maxDepthReached": 2,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  2,
+                  0
+                ],
+                "to": [
+                  2,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "oath"
+              ],
+              "maxDepthReached": 1,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      1
+                    ],
+                    "to": [
+                      3,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "rota"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          1,
+          1
+        ],
+        "to": [
+          2,
+          1
+        ]
+      },
+      "wordsFormed": [
+        "hoof"
+      ],
+      "maxDepthReached": 0
+    },
+    {
+      "move": {
+        "from": [
+          2,
+          0
+        ],
+        "to": [
+          2,
+          1
+        ]
+      },
+      "wordsFormed": [
+        "oath"
+      ],
+      "maxDepthReached": 1,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              2,
+              0
+            ],
+            "to": [
+              2,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "hoof"
+          ],
+          "maxDepthReached": 0
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          3,
+          1
+        ],
+        "to": [
+          3,
+          2
+        ]
+      },
+      "wordsFormed": [
+        "hoot"
+      ],
+      "maxDepthReached": 3,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              1
+            ],
+            "to": [
+              0,
+              2
+            ]
+          },
+          "wordsFormed": [
+            "root"
+          ],
+          "maxDepthReached": 2,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  2,
+                  0
+                ],
+                "to": [
+                  2,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "oath"
+              ],
+              "maxDepthReached": 1,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      1
+                    ],
+                    "to": [
+                      3,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "rota"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              2,
+              0
+            ],
+            "to": [
+              2,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "oath"
+          ],
+          "maxDepthReached": 0
+        },
+        {
+          "move": {
+            "from": [
+              3,
+              1
+            ],
+            "to": [
+              3,
+              2
+            ]
+          },
+          "wordsFormed": [
+            "hoof"
+          ],
+          "maxDepthReached": 0
+        }
+      ]
+    }
+  ]
+}

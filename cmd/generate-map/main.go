@@ -196,7 +196,7 @@ func main() {
 	noopMove := Move{Cell1: Coordinates{Row: 0, Col: 0}, Cell2: Coordinates{Row: 0, Col: 0}}
 
 	// Launch workers
-	for i := range numWorkers {
+	for i := 0; i < numWorkers; i++ { // Corrected loop condition
 		wg.Add(1)
 		go worker(i, &wg, wordMap, simpleWordMap, noopMove, resultsChan, doneChan, &gridAttemptsTotal)
 	}
@@ -205,8 +205,9 @@ func main() {
 	// This signals the results processing loop below to terminate.
 	go func() {
 		wg.Wait()
-		close(resultsChan)
-		fmt.Println("All workers finished, results channel closed.")
+		close(doneChan)    // Signal workers to stop.  Important to close doneChan here.
+		close(resultsChan) // Close the channel after all workers are done.
+		fmt.Println("All workers finished, results channels closed.")
 	}()
 
 	// Progress ticker
@@ -231,7 +232,8 @@ resultsLoop:
 			// Optional: Stop if cli.NumGrids is reached
 			if cli.NumGrids != -1 && validGridsFound >= cli.NumGrids {
 				fmt.Printf("Target of %d valid grids reached. Signaling workers to stop.\n", cli.NumGrids)
-				close(doneChan) // Signal workers to stop
+				// close(doneChan) // Moved close(doneChan) to the worker shutdown goroutine.
+				break resultsLoop // Exit the loop after signaling workers.
 			}
 
 		case <-ticker.C:
@@ -240,17 +242,9 @@ resultsLoop:
 				time.Since(startTime).Round(time.Second), attempts, validGridsFound)
 			// Optional: Add a timeout for the whole process
 			// case <-time.After(5 * time.Minute):
-			// 	fmt.Println("Total search time limit reached. Signaling workers to stop.")
-			// 	close(doneChan)
-			// 	break resultsLoop
-		}
-		// Check if doneChan is closed and resultsChan might still have items or is also closed
-		// This ensures we don't get stuck if doneChan closes but resultsChan still has items.
-		select {
-		case <-doneChan:
-			// If doneChan is closed, we still need to drain resultsChan
-			// The main break condition is `resultsChan` being closed.
-		default:
+			//  fmt.Println("Total search time limit reached. Signaling workers to stop.")
+			//  close(doneChan)
+			//  break resultsLoop
 		}
 	}
 

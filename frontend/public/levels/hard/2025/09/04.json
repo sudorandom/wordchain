@@ -1,0 +1,976 @@
+{
+  "initialGrid": [
+    [
+      "d",
+      "c",
+      "f",
+      "s"
+    ],
+    [
+      "r",
+      "t",
+      "i",
+      "p"
+    ],
+    [
+      "i",
+      "t",
+      "h",
+      "r"
+    ],
+    [
+      "f",
+      "t",
+      "e",
+      "n"
+    ]
+  ],
+  "wordLength": 4,
+  "requiredMinTurns": 6,
+  "requiredMaxTurns": 9,
+  "maxDepthReached": 6,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          1,
+          0
+        ],
+        "to": [
+          1,
+          1
+        ]
+      },
+      "wordsFormed": [
+        "trip"
+      ],
+      "maxDepthReached": 5,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              0
+            ],
+            "to": [
+              1,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "drip"
+          ],
+          "maxDepthReached": 4,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  2,
+                  2
+                ],
+                "to": [
+                  2,
+                  3
+                ]
+              },
+              "wordsFormed": [
+                "fire"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      2
+                    ],
+                    "to": [
+                      0,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "sire"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          1
+                        ],
+                        "to": [
+                          2,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "site"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              0,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "cite"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              2,
+              2
+            ],
+            "to": [
+              2,
+              3
+            ]
+          },
+          "wordsFormed": [
+            "fire"
+          ],
+          "maxDepthReached": 4,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  0,
+                  0
+                ],
+                "to": [
+                  1,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "drip"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      2
+                    ],
+                    "to": [
+                      0,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "sire"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          1
+                        ],
+                        "to": [
+                          2,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "site"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              0,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "cite"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  0,
+                  2
+                ],
+                "to": [
+                  0,
+                  3
+                ]
+              },
+              "wordsFormed": [
+                "sire"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      0
+                    ],
+                    "to": [
+                      1,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "drip"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          1
+                        ],
+                        "to": [
+                          2,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "site"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              0,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "cite"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      1
+                    ],
+                    "to": [
+                      2,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "site"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          0
+                        ],
+                        "to": [
+                          1,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "drip"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              0,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "cite"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          1
+                        ],
+                        "to": [
+                          0,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "cite"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              0
+                            ],
+                            "to": [
+                              1,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "drip"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          2,
+          2
+        ],
+        "to": [
+          2,
+          3
+        ]
+      },
+      "wordsFormed": [
+        "fire"
+      ],
+      "maxDepthReached": 5,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              2
+            ],
+            "to": [
+              0,
+              3
+            ]
+          },
+          "wordsFormed": [
+            "sire"
+          ],
+          "maxDepthReached": 4,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  0
+                ],
+                "to": [
+                  1,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "trip"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      0
+                    ],
+                    "to": [
+                      1,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "drip"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          1
+                        ],
+                        "to": [
+                          2,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "site"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              0,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "cite"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      1
+                    ],
+                    "to": [
+                      2,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "site"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          0
+                        ],
+                        "to": [
+                          1,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "drip"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              0,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "cite"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          1
+                        ],
+                        "to": [
+                          0,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "cite"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              0
+                            ],
+                            "to": [
+                              1,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "drip"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  2,
+                  1
+                ],
+                "to": [
+                  2,
+                  2
+                ]
+              },
+              "wordsFormed": [
+                "site"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      1
+                    ],
+                    "to": [
+                      0,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "cite"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          0
+                        ],
+                        "to": [
+                          1,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "trip"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              0
+                            ],
+                            "to": [
+                              1,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "drip"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      0
+                    ],
+                    "to": [
+                      1,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "trip"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          0
+                        ],
+                        "to": [
+                          1,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "drip"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              0,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "cite"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          1
+                        ],
+                        "to": [
+                          0,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "cite"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              0
+                            ],
+                            "to": [
+                              1,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "drip"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              1,
+              0
+            ],
+            "to": [
+              1,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "trip"
+          ],
+          "maxDepthReached": 4,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  0,
+                  0
+                ],
+                "to": [
+                  1,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "drip"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      2
+                    ],
+                    "to": [
+                      0,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "sire"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          1
+                        ],
+                        "to": [
+                          2,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "site"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              0,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "cite"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  0,
+                  2
+                ],
+                "to": [
+                  0,
+                  3
+                ]
+              },
+              "wordsFormed": [
+                "sire"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      0
+                    ],
+                    "to": [
+                      1,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "drip"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          1
+                        ],
+                        "to": [
+                          2,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "site"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              0,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "cite"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      1
+                    ],
+                    "to": [
+                      2,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "site"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          0
+                        ],
+                        "to": [
+                          1,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "drip"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              1
+                            ],
+                            "to": [
+                              0,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "cite"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          1
+                        ],
+                        "to": [
+                          0,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "cite"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              0
+                            ],
+                            "to": [
+                              1,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "drip"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

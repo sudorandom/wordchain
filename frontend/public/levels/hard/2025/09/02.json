@@ -1,0 +1,410 @@
+{
+  "initialGrid": [
+    [
+      "w",
+      "d",
+      "k",
+      "y"
+    ],
+    [
+      "n",
+      "n",
+      "m",
+      "t"
+    ],
+    [
+      "r",
+      "u",
+      "p",
+      "t"
+    ],
+    [
+      "i",
+      "a",
+      "n",
+      "e"
+    ]
+  ],
+  "wordLength": 4,
+  "requiredMinTurns": 6,
+  "requiredMaxTurns": 9,
+  "maxDepthReached": 6,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          2,
+          1
+        ],
+        "to": [
+          3,
+          1
+        ]
+      },
+      "wordsFormed": [
+        "rapt"
+      ],
+      "maxDepthReached": 5,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              2,
+              0
+            ],
+            "to": [
+              3,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "rune"
+          ],
+          "maxDepthReached": 4,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  2,
+                  3
+                ],
+                "to": [
+                  3,
+                  3
+                ]
+              },
+              "wordsFormed": [
+                "runt"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      0
+                    ],
+                    "to": [
+                      2,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "nape"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          2
+                        ],
+                        "to": [
+                          2,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "name"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              1
+                            ],
+                            "to": [
+                              3,
+                              1
+                            ]
+                          },
+                          "wordsFormed": [
+                            "rant"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          0
+                        ],
+                        "to": [
+                          3,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "rape"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          1
+                        ],
+                        "to": [
+                          3,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "rant"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      0
+                    ],
+                    "to": [
+                      3,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "rape"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          0
+                        ],
+                        "to": [
+                          2,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "nape"
+                      ],
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              2
+                            ],
+                            "to": [
+                              2,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "name"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      1
+                    ],
+                    "to": [
+                      3,
+                      1
+                    ]
+                  },
+                  "wordsFormed": [
+                    "rant"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              2,
+              2
+            ],
+            "to": [
+              3,
+              2
+            ]
+          },
+          "wordsFormed": [
+            "rant"
+          ],
+          "maxDepthReached": 2,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  2,
+                  1
+                ],
+                "to": [
+                  3,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "runt"
+              ],
+              "maxDepthReached": 1,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      0
+                    ],
+                    "to": [
+                      3,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "rape"
+                  ],
+                  "maxDepthReached": 0
+                },
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      3
+                    ],
+                    "to": [
+                      3,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "rune"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              2,
+              3
+            ],
+            "to": [
+              3,
+              3
+            ]
+          },
+          "wordsFormed": [
+            "rape"
+          ],
+          "maxDepthReached": 2,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  0
+                ],
+                "to": [
+                  2,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "nape"
+              ],
+              "maxDepthReached": 1,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      2
+                    ],
+                    "to": [
+                      2,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "name"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          2,
+          2
+        ],
+        "to": [
+          3,
+          2
+        ]
+      },
+      "wordsFormed": [
+        "runt"
+      ],
+      "maxDepthReached": 1,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              2,
+              0
+            ],
+            "to": [
+              3,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "rape"
+          ],
+          "maxDepthReached": 0
+        },
+        {
+          "move": {
+            "from": [
+              2,
+              3
+            ],
+            "to": [
+              3,
+              3
+            ]
+          },
+          "wordsFormed": [
+            "rune"
+          ],
+          "maxDepthReached": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,614 @@
+{
+  "initialGrid": [
+    [
+      "p",
+      "h",
+      "d",
+      "e"
+    ],
+    [
+      "r",
+      "d",
+      "a",
+      "e"
+    ],
+    [
+      "p",
+      "a",
+      "i",
+      "n"
+    ],
+    [
+      "l",
+      "h",
+      "t",
+      "w"
+    ]
+  ],
+  "wordLength": 4,
+  "requiredMinTurns": 6,
+  "requiredMaxTurns": 9,
+  "maxDepthReached": 8,
+  "explorationTree": [
+    {
+      "move": {
+        "from": [
+          1,
+          0
+        ],
+        "to": [
+          2,
+          0
+        ]
+      },
+      "wordsFormed": [
+        "rain"
+      ],
+      "maxDepthReached": 7,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              1,
+              0
+            ],
+            "to": [
+              2,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "pain"
+          ],
+          "maxDepthReached": 0
+        },
+        {
+          "move": {
+            "from": [
+              2,
+              0
+            ],
+            "to": [
+              3,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "lain"
+          ],
+          "maxDepthReached": 6,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  0
+                ],
+                "to": [
+                  2,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "pain"
+              ],
+              "maxDepthReached": 5,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      1
+                    ],
+                    "to": [
+                      1,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "lade"
+                  ],
+                  "maxDepthReached": 4,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          2
+                        ],
+                        "to": [
+                          0,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "edit"
+                      ],
+                      "maxDepthReached": 3,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              3,
+                              2
+                            ],
+                            "to": [
+                              3,
+                              3
+                            ]
+                          },
+                          "wordsFormed": [
+                            "dent"
+                          ],
+                          "maxDepthReached": 2,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  2
+                                ],
+                                "to": [
+                                  3,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "pawn"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      1,
+                                      0
+                                    ],
+                                    "to": [
+                                      2,
+                                      0
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "lawn"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          2,
+          0
+        ],
+        "to": [
+          3,
+          0
+        ]
+      },
+      "wordsFormed": [
+        "lain"
+      ],
+      "maxDepthReached": 7,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              1,
+              0
+            ],
+            "to": [
+              2,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "rain"
+          ],
+          "maxDepthReached": 6,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  1
+                ],
+                "to": [
+                  1,
+                  2
+                ]
+              },
+              "wordsFormed": [
+                "lade"
+              ],
+              "maxDepthReached": 5,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      2
+                    ],
+                    "to": [
+                      0,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "edit"
+                  ],
+                  "maxDepthReached": 4,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          2,
+                          0
+                        ],
+                        "to": [
+                          3,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "pain"
+                      ],
+                      "maxDepthReached": 3,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              3,
+                              2
+                            ],
+                            "to": [
+                              3,
+                              3
+                            ]
+                          },
+                          "wordsFormed": [
+                            "dent"
+                          ],
+                          "maxDepthReached": 2,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  2
+                                ],
+                                "to": [
+                                  3,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "pawn"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      1,
+                                      0
+                                    ],
+                                    "to": [
+                                      2,
+                                      0
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "lawn"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          2
+                        ],
+                        "to": [
+                          3,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "dent"
+                      ],
+                      "maxDepthReached": 3,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              0
+                            ],
+                            "to": [
+                              3,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "pain"
+                          ],
+                          "maxDepthReached": 2,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  2
+                                ],
+                                "to": [
+                                  3,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "pawn"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      1,
+                                      0
+                                    ],
+                                    "to": [
+                                      2,
+                                      0
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "lawn"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      2,
+                      0
+                    ],
+                    "to": [
+                      3,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "pain"
+                  ],
+                  "maxDepthReached": 4,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          2
+                        ],
+                        "to": [
+                          0,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "edit"
+                      ],
+                      "maxDepthReached": 3,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              3,
+                              2
+                            ],
+                            "to": [
+                              3,
+                              3
+                            ]
+                          },
+                          "wordsFormed": [
+                            "dent"
+                          ],
+                          "maxDepthReached": 2,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  2
+                                ],
+                                "to": [
+                                  3,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "pawn"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      1,
+                                      0
+                                    ],
+                                    "to": [
+                                      2,
+                                      0
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "lawn"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  2,
+                  0
+                ],
+                "to": [
+                  3,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "pain"
+              ],
+              "maxDepthReached": 5,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      1
+                    ],
+                    "to": [
+                      1,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "lade"
+                  ],
+                  "maxDepthReached": 4,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          2
+                        ],
+                        "to": [
+                          0,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "edit"
+                      ],
+                      "maxDepthReached": 3,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              3,
+                              2
+                            ],
+                            "to": [
+                              3,
+                              3
+                            ]
+                          },
+                          "wordsFormed": [
+                            "dent"
+                          ],
+                          "maxDepthReached": 2,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  2,
+                                  2
+                                ],
+                                "to": [
+                                  3,
+                                  2
+                                ]
+                              },
+                              "wordsFormed": [
+                                "pawn"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      1,
+                                      0
+                                    ],
+                                    "to": [
+                                      2,
+                                      0
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "lawn"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              2,
+              0
+            ],
+            "to": [
+              3,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "pain"
+          ],
+          "maxDepthReached": 0
+        }
+      ]
+    }
+  ]
+}

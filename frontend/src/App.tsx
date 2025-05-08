@@ -70,13 +70,13 @@ function App() {
     const [reloadTrigger, setReloadTrigger] = useState(0);
 
     // Memoized initial game states
-      const initialStates = useMemo(() => {
+    const initialStates = useMemo(() => {
         const initial = getInitialGameState(gameData);
         return {
-          ...initial,
-          grid: initial.grid || (gameData?.initialGrid || null), // Ensure grid is not undefined
+            ...initial,
+            grid: initial.grid || (gameData?.initialGrid || null), // Ensure grid is not undefined
         };
-      }, [gameData]);
+    }, [gameData]);
 
     // Core Game State (live play)
     const [grid, setGrid] = useState<string[][] | null>(initialStates.grid);
@@ -84,7 +84,7 @@ function App() {
     const [currentDepth, setCurrentDepth] = useState<number>(initialStates.currentDepth);
     const [history, setHistory] = useState<HistoryEntry[]>(initialStates.history);
     const [hasDeviated, setHasDeviated] = useState<boolean>(initialStates.hasDeviated);
-    const [turnFailedAttempts, setTurnFailedAttempts] = useState(0);
+    const [turnFailedAttempts, setTurnFailedAttempts] = useState(initialStates.turnFailedAttempts);
 
     // UI Interaction State
     const [selectedCell, setSelectedCell] = useState<CellCoordinates | null>(initialStates.selectedCell);
@@ -174,14 +174,14 @@ function App() {
         // Determine initial difficulty: URL param takes precedence, then check progress
         let initialDifficultyValue: DifficultyLevel = 'normal';
         if (urlDifficulty && difficulties.includes(urlDifficulty)) {
-             initialDifficultyValue = urlDifficulty;
+            initialDifficultyValue = urlDifficulty;
         } else if (currentDailyProgressState.normal && !currentDailyProgressState.hard) {
             initialDifficultyValue = 'hard';
         } else if (currentDailyProgressState.normal && currentDailyProgressState.hard && !currentDailyProgressState.impossible) {
-             initialDifficultyValue = 'impossible'; // Suggest impossible if others done
+            initialDifficultyValue = 'impossible'; // Suggest impossible if others done
         }
         setDifficulty(initialDifficultyValue);
-        
+
     }, []); // Runs once on mount
 
     // Effect to load level data when currentDate, difficulty, or reloadTrigger changes
@@ -201,7 +201,7 @@ function App() {
             setCurrentPossibleMoves(freshInitialStates.currentPossibleMoves);
             setCurrentDepth(freshInitialStates.currentDepth);
             setHistory(freshInitialStates.history);
-            setHasDeviated(freshInitialStates.hasDeviated);
+            setHasDeviated(false);  // Reset hasDeviated on load
             setIsInvalidMove(freshInitialStates.isInvalidMove);
             setInvalidMoveMessage(freshInitialStates.invalidMoveMessage);
             setSelectedCell(freshInitialStates.selectedCell);
@@ -246,22 +246,32 @@ function App() {
                 const fetchedGameData: GameData = await response.json();
                 setGameData(fetchedGameData);
 
-                const savedGameStateString = localStorage.getItem(
-                    `wordChainsState-${getFormattedDate(date)}-${diff}`
-                );
                 let loadedDepth = 0;
-                if (savedGameStateString) {
-                    const savedState = JSON.parse(savedGameStateString);
-                    setGrid(savedState.lastGrid || fetchedGameData.initialGrid);
-                    setHistory(savedState.history || []);
-                    loadedDepth = savedState.currentDepth || 0;
-                    setCurrentDepth(loadedDepth);
-                    setTurnFailedAttempts(savedState.turnFailedAttempts || 0);
-                    setHasDeviated(savedState.hasDeviated || false);
-                } else {
-                    setGrid(fetchedGameData.initialGrid);
+                let savedGrid: string[][] | null = null;
+                let savedHistory: HistoryEntry[] = [];
+                let savedTurnFailedAttempts = 0;
+                let savedHasDeviated = false;
+
+
+                savedGrid = fetchedGameData.initialGrid;
+
+
+                // Important:  Set ALL game state here, ensuring consistency
+                setGrid(savedGrid);
+                setHistory(savedHistory);
+                setCurrentDepth(loadedDepth);
+                setTurnFailedAttempts(savedTurnFailedAttempts);
+                setHasDeviated(savedHasDeviated); // Load saved deviation state
+
+                // Re-calculate possible moves based on the loaded/initial grid and history.  This is CRUCIAL.
+                let calculatedPossibleMoves: ExplorationNodeData[] = fetchedGameData.explorationTree || [];
+                if (savedHistory.length > 0) {
+                    // If there's history, we need to find the correct possible moves based on the *last* grid state
+                    const lastHistoryEntry = savedHistory[savedHistory.length - 1];
+                    calculatedPossibleMoves = lastHistoryEntry.currentPossibleMoves || [];
                 }
-                setCurrentPossibleMoves(fetchedGameData.explorationTree || []);
+                setCurrentPossibleMoves(calculatedPossibleMoves);
+
 
                 if (
                     fetchedGameData &&
@@ -287,17 +297,17 @@ function App() {
     }, [currentDate, difficulty, reloadTrigger]);
 
     // Memoized live game values
-      const liveOptimalPathWords = useMemo(() => {
+    const liveOptimalPathWords = useMemo(() => {
         if (gameData) {
-          try {
-            return findLongestWordChain(gameData.explorationTree, history);
-          } catch (error) {
-            console.error("Error in findLongestWordChain:", error);
-            return [];
-          }
+            try {
+                return findLongestWordChain(gameData.explorationTree, history);
+            } catch (error) {
+                console.error("Error in findLongestWordChain:", error);
+                return [];
+            }
         }
         return [];
-      }, [gameData, history]);
+    }, [gameData, history]);
     const livePlayerUniqueWordsFound = useMemo(() => {
         const words = new Set<string>();
         history.forEach(state => { if (Array.isArray(state.wordsFormedByMove)) { state.wordsFormedByMove.forEach(word => words.add(word)); } });
@@ -418,7 +428,7 @@ function App() {
 
     // Effect to show hint after 3 failed attempts
     useEffect(() => {
-        // Disable hints for impossible mode
+        // Disable hints entirely for impossible mode
         if (difficulty === 'impossible') {
             setHintCells([]); // Ensure hints are cleared if switching to impossible
             if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
@@ -478,9 +488,11 @@ function App() {
             setSelectedCell(null);
             setDraggedCell(null);
             setHoveredCell(null);
+
             let matchedNode: ExplorationNodeData | null = null;
             const moveOption1 = { from: [cell1.row, cell1.col], to: [cell2.row, cell2.col] };
             const moveOption2 = { from: [cell2.row, cell2.col], to: [cell1.row, cell1.col] };
+
             if (currentPossibleMoves && currentPossibleMoves.length > 0) {
                 for (const node of currentPossibleMoves) {
                     if (!node.move) continue;
@@ -502,28 +514,16 @@ function App() {
                     }
                 }
             }
+
             if (matchedNode) {
                 const moveMadeCoords = {
                     from: { row: cell1.row, col: cell1.col },
                     to: { row: cell2.row, col: cell2.col },
                 };
                 const wordsFormedByMove = matchedNode.wordsFormed || [];
-                let isDeviatedMove = false;
-                let maxDepthPossibleFromCurrentState = -1;
-                if (currentPossibleMoves && currentPossibleMoves.length > 0) {
-                    const validNodes = currentPossibleMoves.filter(
-                        (node) => typeof node.maxDepthReached === 'number'
-                    );
-                    if (validNodes.length > 0)
-                        maxDepthPossibleFromCurrentState = Math.max(
-                            ...validNodes.map((node) => node.maxDepthReached!)
-                        );
-                }
-                if (
-                    typeof matchedNode.maxDepthReached === 'number' &&
-                    matchedNode.maxDepthReached < maxDepthPossibleFromCurrentState
-                )
-                    isDeviatedMove = true;
+                // Determine if this move deviates from the optimal path
+                const isDeviatedMove = matchedNode.maxDepthReached > 0 && matchedNode.maxDepthReached + currentDepth + 1 !== liveMaxDepthAttainable;
+
                 setHasDeviated(isDeviatedMove);
                 setTurnFailedAttempts(0);
                 setHintCells([]);
@@ -532,11 +532,12 @@ function App() {
                     ...prevHistory,
                     {
                         grid: grid!,
-                        currentPossibleMoves,
+                        currentPossibleMoves, // Store the possible moves *before* making the swap
                         currentDepth,
                         moveMade: moveMadeCoords,
                         wordsFormedByMove,
                         turnFailedAttempts,
+                        isDeviated: isDeviatedMove // Store isDeviated in history
                     },
                 ]);
                 setAnimationState({ animating: true, from: cell1, to: cell2 });
@@ -552,10 +553,14 @@ function App() {
                     newGrid[cell2.row][cell2.col] = temp;
                     const nextDepth = currentDepth + 1;
                     setGrid(newGrid);
-                    setCurrentPossibleMoves(matchedNode!.nextMoves || []);
+
+                    //  CRITICAL:  Calculate the NEXT possible moves *after* the swap and grid update.
+                    const nextPossibleMoves = matchedNode!.nextMoves || [];
+                    setCurrentPossibleMoves(nextPossibleMoves);
                     setCurrentDepth(nextDepth);
                     setAnimationState({ animating: false, from: null, to: null });
                     animationTimeoutRef.current = null;
+
                     let allCoords: CellCoordinates[] = [];
                     wordsFormedByMove.forEach((word: string) => {
                         const coords = findWordCoordinates(newGrid, word, matchedNode!.move!);
@@ -691,8 +696,7 @@ function App() {
 
     const handleCellClick = useCallback(
         (cellCoords: CellCoordinates) => {
-            if (
-                animationState.animating ||
+            if (                animationState.animating ||
                 (isGameOver && !hasAcknowledgedGameOver) ||
                 !gameData ||
                 draggedCell ||
@@ -765,9 +769,7 @@ function App() {
     const handleReset = useCallback(() => {
         if (!currentDate || loading || showEndGamePanelOverride) return; // Prevent reset if loading or panel shown
 
-        // Clear saved state for this specific level before resetting
-        const stateKey = `wordChainsState-${getFormattedDate(currentDate)}-${difficulty}`;
-        localStorage.removeItem(stateKey);
+
 
         setLoading(true);
         masterResetGameStates();
@@ -775,16 +777,16 @@ function App() {
     }, [currentDate, difficulty, masterResetGameStates, loading, showEndGamePanelOverride]);
 
     // Handles undoing the last move
-      const handleBack = useCallback(() => {
+    const handleBack = useCallback(() => {
         // Disable if history empty, animating, game over and not acknowledged, panel override active, or loading
         if (
-          history.length === 0 ||
-          animationState.animating ||
-          (isGameOver && !hasAcknowledgedGameOver) ||
-          showEndGamePanelOverride ||
-          loading
+            history.length === 0 ||
+            animationState.animating ||
+            (isGameOver && !hasAcknowledgedGameOver) ||
+            showEndGamePanelOverride ||
+            loading
         )
-          return;
+            return;
 
         if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current);
         if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current);
@@ -798,82 +800,16 @@ function App() {
         const previousState = history[history.length - 1];
         const moveToundo = previousState.moveMade;
         if (!moveToundo || !previousState.grid) {
-          console.error("Cannot undo: History data missing.", previousState);
-          handleReset();
-          return;
+            console.error("Cannot undo: History data missing.", previousState);
+            handleReset();
+            return;
         }
         const previousTurnFailedAttempts = previousState.turnFailedAttempts ?? 0;
-        let previousStateWasDeviated = false;
-        if (history.length > 1) {
-          const stateBeforePrevious = history[history.length - 2];
-          const movesFromBeforePrevious =
-            stateBeforePrevious.currentPossibleMoves;
-          const moveThatLedToPrevious = previousState.moveMade;
-          let nodeOfPreviousMove = null;
-          if (movesFromBeforePrevious && moveThatLedToPrevious) {
-            const prevMoveOpt1 = {
-              from: [
-                moveThatLedToPrevious.from.row,
-                moveThatLedToPrevious.from.col,
-              ],
-              to: [moveThatLedToPrevious.to.row, moveThatLedToPrevious.to.col],
-            };
-            const prevMoveOpt2 = {
-              from: [
-                moveThatLedToPrevious.to.row,
-                moveThatLedToPrevious.to.col,
-              ],
-              to: [
-                moveThatLedToPrevious.from.row,
-                moveThatLedToPrevious.from.col,
-              ],
-            };
-            for (const node of movesFromBeforePrevious) {
-              if (!node.move) continue;
-              const fromMatch1 =
-                node.move.from[0] === prevMoveOpt1.from[0] &&
-                node.move.from[1] === prevMoveOpt1.from[1];
-              const toMatch1 =
-                node.move.to[0] === prevMoveOpt1.to[0] &&
-                node.move.to[1] === prevMoveOpt1.to[1];
-              const fromMatch2 =
-                node.move.from[0] === prevMoveOpt2.from[0] &&
-                node.move.from[1] === prevMoveOpt2.from[1];
-              const toMatch2 =
-                node.move.to[0] === prevMoveOpt2.to[0] &&
-                node.move.to[1] === prevMoveOpt2.to[1];
-              if ((fromMatch1 && toMatch1) || (fromMatch2 && toMatch2)) {
-                nodeOfPreviousMove = node;
-                break;
-              }
-            }
-          }
-          if (
-            nodeOfPreviousMove &&
-            movesFromBeforePrevious &&
-            movesFromBeforePrevious.length > 0
-          ) {
-            const validNodes = movesFromBeforePrevious.filter(
-              (node: ExplorationNodeData) =>
-                typeof node.maxDepthReached === "number"
-            );
-            if (validNodes.length > 0) {
-              const maxDepthPossibleBeforePrevious = Math.max(
-                ...validNodes.map((node: ExplorationNodeData) => node.maxDepthReached!)
-              );
-              if (
-                typeof nodeOfPreviousMove.maxDepthReached === "number" &&
-                nodeOfPreviousMove.maxDepthReached <
-                  maxDepthPossibleBeforePrevious
-              )
-                previousStateWasDeviated = true;
-            }
-          }
-        }
+        const previousStateWasDeviated = previousState.isDeviated || false;
         setAnimationState({
-          animating: true,
-          from:moveToundo.to,
-          to: moveToundo.from,
+            animating: true,
+            from: moveToundo.to,
+            to: moveToundo.from,
         });
         setIsInvalidMove(false);
         setInvalidMoveMessage("");
@@ -885,16 +821,16 @@ function App() {
         setWiggleCells([]);
         setHintCells([]);
         animationTimeoutRef.current = window.setTimeout(() => {
-          setGrid(previousState.grid);
-          setCurrentPossibleMoves(previousState.currentPossibleMoves);
-          setCurrentDepth(previousState.currentDepth);
-          setHistory((prevHistory) => prevHistory.slice(0, -1));
-          setAnimationState({ animating: false, from: null, to: null });
-          setHasDeviated(previousStateWasDeviated);
-          setTurnFailedAttempts(previousTurnFailedAttempts);
-          animationTimeoutRef.current = null;
+            setGrid(previousState.grid);
+            setCurrentPossibleMoves(previousState.currentPossibleMoves);
+            setCurrentDepth(previousState.currentDepth);
+            setHistory((prevHistory) => prevHistory.slice(0, -1));
+            setAnimationState({ animating: false, from: null, to: null });
+            setHasDeviated(previousStateWasDeviated);
+            setTurnFailedAttempts(previousTurnFailedAttempts);
+            animationTimeoutRef.current = null;
         }, 300);
-      }, [
+    }, [
         history,
         animationState.animating,
         isGameOver,
@@ -903,7 +839,7 @@ function App() {
         showEndGamePanelOverride,
         loading,
         hasAcknowledgedGameOver,
-      ]);
+    ]);
 
     // Handles closing the EndGamePanel
     const handleCloseGameOver = useCallback(() => {
@@ -913,7 +849,7 @@ function App() {
     }, []);
 
     // Generalized handler for switching difficulty
-     const handlePlayMode = useCallback(
+    const handlePlayMode = useCallback(
         (newDifficulty: DifficultyLevel) => {
             if (loading || showEndGamePanelOverride || difficulty === newDifficulty)
                 return; // Prevent action if loading, panel shown, or already on this difficulty
@@ -986,16 +922,16 @@ function App() {
         if (displayHistory.length === 0) return <div className="min-h-[2rem] mt-4"></div>;
         return (
             // Use gap-x-2 and gap-y-1 for spacing with wrapping
-            <div className="flex flex-wrap items-center justify-center mt-4 gap-x-2 gap-y-1 text-lg px-4 pb-2"> 
+            <div className="flex flex-wrap items-center justify-center mt-4 gap-x-2 gap-y-1 text-lg px-4 pb-2">
                 {displayHistory.map((histEntry, index) => (
                     // Use inline-flex for each word/arrow pair to keep them together
-                    <div key={`hist-${index}`} className="inline-flex items-baseline"> 
+                    <div key={`hist-${index}`} className="inline-flex items-baseline">
                         <span className="px-2 py-1 bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 rounded font-medium">
                             {histEntry.wordsFormedByMove?.[0]?.toUpperCase() || '???'}
                             {histEntry.wordsFormedByMove && histEntry.wordsFormedByMove.length > 1 ? '...' : ''}
                         </span>
                         {/* Render arrow only if it's not the last actual history item */}
-                        {index < displayHistory.length -1 && // Corrected condition: show arrow between history items
+                        {index < displayHistory.length - 1 && // Corrected condition: show arrow between history items
                             <span className="text-gray-500 dark:text-gray-400 font-bold mx-1">→</span>
                         }
                     </div>
@@ -1036,7 +972,7 @@ function App() {
             if (combinedSummaryData.hard) {
                 hardDataForPanel = {
                     ...combinedSummaryData.hard,
-                    playerWords: new Set(combinedSummaryData.hard.playerWords),
+                    playerWords: new Set( combinedSummaryData.hard.playerWords),
                     levelCompleted: combinedSummaryData.hard.score === combinedSummaryData.hard.maxScore,
                 };
             }
@@ -1079,14 +1015,14 @@ function App() {
                 if (difficulty !== 'hard' && parsedProgress.hard?.summary) {
                     hardDataForPanel = {
                         ...parsedProgress.hard.summary,
-                        playerWords: new Set(parsedProgress.hard.playerWords),
+                        playerWords: new Set(parsedProgress.hard.summary.playerWords),
                         levelCompleted: parsedProgress.hard.summary.score === parsedProgress.hard.maxScore,
                     };
                 }
-                 if (difficulty !== 'impossible' && parsedProgress.impossible?.summary) { // Load impossible if not current
+                if (difficulty !== 'impossible' && parsedProgress.impossible?.summary) { // Load impossible if not current
                     impossibleDataForPanel = {
                         ...parsedProgress.impossible.summary,
-                        playerWords: new Set(parsedProgress.impossible.summary.playerWords),
+                        playerWords: new Set(parsedProgress.impossible.playerWords),
                         levelCompleted: parsedProgress.impossible.summary.score === parsedProgress.impossible.maxScore,
                     };
                 }
@@ -1111,10 +1047,10 @@ function App() {
                 <a href="/">Word Chain 🔗</a>
             </h1>
             <h2 className="text-2xl mb-1 text-gray-700 dark:text-gray-300">
-                {currentDate ? getFriendlyDate(currentDate) : 'Loading date...'} 
+                {currentDate ? getFriendlyDate(currentDate) : 'Loading date...'}
                 <span className="capitalize text-xl"> ({difficulty}) </span>
                 {/* Checkmark if ALL levels completed */}
-                {dailyProgress.normal && dailyProgress.hard && dailyProgress.impossible && <i className="fas fa-check text-green-600 ml-2" title="All levels completed!"></i>} 
+                {dailyProgress.normal && dailyProgress.hard && dailyProgress.impossible && <i className="fas fa-check text-green-600 ml-2" title="All levels completed!"></i>}
             </h2>
 
             {/* How to Play Instructions */}
@@ -1123,7 +1059,7 @@ function App() {
                     <p><span className="font-semibold mb-1">How to Play:</span> Click two adjacent letters to swap their positions. Every move <i>must</i> make a new {wordLength}-letter word. Find the longest move sequence to win! Tap the light bulb button <i className="fas fa-lightbulb"></i> to get a hint about the next move.</p>}
                 {difficulty === 'hard' &&
                     <p><span className="font-semibold mb-1">How to Play:</span> Prepare for a greater challenge! Hard Mode expands the puzzle to a larger grid. The core rule remains the same: every move must create a new <strong>{wordLength}-letter</strong> word. However, on this bigger grid, you can now form words both <i>horizontally and vertically</i>, significantly increasing the possibilities and complexity. Find the optimal sequence of moves to conquer this enhanced challenge!</p>}
-                 {difficulty === 'impossible' &&
+                {difficulty === 'impossible' &&
                     <p><span className="font-semibold mb-1">How to Play: Impossible Mode</span> - The ultimate test! Face a sprawling grid with <strong>no hints</strong> to guide you. The optimal path is likely a labyrinthine filled with wrong turns. Good luck, you'll need it! Every move <i>must</i> make a new <i>{wordLength}-letter</i> word.</p>}
             </div>
 
@@ -1137,59 +1073,59 @@ function App() {
 
             {/* Combined Daily Status & Navigation Section */}
             {Object.values(dailyProgress).some(value => value === true) &&
-            <div className="text-center max-w-2xl w-full my-4 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700 shadow-sm">
-                <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">Today's Status</h3>
-                {/* Status Display */}
-                <div className="flex flex-col sm:flex-row justify-around items-stretch gap-2 mb-4">
-                     {difficulties.map(diffLevel => {
-                        const isCompleted = dailyProgress[diffLevel];
-                        const isCurrentDifficulty = difficulty === diffLevel;
-                        // Determine if this difficulty level can be played
-                        const canPlay = 
-                            diffLevel === 'normal' || 
-                            (diffLevel === 'hard' && dailyProgress.normal) || 
-                            (diffLevel === 'impossible' && dailyProgress.hard);
-                        
-                        const isDisabled = isCurrentDifficulty || !canPlay || loading || showEndGamePanelOverride;
-                        const isClickable = !isDisabled; // Clickable if not disabled
+                <div className="text-center max-w-2xl w-full my-4 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700 shadow-sm">
+                    <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">Today's Status</h3>
+                    {/* Status Display */}
+                    <div className="flex flex-col sm:flex-row justify-around items-stretch gap-2 mb-4">
+                        {difficulties.map(diffLevel => {
+                            const isCompleted = dailyProgress[diffLevel];
+                            const isCurrentDifficulty = difficulty === diffLevel;
+                            // Determine if this difficulty level can be played
+                            const canPlay =
+                                diffLevel === 'normal' ||
+                                (diffLevel === 'hard' && dailyProgress.normal) ||
+                                (diffLevel === 'impossible' && dailyProgress.hard);
 
-                        return (
-                            <div 
-                                key={diffLevel} 
-                                className={`flex-1 text-center p-2 border rounded min-w-[120px] flex flex-col justify-between 
+                            const isDisabled = isCurrentDifficulty || !canPlay || loading || showEndGamePanelOverride;
+                            const isClickable = !isDisabled; // Clickable if not disabled
+
+                            return (
+                                <div
+                                    key={diffLevel}
+                                    className={`flex-1 text-center p-2 border rounded min-w-[120px] flex flex-col justify-between 
                                             ${isCurrentDifficulty ? 'border-indigo-500 dark:border-indigo-400 bg-indigo-50 dark:bg-gray-800' : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800'}
                                             ${isClickable ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors' : 'opacity-75 cursor-not-allowed'}`}
-                                onClick={isClickable ? () => handlePlayMode(diffLevel) : undefined} 
-                                title={isClickable ? `Switch to ${diffLevel.charAt(0).toUpperCase() + diffLevel.slice(1)} Mode` : (isCurrentDifficulty ? 'Current Mode' : `Complete ${diffLevel === 'hard' ? 'Normal' : 'Hard'} Mode first`)}
-                            >
-                                <div> {/* Inner div for content alignment */}
-                                    <p className={`font-medium capitalize ${isCurrentDifficulty ? 'text-indigo-700 dark:text-indigo-300' : 'text-gray-700 dark:text-gray-300'}`}>{diffLevel}</p>
-                                    {isCompleted ? (
-                                        <p className="text-green-600 dark:text-green-400 font-bold my-1 text-sm">
-                                            Completed <i className="fas fa-check"></i>
-                                        </p>
-                                    ) : (
-                                        <p className="text-gray-500 dark:text-gray-400 my-1 italic text-sm">Not Completed</p>
+                                    onClick={isClickable ? () => handlePlayMode(diffLevel) : undefined}
+                                    title={isClickable ? `Switch to ${diffLevel.charAt(0).toUpperCase() + diffLevel.slice(1)} Mode` : (isCurrentDifficulty ? 'Current Mode' : `Complete ${diffLevel === 'hard' ? 'Normal' : 'Hard'} Mode first`)}
+                                >
+                                    <div> {/* Inner div for content alignment */}
+                                        <p className={`font-medium capitalize ${isCurrentDifficulty ? 'text-indigo-700 dark:text-indigo-300' : 'text-gray-700 dark:text-gray-300'}`}>{diffLevel}</p>
+                                        {isCompleted ? (
+                                            <p className="text-green-600 dark:text-green-400 font-bold my-1 text-sm">
+                                                Completed <i className="fas fa-check"></i>
+                                            </p>
+                                        ) : (
+                                            <p className="text-gray-500 dark:text-gray-400 my-1 italic text-sm">Not Completed</p>
+                                        )}
+                                    </div>
+                                    {!canPlay && !isCurrentDifficulty && ( // Lock icon if prerequisite not met
+                                        <div className="mt-2 self-center text-gray-400 dark:text-gray-500">
+                                            <i className="fas fa-lock"></i>
+                                        </div>
                                     )}
                                 </div>
-                                {!canPlay && !isCurrentDifficulty && ( // Lock icon if prerequisite not met
-                                     <div className="mt-2 self-center text-gray-400 dark:text-gray-500">
-                                         <i className="fas fa-lock"></i>
-                                     </div>
-                                )}
-                            </div>
-                        );
-                    })}
+                            );
+                        })}
+                    </div>
+                    <button
+                        onClick={(e) => { e.stopPropagation(); handleShowGameSummary(); }} // Stop propagation to prevent div click
+                        disabled={showEndGamePanelOverride || loading}
+                        className="cursor-pointer mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center self-center"
+                        title={'View Summary'}
+                    >
+                        <i className="fas fa-eye mr-1"></i> View Summary
+                    </button>
                 </div>
-                <button
-                    onClick={(e) => { e.stopPropagation(); handleShowGameSummary(); }} // Stop propagation to prevent div click
-                    disabled={showEndGamePanelOverride || loading}
-                    className="cursor-pointer mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center self-center"
-                    title={'View Summary'}
-                >
-                    <i className="fas fa-eye mr-1"></i> View Summary
-                </button>
-            </div>
             }
 
             <div className="h-6 mb-2 text-center">
@@ -1220,9 +1156,9 @@ function App() {
                     />
                 }
                 <div className="w-full flex items-center mt-2">
-                    <ProgressBar 
-                        currentScore={currentDepth} 
-                        maxScore={liveMaxDepthAttainable} 
+                    <ProgressBar
+                        currentScore={currentDepth}
+                        maxScore={liveMaxDepthAttainable}
                     />
                     <div className="flex space-x-1 ml-2">
                         <button onClick={handleBack} disabled={history.length === 0 || animationState.animating || (isGameOver && !hasAcknowledgedGameOver) || showEndGamePanelOverride || loading} className={`cursor-pointer p-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md shadow hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed`} title="Back (Undo last move)">

@@ -1,22 +1,22 @@
 {
   "initialGrid": [
     [
-      "n",
-      "d",
-      "o",
-      "e"
+      "e",
+      "w",
+      "l",
+      "t"
     ],
     [
       "s",
-      "e",
-      "o",
-      "n"
+      "i",
+      "y",
+      "d"
     ],
     [
-      "u",
-      "o",
-      "r",
-      "n"
+      "p",
+      "e",
+      "m",
+      "a"
     ]
   ],
   "wordLength": 4,
@@ -31,30 +31,30 @@
           0
         ],
         "to": [
-          1,
-          0
+          0,
+          1
         ]
       },
       "wordsFormed": [
-        "neon"
+        "welt"
       ],
-      "maxDepthReached": 3,
+      "maxDepthReached": 6,
       "nextMoves": [
         {
           "move": {
             "from": [
-              1,
+              0,
               1
             ],
             "to": [
-              2,
+              1,
               1
             ]
           },
           "wordsFormed": [
-            "noon"
+            "wilt"
           ],
-          "maxDepthReached": 2,
+          "maxDepthReached": 5,
           "nextMoves": [
             {
               "move": {
@@ -68,9 +68,9 @@
                 ]
               },
               "wordsFormed": [
-                "soon"
+                "silt"
               ],
-              "maxDepthReached": 1,
+              "maxDepthReached": 2,
               "nextMoves": [
                 {
                   "move": {
@@ -84,61 +84,77 @@
                     ]
                   },
                   "wordsFormed": [
-                    "node"
+                    "slit"
                   ],
-                  "maxDepthReached": 0
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          3
+                        ],
+                        "to": [
+                          1,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "slid"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      2
+                    ],
+                    "to": [
+                      1,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "weld"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          1
+                        ],
+                        "to": [
+                          1,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "wild"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
                 }
               ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "move": {
-        "from": [
-          0,
-          1
-        ],
-        "to": [
-          0,
-          2
-        ]
-      },
-      "wordsFormed": [
-        "node"
-      ],
-      "maxDepthReached": 6,
-      "nextMoves": [
-        {
-          "move": {
-            "from": [
-              0,
-              0
-            ],
-            "to": [
-              1,
-              0
-            ]
-          },
-          "wordsFormed": [
-            "neon"
-          ],
-          "maxDepthReached": 5,
-          "nextMoves": [
+            },
             {
               "move": {
                 "from": [
                   0,
-                  1
+                  3
                 ],
                 "to": [
                   1,
-                  1
+                  3
                 ]
               },
               "wordsFormed": [
-                "noon"
+                "wild"
               ],
               "maxDepthReached": 4,
               "nextMoves": [
@@ -146,15 +162,15 @@
                   "move": {
                     "from": [
                       0,
-                      0
+                      1
                     ],
                     "to": [
                       1,
-                      0
+                      1
                     ]
                   },
                   "wordsFormed": [
-                    "soon"
+                    "weld"
                   ],
                   "maxDepthReached": 3,
                   "nextMoves": [
@@ -165,28 +181,28 @@
                           2
                         ],
                         "to": [
-                          0,
-                          3
+                          1,
+                          2
                         ]
                       },
                       "wordsFormed": [
-                        "need"
+                        "silt"
                       ],
                       "maxDepthReached": 2,
                       "nextMoves": [
                         {
                           "move": {
                             "from": [
-                              0,
-                              0
+                              1,
+                              1
                             ],
                             "to": [
                               1,
-                              0
+                              2
                             ]
                           },
                           "wordsFormed": [
-                            "seed"
+                            "slit"
                           ],
                           "maxDepthReached": 1,
                           "nextMoves": [
@@ -202,7 +218,7 @@
                                 ]
                               },
                               "wordsFormed": [
-                                "seen"
+                                "slid"
                               ],
                               "maxDepthReached": 0
                             }
@@ -211,74 +227,6 @@
                       ]
                     }
                   ]
-                },
-                {
-                  "move": {
-                    "from": [
-                      0,
-                      2
-                    ],
-                    "to": [
-                      0,
-                      3
-                    ]
-                  },
-                  "wordsFormed": [
-                    "seed"
-                  ],
-                  "maxDepthReached": 1,
-                  "nextMoves": [
-                    {
-                      "move": {
-                        "from": [
-                          0,
-                          3
-                        ],
-                        "to": [
-                          1,
-                          3
-                        ]
-                      },
-                      "wordsFormed": [
-                        "seen"
-                      ],
-                      "maxDepthReached": 0
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "move": {
-                "from": [
-                  1,
-                  1
-                ],
-                "to": [
-                  2,
-                  1
-                ]
-              },
-              "wordsFormed": [
-                "noon"
-              ],
-              "maxDepthReached": 1,
-              "nextMoves": [
-                {
-                  "move": {
-                    "from": [
-                      0,
-                      0
-                    ],
-                    "to": [
-                      1,
-                      0
-                    ]
-                  },
-                  "wordsFormed": [
-                    "soon"
-                  ],
-                  "maxDepthReached": 0
                 }
               ]
             }
@@ -288,15 +236,15 @@
           "move": {
             "from": [
               0,
-              1
+              3
             ],
             "to": [
               1,
-              1
+              3
             ]
           },
           "wordsFormed": [
-            "soon"
+            "weld"
           ],
           "maxDepthReached": 3,
           "nextMoves": [
@@ -307,28 +255,28 @@
                   2
                 ],
                 "to": [
-                  0,
-                  3
+                  1,
+                  2
                 ]
               },
               "wordsFormed": [
-                "need"
+                "silt"
               ],
               "maxDepthReached": 2,
               "nextMoves": [
                 {
                   "move": {
                     "from": [
-                      0,
-                      0
+                      1,
+                      1
                     ],
                     "to": [
                       1,
-                      0
+                      2
                     ]
                   },
                   "wordsFormed": [
-                    "seed"
+                    "slit"
                   ],
                   "maxDepthReached": 1,
                   "nextMoves": [
@@ -344,7 +292,7 @@
                         ]
                       },
                       "wordsFormed": [
-                        "seen"
+                        "slid"
                       ],
                       "maxDepthReached": 0
                     }
@@ -353,56 +301,6 @@
               ]
             }
           ]
-        },
-        {
-          "move": {
-            "from": [
-              1,
-              1
-            ],
-            "to": [
-              2,
-              1
-            ]
-          },
-          "wordsFormed": [
-            "soon"
-          ],
-          "maxDepthReached": 0
-        }
-      ]
-    },
-    {
-      "move": {
-        "from": [
-          1,
-          1
-        ],
-        "to": [
-          2,
-          1
-        ]
-      },
-      "wordsFormed": [
-        "soon"
-      ],
-      "maxDepthReached": 1,
-      "nextMoves": [
-        {
-          "move": {
-            "from": [
-              0,
-              1
-            ],
-            "to": [
-              0,
-              2
-            ]
-          },
-          "wordsFormed": [
-            "node"
-          ],
-          "maxDepthReached": 0
         }
       ]
     }

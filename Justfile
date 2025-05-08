@@ -13,7 +13,7 @@ gen-normal $date='':
     --max-turns=10 \
     --max-unique-words=12 \
     --num-grids=100 \
-    --output=output/normal \
+    --output=frontend/public/levels/normal \
     --start-date=${date}
 
 gen-hard $date='':
@@ -25,7 +25,7 @@ gen-hard $date='':
     --max-turns=9 \
     --max-unique-words=10 \
     --num-grids=100 \
-    --output=output/hard \
+    --output=frontend/public/levels/hard \
     --start-date=${date}
 
 gen-impossible $date='':
@@ -35,10 +35,10 @@ gen-impossible $date='':
     --word-length=5 \
     --min-turns=10 \
     --max-turns=20 \
-    --max-unique-words=30 \
+    --max-unique-words=20 \
     --num-grids=100 \
-    --output=output/impossible \
+    --output=frontend/public/levels/impossible \
     --start-date=${date}
 
 expand-dictionary:
-    unmunch cmd/generate-map/data/en.dic cmd/generate-map/data/en.aff > cmd/generate-map/data/en.txt
+  unmunch cmd/generate-map/data/en.dic cmd/generate-map/data/en.aff > cmd/generate-map/data/en.txt
