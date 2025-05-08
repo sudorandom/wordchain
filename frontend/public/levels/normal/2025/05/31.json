@@ -1,76 +1,76 @@
 {
   "initialGrid": [
     [
-      "l",
-      "t",
-      "t",
-      "w"
-    ],
-    [
-      "m",
-      "o",
-      "w",
-      "l"
-    ],
-    [
-      "t",
-      "i",
+      "n",
+      "n",
       "e",
-      "n"
+      "o"
+    ],
+    [
+      "s",
+      "a",
+      "h",
+      "m"
+    ],
+    [
+      "t",
+      "e",
+      "i",
+      "i"
     ]
   ],
   "wordLength": 4,
   "requiredMinTurns": 7,
   "requiredMaxTurns": 10,
-  "maxDepthReached": 7,
+  "maxDepthReached": 8,
   "explorationTree": [
     {
       "move": {
         "from": [
           1,
-          0
+          1
         ],
         "to": [
-          2,
-          0
+          1,
+          2
         ]
       },
       "wordsFormed": [
-        "mien"
+        "sham"
       ],
-      "maxDepthReached": 6,
+      "maxDepthReached": 7,
       "nextMoves": [
         {
           "move": {
             "from": [
               1,
-              3
+              1
             ],
             "to": [
               2,
-              3
+              1
             ]
           },
           "wordsFormed": [
-            "town"
+            "seam"
           ],
-          "maxDepthReached": 5,
+          "maxDepthReached": 6,
           "nextMoves": [
             {
               "move": {
                 "from": [
-                  2,
+                  0,
                   2
                 ],
                 "to": [
-                  2,
-                  3
+                  1,
+                  2
                 ]
               },
               "wordsFormed": [
-                "mile"
+                "seem"
               ],
-              "maxDepthReached": 4,
+              "maxDepthReached": 5,
               "nextMoves": [
                 {
                   "move": {
@@ -84,9 +84,147 @@
                     ]
                   },
                   "wordsFormed": [
-                    "tile"
+                    "teem"
                   ],
-                  "maxDepthReached": 3,
+                  "maxDepthReached": 4,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          2
+                        ],
+                        "to": [
+                          1,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "team"
+                      ],
+                      "maxDepthReached": 3,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              3
+                            ],
+                            "to": [
+                              2,
+                              3
+                            ]
+                          },
+                          "wordsFormed": [
+                            "shim"
+                          ],
+                          "maxDepthReached": 2,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  1,
+                                  1
+                                ],
+                                "to": [
+                                  2,
+                                  1
+                                ]
+                              },
+                              "wordsFormed": [
+                                "thai"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      2,
+                                      2
+                                    ],
+                                    "to": [
+                                      2,
+                                      3
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "semi"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          1
+                        ],
+                        "to": [
+                          2,
+                          1
+                        ]
+                      },
+                      "wordsFormed": [
+                        "them"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          3
+                        ],
+                        "to": [
+                          2,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "shim"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  1,
+                  0
+                ],
+                "to": [
+                  2,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "team"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      3
+                    ],
+                    "to": [
+                      2,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "shim"
+                  ],
+                  "maxDepthReached": 2,
                   "nextMoves": [
                     {
                       "move": {
@@ -100,43 +238,111 @@
                         ]
                       },
                       "wordsFormed": [
-                        "tole"
+                        "thai"
                       ],
-                      "maxDepthReached": 2,
+                      "maxDepthReached": 1,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              2,
+                              2
+                            ],
+                            "to": [
+                              2,
+                              3
+                            ]
+                          },
+                          "wordsFormed": [
+                            "semi"
+                          ],
+                          "maxDepthReached": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  1,
+                  2
+                ],
+                "to": [
+                  2,
+                  2
+                ]
+              },
+              "wordsFormed": [
+                "thai"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      2
+                    ],
+                    "to": [
+                      1,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "seem"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          0
+                        ],
+                        "to": [
+                          2,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "teem"
+                      ],
+                      "maxDepthReached": 1,
                       "nextMoves": [
                         {
                           "move": {
                             "from": [
                               1,
-                              0
+                              1
                             ],
                             "to": [
                               2,
-                              0
+                              1
                             ]
                           },
                           "wordsFormed": [
-                            "mole"
+                            "them"
                           ],
-                          "maxDepthReached": 1,
-                          "nextMoves": [
-                            {
-                              "move": {
-                                "from": [
-                                  1,
-                                  1
-                                ],
-                                "to": [
-                                  1,
-                                  2
-                                ]
-                              },
-                              "wordsFormed": [
-                                "twin"
-                              ],
-                              "maxDepthReached": 0
-                            }
-                          ]
+                          "maxDepthReached": 0
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              2
+                            ],
+                            "to": [
+                              2,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "team"
+                          ],
+                          "maxDepthReached": 0
                         }
                       ]
                     }
@@ -154,7 +360,7 @@
                     ]
                   },
                   "wordsFormed": [
-                    "mole"
+                    "shim"
                   ],
                   "maxDepthReached": 1,
                   "nextMoves": [
@@ -162,19 +368,35 @@
                       "move": {
                         "from": [
                           1,
-                          1
+                          3
                         ],
                         "to": [
-                          1,
-                          2
+                          2,
+                          3
                         ]
                       },
                       "wordsFormed": [
-                        "twin"
+                        "team"
                       ],
                       "maxDepthReached": 0
                     }
                   ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      2
+                    ],
+                    "to": [
+                      1,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "semi"
+                  ],
+                  "maxDepthReached": 0
                 }
               ]
             }
@@ -183,88 +405,36 @@
         {
           "move": {
             "from": [
-              2,
+              1,
               2
             ],
             "to": [
               2,
-              3
+              2
             ]
           },
           "wordsFormed": [
-            "mine"
+            "shim"
           ],
-          "maxDepthReached": 2,
+          "maxDepthReached": 1,
           "nextMoves": [
             {
               "move": {
                 "from": [
                   1,
-                  0
+                  3
                 ],
                 "to": [
                   2,
-                  0
+                  3
                 ]
               },
               "wordsFormed": [
-                "tine"
+                "team"
               ],
-              "maxDepthReached": 1,
-              "nextMoves": [
-                {
-                  "move": {
-                    "from": [
-                      1,
-                      1
-                    ],
-                    "to": [
-                      2,
-                      1
-                    ]
-                  },
-                  "wordsFormed": [
-                    "tone"
-                  ],
-                  "maxDepthReached": 0
-                }
-              ]
+              "maxDepthReached": 0
             }
           ]
-        }
-      ]
-    },
-    {
-      "move": {
-        "from": [
-          2,
-          2
-        ],
-        "to": [
-          2,
-          3
-        ]
-      },
-      "wordsFormed": [
-        "tine"
-      ],
-      "maxDepthReached": 1,
-      "nextMoves": [
-        {
-          "move": {
-            "from": [
-              1,
-              1
-            ],
-            "to": [
-              2,
-              1
-            ]
-          },
-          "wordsFormed": [
-            "tone"
-          ],
-          "maxDepthReached": 0
         }
       ]
     }

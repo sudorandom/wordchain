@@ -1,28 +1,28 @@
 {
   "initialGrid": [
     [
-      "u",
-      "e",
-      "d",
-      "o"
-    ],
-    [
-      "e",
-      "d",
-      "l",
-      "d"
-    ],
-    [
       "w",
+      "i",
       "e",
-      "t",
-      "f"
+      "r"
     ],
     [
-      "e",
-      "e",
-      "e",
-      "t"
+      "s",
+      "t",
+      "c",
+      "k"
+    ],
+    [
+      "r",
+      "r",
+      "h",
+      "n"
+    ],
+    [
+      "d",
+      "h",
+      "n",
+      "l"
     ]
   ],
   "wordLength": 4,
@@ -33,116 +33,166 @@
     {
       "move": {
         "from": [
-          2,
+          0,
+          1
+        ],
+        "to": [
+          0,
+          2
+        ]
+      },
+      "wordsFormed": [
+        "weir"
+      ],
+      "maxDepthReached": 0
+    },
+    {
+      "move": {
+        "from": [
+          0,
+          1
+        ],
+        "to": [
+          1,
+          1
+        ]
+      },
+      "wordsFormed": [
+        "sick"
+      ],
+      "maxDepthReached": 2,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              0,
+              0
+            ],
+            "to": [
+              1,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "wick"
+          ],
+          "maxDepthReached": 1,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  0
+                ],
+                "to": [
+                  2,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "rick"
+              ],
+              "maxDepthReached": 0
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              1,
+              0
+            ],
+            "to": [
+              2,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "rick"
+          ],
+          "maxDepthReached": 1,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  0,
+                  0
+                ],
+                "to": [
+                  1,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "wick"
+              ],
+              "maxDepthReached": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          0,
           2
         ],
         "to": [
-          2,
+          0,
           3
         ]
       },
       "wordsFormed": [
-        "weft"
+        "wire"
       ],
       "maxDepthReached": 5,
       "nextMoves": [
         {
           "move": {
             "from": [
-              1,
-              2
+              0,
+              0
             ],
             "to": [
-              2,
-              2
+              1,
+              0
             ]
           },
           "wordsFormed": [
-            "welt"
+            "sire"
           ],
           "maxDepthReached": 4,
           "nextMoves": [
             {
               "move": {
                 "from": [
-                  1,
-                  3
+                  0,
+                  1
                 ],
                 "to": [
-                  2,
-                  3
+                  1,
+                  1
                 ]
               },
               "wordsFormed": [
-                "weld"
+                "wick"
               ],
               "maxDepthReached": 3,
               "nextMoves": [
                 {
                   "move": {
                     "from": [
-                      1,
+                      0,
                       0
                     ],
                     "to": [
                       1,
-                      1
+                      0
                     ]
                   },
                   "wordsFormed": [
-                    "deft"
-                  ],
-                  "maxDepthReached": 2,
-                  "nextMoves": [
-                    {
-                      "move": {
-                        "from": [
-                          2,
-                          2
-                        ],
-                        "to": [
-                          3,
-                          2
-                        ]
-                      },
-                      "wordsFormed": [
-                        "weed"
-                      ],
-                      "maxDepthReached": 1,
-                      "nextMoves": [
-                        {
-                          "move": {
-                            "from": [
-                              1,
-                              0
-                            ],
-                            "to": [
-                              2,
-                              0
-                            ]
-                          },
-                          "wordsFormed": [
-                            "deed"
-                          ],
-                          "maxDepthReached": 0
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "move": {
-                    "from": [
-                      2,
-                      2
-                    ],
-                    "to": [
-                      3,
-                      2
-                    ]
-                  },
-                  "wordsFormed": [
-                    "weed"
+                    "sick"
                   ],
                   "maxDepthReached": 2,
                   "nextMoves": [
@@ -153,34 +203,136 @@
                           0
                         ],
                         "to": [
-                          1,
-                          1
+                          2,
+                          0
                         ]
                       },
                       "wordsFormed": [
-                        "deft"
+                        "rick"
                       ],
                       "maxDepthReached": 1,
                       "nextMoves": [
                         {
                           "move": {
                             "from": [
-                              1,
-                              0
+                              0,
+                              3
                             ],
                             "to": [
-                              2,
-                              0
+                              1,
+                              3
                             ]
                           },
                           "wordsFormed": [
-                            "deed"
+                            "rice"
                           ],
                           "maxDepthReached": 0
                         }
                       ]
                     }
                   ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      0
+                    ],
+                    "to": [
+                      2,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "rick"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          0
+                        ],
+                        "to": [
+                          1,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "sick"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          3
+                        ],
+                        "to": [
+                          1,
+                          3
+                        ]
+                      },
+                      "wordsFormed": [
+                        "rice"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              0,
+              1
+            ],
+            "to": [
+              1,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "sick"
+          ],
+          "maxDepthReached": 2,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  0
+                ],
+                "to": [
+                  2,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "rick"
+              ],
+              "maxDepthReached": 1,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      3
+                    ],
+                    "to": [
+                      1,
+                      3
+                    ]
+                  },
+                  "wordsFormed": [
+                    "rice"
+                  ],
+                  "maxDepthReached": 0
                 }
               ]
             }
