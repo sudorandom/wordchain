@@ -1,11 +1,11 @@
 import React from 'react';
 import { HistoryEntry } from '../utils/gameHelpers';
 
-interface WordChainDisplayProps {
+interface WordSequenceDisplayProps {
     history: HistoryEntry[];
     showEndGamePanelOverride: boolean;
 }
-export const WordChainDisplay: React.FC<WordChainDisplayProps> = ({ history, showEndGamePanelOverride }) => {
+export const WordSequenceDisplay: React.FC<WordSequenceDisplayProps> = ({ history, showEndGamePanelOverride }) => {
     const displayHistory = (!showEndGamePanelOverride && history) ? history : [];
     if (displayHistory.length === 0) return <div className="min-h-[2rem] mt-4"></div>;
     return (

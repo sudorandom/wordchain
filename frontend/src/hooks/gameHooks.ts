@@ -1,4 +1,4 @@
-// src/hooks/useWordChainGame.ts
+// src/hooks/gameHooks.ts
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import {
     getFriendlyDate,
@@ -12,7 +12,6 @@ import {
     HistoryEntry,
     ExplorationNodeData,
     DifficultyLevel,
-    GameMove,
 } from '../utils/gameHelpers';
 import { WordChainGameLogic, CoreGameState, SavedProgressState } from '../core/gameLogic';
 
@@ -41,7 +40,7 @@ export type DailyProgressStorage = Partial<Record<DifficultyLevel, {
     summary?: LevelCompletionSummary;
 }>>;
 
-export const useWordChainGame = () => {
+export const gameHooks = () => {
     // --- UI and App State ---
     const [darkMode, setDarkMode] = useState(() => {
         if (typeof window !== 'undefined') {

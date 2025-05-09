@@ -10,24 +10,40 @@ import {
     // CellCoordinates, GameData, HistoryEntry, ExplorationNodeData are used by the hook
     DifficultyLevel // Keep if used directly by App, otherwise hook exports it
 } from './utils/gameHelpers';
-import { WordChainDisplay } from './components/WordChainDisplay';
+import { WordSequenceDisplay } from './components/WordSequenceDisplay';
 import { StatusMessages } from './components/StatusMessages';
 import { DailyProgressDisplay } from './components/DailyProgressDisplay';
 import {
-    useWordChainGame,
-} from './hooks/useWordChainGame'; // Adjusted import path
+    gameHooks,
+} from './hooks/gameHooks'; // Adjusted import path
 
 // GameHeader, Instructions components remain the same, so they are not repeated here for brevity.
 // Assume they are defined as in the original App.tsx or imported from their own files.
+
+const WordSeqIcon: React.FC<{ className?: string }> = ({ className = "w-5 h-5" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24" // Standard viewBox for consistency
+    strokeWidth={2} // Use camelCase for JSX attributes
+    stroke="currentColor" // Inherits text color from parent CSS unless overridden by className
+    className={`${className} inline-block align-middle ml-1`} // Base styling
+  >
+    {/* SVG path data for the 2x2 grid with whitespace */}
+    {/* Square size: 8x8, Gap: 2 units, Padding: 3 units on each side for a 24x24 viewBox */}
+    <rect x="3" y="3" width="8" height="8" />
+    <rect x="13" y="3" width="8" height="8" />
+    <rect x="3" y="13" width="8" height="8" />
+    <rect x="13" y="13" width="8" height="8" />
+  </svg>
+);
 
 interface GameHeaderProps {
     currentDate: Date | undefined;
     difficulty: DifficultyLevel;
     dailyProgress: Record<DifficultyLevel, boolean>;
-    darkMode: boolean;
-    onToggleDarkMode: () => void;
 }
-const GameHeader: React.FC<GameHeaderProps> = ({ currentDate, difficulty, dailyProgress, darkMode, onToggleDarkMode }) => (
+const GameHeader: React.FC<GameHeaderProps> = ({ currentDate, difficulty, dailyProgress }) => (
     <>
         {/* <button
             onClick={onToggleDarkMode}
@@ -36,8 +52,8 @@ const GameHeader: React.FC<GameHeaderProps> = ({ currentDate, difficulty, dailyP
         >
             {darkMode ? <i className="fas fa-sun"></i> : <i className="fas fa-moon"></i>}
         </button> */}
-        <h1 className="glitch-border-hover text-4xl sm:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-flow font-bungee">
-            <a href="/">Word Chain 🔗</a>
+        <h1 className="text-4xl sm:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-flow font-bungee">
+            <a href="/" className="inline-flex items-center">wordseq</a>
         </h1>
         <h2 className="text-xl sm:text-2xl mb-1 text-gray-700 dark:text-gray-300">
             {currentDate ? getFriendlyDate(currentDate) : 'Loading date...'}
@@ -54,7 +70,7 @@ interface InstructionsProps {
 const Instructions: React.FC<InstructionsProps> = ({ difficulty, wordLength }) => (
     <div className="text-center max-w-xl mb-2 text-sm text-gray-600 dark:text-gray-400 px-2">
         {difficulty === 'normal' &&
-            <p><span className="font-semibold mb-1">How to Play:</span> Swap adjacent letters. Every swap <i>must</i> make a new {wordLength}-letter word (horizontally or vertically). Find the longest sequence of swaps! Tap <i className="fas fa-lightbulb"></i> for a hint.</p>}
+            <p><span className="font-semibold mb-1">How to Play:</span> Swap adjacent letters. Every swap <i>must</i> make a new {wordLength}-letter word (horizontally or vertically). Find the longest word sequence! Tap <i className="fas fa-lightbulb"></i> for a hint.</p>}
         {difficulty === 'hard' &&
             <p><span className="font-semibold mb-1">Hard Mode:</span> A larger grid and more complex chains! Swaps must form a new <strong>{wordLength}-letter</strong> word (horizontally or vertically). Tap <i className="fas fa-lightbulb"></i> for a hint.</p>}
         {difficulty === 'impossible' &&
@@ -65,7 +81,7 @@ const Instructions: React.FC<InstructionsProps> = ({ difficulty, wordLength }) =
 
 // --- MAIN APP COMPONENT ---
 function App() {
-    const game = useWordChainGame();
+    const game = gameHooks();
 
     // --- LOADING / ERROR STATES ---
     // Display loading message if game data is not yet available but loading is in progress
@@ -141,8 +157,6 @@ function App() {
                 currentDate={game.currentDate}
                 difficulty={game.difficulty}
                 dailyProgress={game.dailyProgress}
-                darkMode={game.darkMode}
-                onToggleDarkMode={() => game.setDarkMode(!game.darkMode)}
             />
 
             {/* Instructions: Provides game instructions based on difficulty */}
@@ -208,8 +222,7 @@ function App() {
                 />
             )}
 
-            {/* Word Chain Display: Shows the sequence of words formed by the player */}
-            <WordChainDisplay history={game.history} showEndGamePanelOverride={game.showEndGamePanelOverride} />
+            <WordSequenceDisplay history={game.history} showEndGamePanelOverride={game.showEndGamePanelOverride} />
 
             {/* Debug View: Optionally shown if debug mode is active */}
             {game.isDebugMode && game.coreGameData && game.coreGameData.explorationTree && <DebugView treeData={game.coreGameData.explorationTree} optimalPathWords={game.liveOptimalPathWords} />}

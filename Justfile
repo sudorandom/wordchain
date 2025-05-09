@@ -42,3 +42,8 @@ gen-impossible $date='':
 
 expand-dictionary:
   unmunch cmd/generate-map/data/en.dic cmd/generate-map/data/en.aff > cmd/generate-map/data/en.txt
+
+gen-logo:
+  magick -background none frontend/public/images/wordseq.svg -resize 2400x1260 frontend/public/images/wordseq-social-preview.png
+  magick -background none frontend/public/images/wordseq.svg -resize 1600x836 frontend/public/images/wordseq-twitter-card.png
+  magick -background none frontend/public/images/wordseq.svg -resize 180x180 frontend/public/apple-touch-icon.png

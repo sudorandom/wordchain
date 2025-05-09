@@ -49,7 +49,7 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
         const today = new Date().toISOString().slice(0, 10); // IANA-MM-DD
         const shareLines: string[] = [];
 
-        shareLines.push(`Word Chain ${today}`);
+        shareLines.push(`wordseq ${today}`);
 
         const normalEmojiLine = generateEmojiLine(normalModeData);
         if (normalEmojiLine) {
