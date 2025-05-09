@@ -1,6 +1,45 @@
 /* App.css or your main CSS file */
 @import "tailwindcss";
 
+body {
+  background-color: #111827; /* bg-gray-900 for demo */
+}
+
+@keyframes text-glitch-subtle {
+  0%, 92%, 100% { /* Text is normal for most of the duration */
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  93% { /* Quick, small horizontal jump */
+    transform: translate(2px, 0);
+    opacity: 0.95;
+  }
+  94% {
+    transform: translate(-2px, 0);
+    opacity: 0.9;
+  }
+  95% { /* Quick, small vertical jump */
+    transform: translate(0, 1px);
+    opacity: 1;
+  }
+  96% {
+    transform: translate(0, -1px);
+    opacity: 0.95;
+  }
+  97% { /* Tiny flicker */
+    opacity: 0.85;
+  }
+  98% { /* Back to normal before the long pause */
+    transform: translate(0,0);
+    opacity: 1;
+  }
+}
+
+.animate-text-glitch-subtle {
+  display: inline-block; /* Ensures transform works correctly on inline text elements */
+  animation: text-glitch-subtle 2.5s infinite linear; /* Adjust duration (2.5s) for frequency */
+}
+
 /* Animation for highlighting found words */
 @keyframes pulse-fade-out-short {
   0% { opacity: 0.6; transform: scale(1); }

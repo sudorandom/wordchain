@@ -29,14 +29,14 @@ interface GameHeaderProps {
 }
 const GameHeader: React.FC<GameHeaderProps> = ({ currentDate, difficulty, dailyProgress, darkMode, onToggleDarkMode }) => (
     <>
-        <button
+        {/* <button
             onClick={onToggleDarkMode}
             className="cursor-pointer absolute top-4 right-4 p-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-200"
             title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
         >
             {darkMode ? <i className="fas fa-sun"></i> : <i className="fas fa-moon"></i>}
-        </button>
-        <h1 className="text-4xl sm:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-flow font-bungee">
+        </button> */}
+        <h1 className="glitch-border-hover text-4xl sm:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-flow font-bungee">
             <a href="/">Word Chain 🔗</a>
         </h1>
         <h2 className="text-xl sm:text-2xl mb-1 text-gray-700 dark:text-gray-300">
@@ -58,7 +58,7 @@ const Instructions: React.FC<InstructionsProps> = ({ difficulty, wordLength }) =
         {difficulty === 'hard' &&
             <p><span className="font-semibold mb-1">Hard Mode:</span> A larger grid and more complex chains! Swaps must form a new <strong>{wordLength}-letter</strong> word (horizontally or vertically). Tap <i className="fas fa-lightbulb"></i> for a hint.</p>}
         {difficulty === 'impossible' &&
-            <p><span className="font-semibold mb-1">Impossible Mode:</span> The ultimate test on a sprawling grid! Larger words. More paths. <strong class="whitespace-nowrap">No hints.</strong> Swaps must form a new <i>{wordLength}-letter</i> word. Good luck!</p>}
+            <p><span className="font-semibold mb-1">Impossible Mode:</span> The ultimate test on a sprawling grid! Larger words. More paths. <strong className="whitespace-nowrap">No hints.</strong> Swaps must form a new <i>{wordLength}-letter</i> word. Good luck! <span className="animate-text-glitch-subtle">You will need it.</span></p>}
     </div>
 );
 
