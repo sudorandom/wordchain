@@ -1,22 +1,22 @@
 {
   "initialGrid": [
     [
-      "o",
-      "e",
-      "w",
+      "n",
+      "t",
+      "d",
+      "m"
+    ],
+    [
+      "l",
+      "y",
+      "v",
       "e"
     ],
     [
-      "m",
-      "t",
-      "u",
-      "t"
-    ],
-    [
       "r",
-      "l",
-      "a",
-      "r"
+      "o",
+      "p",
+      "t"
     ]
   ],
   "wordLength": 4,
@@ -31,12 +31,12 @@
           1
         ],
         "to": [
-          1,
-          2
+          2,
+          1
         ]
       },
       "wordsFormed": [
-        "mutt"
+        "love"
       ],
       "maxDepthReached": 7,
       "nextMoves": [
@@ -44,15 +44,15 @@
           "move": {
             "from": [
               0,
-              3
+              2
             ],
             "to": [
               1,
-              3
+              2
             ]
           },
           "wordsFormed": [
-            "mute"
+            "lode"
           ],
           "maxDepthReached": 6,
           "nextMoves": [
@@ -60,15 +60,15 @@
               "move": {
                 "from": [
                   0,
-                  1
+                  0
                 ],
                 "to": [
                   1,
-                  1
+                  0
                 ]
               },
               "wordsFormed": [
-                "mete"
+                "node"
               ],
               "maxDepthReached": 5,
               "nextMoves": [
@@ -76,47 +76,31 @@
                   "move": {
                     "from": [
                       1,
-                      1
+                      0
                     ],
                     "to": [
                       2,
-                      1
+                      0
                     ]
                   },
                   "wordsFormed": [
-                    "rear"
-                  ],
-                  "maxDepthReached": 0
-                },
-                {
-                  "move": {
-                    "from": [
-                      1,
-                      2
-                    ],
-                    "to": [
-                      1,
-                      3
-                    ]
-                  },
-                  "wordsFormed": [
-                    "meet"
+                    "rode"
                   ],
                   "maxDepthReached": 4,
                   "nextMoves": [
                     {
                       "move": {
                         "from": [
-                          1,
-                          1
+                          0,
+                          2
                         ],
                         "to": [
-                          2,
-                          1
+                          1,
+                          2
                         ]
                       },
                       "wordsFormed": [
-                        "rear"
+                        "rove"
                       ],
                       "maxDepthReached": 3,
                       "nextMoves": [
@@ -124,31 +108,31 @@
                           "move": {
                             "from": [
                               1,
-                              1
+                              2
                             ],
                             "to": [
-                              1,
+                              2,
                               2
                             ]
                           },
                           "wordsFormed": [
-                            "melt"
+                            "rope"
                           ],
                           "maxDepthReached": 2,
                           "nextMoves": [
                             {
                               "move": {
                                 "from": [
-                                  1,
-                                  2
+                                  0,
+                                  0
                                 ],
                                 "to": [
-                                  2,
-                                  2
+                                  1,
+                                  0
                                 ]
                               },
                               "wordsFormed": [
-                                "meat"
+                                "lope"
                               ],
                               "maxDepthReached": 1,
                               "nextMoves": [
@@ -156,15 +140,49 @@
                                   "move": {
                                     "from": [
                                       1,
-                                      2
+                                      0
                                     ],
                                     "to": [
-                                      1,
-                                      3
+                                      2,
+                                      0
                                     ]
                                   },
                                   "wordsFormed": [
-                                    "meta"
+                                    "nope"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
+                            },
+                            {
+                              "move": {
+                                "from": [
+                                  1,
+                                  0
+                                ],
+                                "to": [
+                                  2,
+                                  0
+                                ]
+                              },
+                              "wordsFormed": [
+                                "nope"
+                              ],
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      0,
+                                      0
+                                    ],
+                                    "to": [
+                                      1,
+                                      0
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "lope"
                                   ],
                                   "maxDepthReached": 0
                                 }
@@ -186,33 +204,507 @@
                         ]
                       },
                       "wordsFormed": [
-                        "meat"
+                        "rope"
+                      ],
+                      "maxDepthReached": 2,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              0
+                            ],
+                            "to": [
+                              1,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "lope"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  1,
+                                  0
+                                ],
+                                "to": [
+                                  2,
+                                  0
+                                ]
+                              },
+                              "wordsFormed": [
+                                "nope"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              0,
+                              2
+                            ],
+                            "to": [
+                              1,
+                              2
+                            ]
+                          },
+                          "wordsFormed": [
+                            "rove"
+                          ],
+                          "maxDepthReached": 0
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              0
+                            ],
+                            "to": [
+                              2,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "nope"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  0,
+                                  0
+                                ],
+                                "to": [
+                                  1,
+                                  0
+                                ]
+                              },
+                              "wordsFormed": [
+                                "lope"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      2
+                    ],
+                    "to": [
+                      2,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "nope"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          0
+                        ],
+                        "to": [
+                          1,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "lope"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  1,
+                  0
+                ],
+                "to": [
+                  2,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "rode"
+              ],
+              "maxDepthReached": 3,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      0
+                    ],
+                    "to": [
+                      1,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "node"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          2
+                        ],
+                        "to": [
+                          2,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "nope"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      2
+                    ],
+                    "to": [
+                      1,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "rove"
+                  ],
+                  "maxDepthReached": 2,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          2
+                        ],
+                        "to": [
+                          2,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "rope"
                       ],
                       "maxDepthReached": 1,
                       "nextMoves": [
                         {
                           "move": {
                             "from": [
-                              1,
-                              2
+                              0,
+                              0
                             ],
                             "to": [
                               1,
-                              3
+                              0
                             ]
                           },
                           "wordsFormed": [
-                            "meta"
+                            "nope"
+                          ],
+                          "maxDepthReached": 0
+                        },
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              0
+                            ],
+                            "to": [
+                              2,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "lope"
                           ],
                           "maxDepthReached": 0
                         }
                       ]
                     }
                   ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      2
+                    ],
+                    "to": [
+                      2,
+                      2
+                    ]
+                  },
+                  "wordsFormed": [
+                    "rope"
+                  ],
+                  "maxDepthReached": 1,
+                  "nextMoves": [
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          0
+                        ],
+                        "to": [
+                          1,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "nope"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          0,
+                          2
+                        ],
+                        "to": [
+                          1,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "rove"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          0
+                        ],
+                        "to": [
+                          2,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "lope"
+                      ],
+                      "maxDepthReached": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "move": {
+                "from": [
+                  1,
+                  2
+                ],
+                "to": [
+                  2,
+                  2
+                ]
+              },
+              "wordsFormed": [
+                "lope"
+              ],
+              "maxDepthReached": 0
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              1,
+              0
+            ],
+            "to": [
+              2,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "rove"
+          ],
+          "maxDepthReached": 2,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  2
+                ],
+                "to": [
+                  2,
+                  2
+                ]
+              },
+              "wordsFormed": [
+                "rope"
+              ],
+              "maxDepthReached": 1,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      0,
+                      0
+                    ],
+                    "to": [
+                      1,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "nope"
+                  ],
+                  "maxDepthReached": 0
+                },
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      0
+                    ],
+                    "to": [
+                      2,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "lope"
+                  ],
+                  "maxDepthReached": 0
                 }
               ]
             }
           ]
+        },
+        {
+          "move": {
+            "from": [
+              1,
+              2
+            ],
+            "to": [
+              2,
+              2
+            ]
+          },
+          "wordsFormed": [
+            "lope"
+          ],
+          "maxDepthReached": 0
+        }
+      ]
+    },
+    {
+      "move": {
+        "from": [
+          1,
+          3
+        ],
+        "to": [
+          2,
+          3
+        ]
+      },
+      "wordsFormed": [
+        "rope"
+      ],
+      "maxDepthReached": 3,
+      "nextMoves": [
+        {
+          "move": {
+            "from": [
+              1,
+              0
+            ],
+            "to": [
+              2,
+              0
+            ]
+          },
+          "wordsFormed": [
+            "lope"
+          ],
+          "maxDepthReached": 2,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  1,
+                  2
+                ],
+                "to": [
+                  2,
+                  2
+                ]
+              },
+              "wordsFormed": [
+                "love"
+              ],
+              "maxDepthReached": 1,
+              "nextMoves": [
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      0
+                    ],
+                    "to": [
+                      2,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "rove"
+                  ],
+                  "maxDepthReached": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              1,
+              2
+            ],
+            "to": [
+              2,
+              2
+            ]
+          },
+          "wordsFormed": [
+            "rove"
+          ],
+          "maxDepthReached": 0
         }
       ]
     }

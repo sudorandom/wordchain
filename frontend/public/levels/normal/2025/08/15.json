@@ -1,142 +1,124 @@
 {
   "initialGrid": [
     [
-      "s",
+      "h",
+      "v",
       "o",
-      "o",
-      "e"
-    ],
-    [
-      "r",
-      "o",
-      "a",
-      "k"
+      "m"
     ],
     [
       "t",
-      "r",
-      "r",
-      "r"
+      "l",
+      "a",
+      "l"
+    ],
+    [
+      "i",
+      "d",
+      "l",
+      "t"
     ]
   ],
   "wordLength": 4,
   "requiredMinTurns": 7,
   "requiredMaxTurns": 10,
-  "maxDepthReached": 7,
+  "maxDepthReached": 8,
   "explorationTree": [
     {
       "move": {
         "from": [
-          0,
-          0
+          1,
+          1
         ],
         "to": [
           1,
-          0
+          2
         ]
       },
       "wordsFormed": [
-        "soak"
+        "tall"
       ],
-      "maxDepthReached": 6,
+      "maxDepthReached": 7,
       "nextMoves": [
         {
           "move": {
             "from": [
               0,
-              3
+              0
             ],
             "to": [
               1,
-              3
+              0
             ]
           },
           "wordsFormed": [
-            "rook"
+            "hall"
           ],
-          "maxDepthReached": 5,
+          "maxDepthReached": 6,
           "nextMoves": [
             {
               "move": {
                 "from": [
                   1,
-                  2
+                  3
                 ],
                 "to": [
                   2,
-                  2
+                  3
                 ]
               },
               "wordsFormed": [
-                "sore"
+                "halt"
               ],
-              "maxDepthReached": 4,
+              "maxDepthReached": 5,
               "nextMoves": [
                 {
                   "move": {
                     "from": [
-                      1,
+                      2,
                       0
                     ],
                     "to": [
                       2,
-                      0
+                      1
                     ]
                   },
                   "wordsFormed": [
-                    "tore"
+                    "dill"
                   ],
-                  "maxDepthReached": 3,
+                  "maxDepthReached": 4,
                   "nextMoves": [
                     {
                       "move": {
                         "from": [
-                          0,
+                          1,
                           0
                         ],
                         "to": [
-                          1,
+                          2,
                           0
                         ]
                       },
                       "wordsFormed": [
-                        "took"
+                        "hill"
                       ],
-                      "maxDepthReached": 2,
+                      "maxDepthReached": 1,
                       "nextMoves": [
                         {
                           "move": {
                             "from": [
                               1,
-                              1
+                              3
                             ],
                             "to": [
                               2,
-                              1
+                              3
                             ]
                           },
                           "wordsFormed": [
-                            "soar"
+                            "hilt"
                           ],
-                          "maxDepthReached": 1,
-                          "nextMoves": [
-                            {
-                              "move": {
-                                "from": [
-                                  1,
-                                  0
-                                ],
-                                "to": [
-                                  2,
-                                  0
-                                ]
-                              },
-                              "wordsFormed": [
-                                "roar"
-                              ],
-                              "maxDepthReached": 0
-                            }
-                          ]
+                          "maxDepthReached": 0
                         }
                       ]
                     },
@@ -152,9 +134,9 @@
                         ]
                       },
                       "wordsFormed": [
-                        "soar"
+                        "hilt"
                       ],
-                      "maxDepthReached": 2,
+                      "maxDepthReached": 3,
                       "nextMoves": [
                         {
                           "move": {
@@ -168,165 +150,61 @@
                             ]
                           },
                           "wordsFormed": [
-                            "took"
+                            "tilt"
                           ],
-                          "maxDepthReached": 1,
+                          "maxDepthReached": 2,
                           "nextMoves": [
                             {
                               "move": {
                                 "from": [
                                   1,
-                                  0
+                                  3
                                 ],
                                 "to": [
                                   2,
-                                  0
+                                  3
                                 ]
                               },
                               "wordsFormed": [
-                                "roar"
+                                "till"
                               ],
-                              "maxDepthReached": 0
+                              "maxDepthReached": 1,
+                              "nextMoves": [
+                                {
+                                  "move": {
+                                    "from": [
+                                      0,
+                                      0
+                                    ],
+                                    "to": [
+                                      1,
+                                      0
+                                    ]
+                                  },
+                                  "wordsFormed": [
+                                    "hill"
+                                  ],
+                                  "maxDepthReached": 0
+                                }
+                              ]
                             }
                           ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "move": {
-                "from": [
-                  1,
-                  3
-                ],
-                "to": [
-                  2,
-                  3
-                ]
-              },
-              "wordsFormed": [
-                "soar"
-              ],
-              "maxDepthReached": 4,
-              "nextMoves": [
-                {
-                  "move": {
-                    "from": [
-                      0,
-                      0
-                    ],
-                    "to": [
-                      1,
-                      0
-                    ]
-                  },
-                  "wordsFormed": [
-                    "roar"
-                  ],
-                  "maxDepthReached": 1,
-                  "nextMoves": [
-                    {
-                      "move": {
-                        "from": [
-                          1,
-                          1
-                        ],
-                        "to": [
-                          2,
-                          1
-                        ]
-                      },
-                      "wordsFormed": [
-                        "tore"
-                      ],
-                      "maxDepthReached": 0
-                    }
-                  ]
-                },
-                {
-                  "move": {
-                    "from": [
-                      1,
-                      1
-                    ],
-                    "to": [
-                      2,
-                      1
-                    ]
-                  },
-                  "wordsFormed": [
-                    "tore"
-                  ],
-                  "maxDepthReached": 3,
-                  "nextMoves": [
-                    {
-                      "move": {
-                        "from": [
-                          1,
-                          0
-                        ],
-                        "to": [
-                          2,
-                          0
-                        ]
-                      },
-                      "wordsFormed": [
-                        "sore"
-                      ],
-                      "maxDepthReached": 2,
-                      "nextMoves": [
+                        },
                         {
                           "move": {
                             "from": [
-                              0,
-                              0
+                              1,
+                              3
                             ],
                             "to": [
-                              1,
-                              0
+                              2,
+                              3
                             ]
                           },
                           "wordsFormed": [
-                            "took"
+                            "hill"
                           ],
-                          "maxDepthReached": 1,
-                          "nextMoves": [
-                            {
-                              "move": {
-                                "from": [
-                                  0,
-                                  1
-                                ],
-                                "to": [
-                                  1,
-                                  1
-                                ]
-                              },
-                              "wordsFormed": [
-                                "roar"
-                              ],
-                              "maxDepthReached": 0
-                            },
-                            {
-                              "move": {
-                                "from": [
-                                  1,
-                                  1
-                                ],
-                                "to": [
-                                  2,
-                                  1
-                                ]
-                              },
-                              "wordsFormed": [
-                                "roar"
-                              ],
-                              "maxDepthReached": 0
-                            }
-                          ]
+                          "maxDepthReached": 0
                         }
                       ]
                     }
@@ -335,162 +213,8 @@
               ]
             }
           ]
-        },
-        {
-          "move": {
-            "from": [
-              1,
-              3
-            ],
-            "to": [
-              2,
-              3
-            ]
-          },
-          "wordsFormed": [
-            "soar"
-          ],
-          "maxDepthReached": 1,
-          "nextMoves": [
-            {
-              "move": {
-                "from": [
-                  0,
-                  0
-                ],
-                "to": [
-                  1,
-                  0
-                ]
-              },
-              "wordsFormed": [
-                "roar"
-              ],
-              "maxDepthReached": 0
-            }
-          ]
         }
       ]
-    },
-    {
-      "move": {
-        "from": [
-          0,
-          2
-        ],
-        "to": [
-          1,
-          2
-        ]
-      },
-      "wordsFormed": [
-        "rook"
-      ],
-      "maxDepthReached": 4,
-      "nextMoves": [
-        {
-          "move": {
-            "from": [
-              0,
-              3
-            ],
-            "to": [
-              1,
-              3
-            ]
-          },
-          "wordsFormed": [
-            "soak"
-          ],
-          "maxDepthReached": 0
-        },
-        {
-          "move": {
-            "from": [
-              1,
-              0
-            ],
-            "to": [
-              2,
-              0
-            ]
-          },
-          "wordsFormed": [
-            "took"
-          ],
-          "maxDepthReached": 3,
-          "nextMoves": [
-            {
-              "move": {
-                "from": [
-                  0,
-                  3
-                ],
-                "to": [
-                  1,
-                  3
-                ]
-              },
-              "wordsFormed": [
-                "soak"
-              ],
-              "maxDepthReached": 2,
-              "nextMoves": [
-                {
-                  "move": {
-                    "from": [
-                      1,
-                      2
-                    ],
-                    "to": [
-                      2,
-                      2
-                    ]
-                  },
-                  "wordsFormed": [
-                    "tore"
-                  ],
-                  "maxDepthReached": 1,
-                  "nextMoves": [
-                    {
-                      "move": {
-                        "from": [
-                          0,
-                          0
-                        ],
-                        "to": [
-                          1,
-                          0
-                        ]
-                      },
-                      "wordsFormed": [
-                        "sore"
-                      ],
-                      "maxDepthReached": 0
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "move": {
-        "from": [
-          1,
-          3
-        ],
-        "to": [
-          2,
-          3
-        ]
-      },
-      "wordsFormed": [
-        "roar"
-      ],
-      "maxDepthReached": 0
     }
   ]
 }
