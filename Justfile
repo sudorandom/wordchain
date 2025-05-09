@@ -47,3 +47,8 @@ gen-logo:
   magick -background none frontend/public/images/wordseq.svg -resize 2400x1260 frontend/public/images/wordseq-social-preview.png
   magick -background none frontend/public/images/wordseq.svg -resize 1600x836 frontend/public/images/wordseq-twitter-card.png
   magick -background none frontend/public/images/wordseq.svg -resize 180x180 frontend/public/apple-touch-icon.png
+
+[working-directory: 'frontend']
+deploy:
+  npm run build
+  npx wrangler pages deploy

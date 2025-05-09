@@ -17,27 +17,6 @@ import {
     gameHooks,
 } from './hooks/gameHooks'; // Adjusted import path
 
-// GameHeader, Instructions components remain the same, so they are not repeated here for brevity.
-// Assume they are defined as in the original App.tsx or imported from their own files.
-
-const WordSeqIcon: React.FC<{ className?: string }> = ({ className = "w-5 h-5" }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24" // Standard viewBox for consistency
-    strokeWidth={2} // Use camelCase for JSX attributes
-    stroke="currentColor" // Inherits text color from parent CSS unless overridden by className
-    className={`${className} inline-block align-middle ml-1`} // Base styling
-  >
-    {/* SVG path data for the 2x2 grid with whitespace */}
-    {/* Square size: 8x8, Gap: 2 units, Padding: 3 units on each side for a 24x24 viewBox */}
-    <rect x="3" y="3" width="8" height="8" />
-    <rect x="13" y="3" width="8" height="8" />
-    <rect x="3" y="13" width="8" height="8" />
-    <rect x="13" y="13" width="8" height="8" />
-  </svg>
-);
-
 interface GameHeaderProps {
     currentDate: Date | undefined;
     difficulty: DifficultyLevel;
@@ -57,7 +36,6 @@ const GameHeader: React.FC<GameHeaderProps> = ({ currentDate, difficulty, dailyP
         </h1>
         <h2 className="text-xl sm:text-2xl mb-1 text-gray-700 dark:text-gray-300">
             {currentDate ? getFriendlyDate(currentDate) : 'Loading date...'}
-            <span className="capitalize text-lg sm:text-xl"> ({difficulty}) </span>
             {dailyProgress.normal && dailyProgress.hard && dailyProgress.impossible && <i className="fas fa-trophy text-yellow-500 ml-2" title="All levels completed for today!"></i>}
         </h2>
     </>
@@ -101,21 +79,6 @@ function App() {
                 <p className="text-gray-700 dark:text-gray-300 mt-2">{game.error}</p>
                 <button 
                     onClick={() => { 
-                        // This comment block explains the reasoning behind the error recovery strategy.
-                        // The goal is to retry loading the current difficulty.
-                        // The hook's `masterResetGameStates` function is designed to:
-                        // 1. Reset various UI states (animations, selections, etc.).
-                        // 2. Trigger a `reloadTrigger` state change.
-                        // This `reloadTrigger` is a dependency in the `useEffect` hook that loads level data.
-                        // Therefore, calling `masterResetGameStates` will cause that effect to run again,
-                        // attempting to fetch and load the data for the *current* `game.difficulty`.
-
-                        // If the intention were to always reset to 'normal' difficulty upon any error,
-                        // the call would be `game.handlePlayMode('normal')`.
-                        // `handlePlayMode` internally sets the difficulty and then calls `masterResetGameStates`,
-                        // ensuring a full reset and reload for the specified difficulty.
-
-                        // Current strategy: Retry the current difficulty.
                         game.masterResetGameStates(); 
                     }} 
                     className="cursor-pointer mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
