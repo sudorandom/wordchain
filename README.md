@@ -1,10 +1,10 @@
-# Word Chain
+# wordseq
 
 A web-based word game where players swap adjacent letters on a grid to form words and follow an optimal path to achieve the maximum game depth.
 
 ## Description
 
-This game presents players with a grid of letters. By swapping adjacent letters (horizontally or vertically), players aim to form valid words of a minimum length (typically 4 letters) in the affected rows or columns. The game includes pre-calculated optimal move sequences (levels), and the player's goal is to follow this sequence to find all the words along the longest possible chain and reach the maximum depth. The game provides visual feedback for valid moves, word formation, and deviation from the optimal path.
+This game presents players with a grid of letters. By swapping adjacent letters (horizontally or vertically), players aim to form valid words of a minimum length (typically 4 letters) in the affected rows or columns. The game includes pre-calculated optimal move sequences (levels), and the player's goal is to follow this sequence to find all the words along the longest possible sequence of words and reach the maximum depth. The game provides visual feedback for valid moves, and deviation from the optimal path.
 
 ## Features
 
@@ -12,7 +12,6 @@ This game presents players with a grid of letters. By swapping adjacent letters 
 * **Word Validation:** Checks if swaps create valid words based on level data.
 * **Optimal Path Guidance:** Tracks player progress against a pre-calculated best path.
 * **Deviation Detection:** Indicates when the player makes a valid move that isn't part of the optimal path.
-* **Dynamic Level Loading:** Loads different game levels based on a URL query parameter (`?level=N`).
 * **Visual Feedback:** Animations for swaps and highlighting for newly formed words.
 * **Static Site Deployment:** Configured for easy deployment to static hosting platforms like GitHub Pages.
 
