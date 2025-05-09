@@ -1,5 +1,7 @@
 // src/utils/gameHelpers.ts
 
+export type DifficultyLevel = 'normal' | 'hard' | 'impossible';
+
 export interface CellCoordinates {
     row: number;
     col: number;
@@ -20,6 +22,7 @@ export interface ExplorationNodeData {
 export interface GameData {
     initialGrid: string[][];
     minWordLength: number;
+    wordLength: number;
     requiredMinTurns: number; // This might be deprecated if maxDepthReached is primary
     maxDepthReached: number; // Max depth for the current level (normal or hard)
     explorationTree: ExplorationNodeData[];
@@ -32,6 +35,7 @@ export interface HistoryEntry {
     moveMade: { from: CellCoordinates; to: CellCoordinates };
     wordsFormedByMove: string[];
     turnFailedAttempts: number; // Persist turn fails for back button
+    isDeviated: boolean;
 }
 
 export const getFriendlyDate = (

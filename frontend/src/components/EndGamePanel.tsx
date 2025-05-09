@@ -1,12 +1,11 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
-import { HistoryEntry, DifficultyLevel } from '../utils/gameHelpers'; // Assuming DifficultyLevel is exported
+import { HistoryEntry, DifficultyLevel } from '../utils/gameHelpers';
 
 // Interface for the data required to display results for one level
 interface LevelResultData {
     history: HistoryEntry[];
     score: number;
     maxScore: number;
-    playerWords: Set<string>;
     optimalPathWords: string[];
     levelCompleted: boolean; // Indicates if this specific level reached max score
 }
@@ -113,26 +112,25 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
     ) => {
         if (!data) return null;
 
-        const { history, score, maxScore, playerWords, optimalPathWords, levelCompleted } = data;
-        const sortedPlayerWords = [...playerWords].sort();
+        const { history, score, maxScore, optimalPathWords, levelCompleted } = data;
         const modeName = mode.charAt(0).toUpperCase() + mode.slice(1);
 
         // Define colors based on mode
         let titleColor = 'text-gray-700 dark:text-gray-400';
-        let bgColor = 'bg-gray-50 dark:bg-gray-900';
+        let bgColor = 'bg-gray-900 dark:bg-gray-950';
         let borderColor = 'border-gray-200 dark:border-gray-700';
         if (mode === 'normal') {
-            titleColor = 'text-blue-700 dark:text-blue-400';
-            bgColor = 'bg-blue-50 dark:bg-blue-900';
-            borderColor = 'border-blue-200 dark:border-blue-700';
+            titleColor = 'text-blue-400 dark:text-blue-400';
+            bgColor = 'bg-blue-900 dark:bg-blue-950';
+            borderColor = 'border-blue-700 dark:border-blue-700';
         } else if (mode === 'hard') {
             titleColor = 'text-purple-700 dark:text-purple-400';
-            bgColor = 'bg-purple-50 dark:bg-purple-900';
-            borderColor = 'border-purple-200 dark:border-purple-700';
+            bgColor = 'bg-purple-900 dark:bg-purple-950';
+            borderColor = 'border-purple-700 dark:border-purple-700';
         } else if (mode === 'impossible') {
-            titleColor = 'text-red-700 dark:text-red-400';
-            bgColor = 'bg-red-50 dark:bg-red-900';
-            borderColor = 'border-red-200 dark:border-red-700';
+            titleColor = 'text-red-700 dark:text-red-700';
+            bgColor = 'bg-black dark:bg-black';
+            borderColor = 'border-red-700 dark:border-red-700';
         }
 
         const foundWordsColor = 'text-green-700 dark:text-green-400';
@@ -194,14 +192,17 @@ const EndGamePanel: React.FC<CombinedEndGamePanelProps> = ({
                             );
                         })}
                         {/* Display optimal path differences */}
-                        {deviationIndex !== -1 && optimalPathWords.slice(deviationIndex).map((word, index) => (
-                            <span
-                                key={`optimal-${mode}-${word}-${index + deviationIndex}`}
-                                className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded font-medium text-xs"
-                            >
-                                {word.toUpperCase()}
-                            </span>
-                        ))}
+                        {deviationIndex !== -1 && optimalPathWords.slice(deviationIndex).map((word, index) =>
+                            <div key={`history-${mode}-${index}-optimal`} className="inline-flex items-baseline">
+                                <span className="text-gray-500 dark:text-gray-400 font-bold mx-0.5 text-xs mr-2">→</span>
+                                <span
+                                    key={`optimal-${mode}-${word}-${index + deviationIndex}`}
+                                    className="px-1.5 py-0.5 rounded font-medium text-xs bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+                                >
+                                    {word.toUpperCase()}
+                                </span>
+                            </div>
+                        )}
                     </div>
                     {/* Informative text about matching moves */}
                     {deviationIndex !== -1 && (

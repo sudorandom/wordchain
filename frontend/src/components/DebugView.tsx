@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 
 interface ExplorationNodeData {
     move?: { from: number[]; to: number[] };
@@ -7,7 +7,7 @@ interface ExplorationNodeData {
     nextMoves?: ExplorationNodeData[];
 }
 
-interface ExplorationTreeViewProps {
+interface DebugViewProps {
     treeData?: ExplorationNodeData[] | null;
     optimalPathWords: string[];
 }
@@ -72,7 +72,31 @@ const TreeNode: React.FC<{ node: ExplorationNodeData; level: number; isOptimalPa
 };
 
 // Main Tree View component
-const ExplorationTreeView: React.FC<ExplorationTreeViewProps> = ({ treeData, optimalPathWords }) => {
+const DebugView: React.FC<DebugViewProps> = ({ treeData, optimalPathWords }) => {
+    const [localStorageData, setLocalStorageData] = useState<string | null>(null);
+
+    // Get all localStorage data
+    const getLocalStorageData = () => {
+        let data = {};
+        try {
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key) {
+                    const value = localStorage.getItem(key);
+                    data = { ...data, [key]: value ? JSON.parse(value) : null };
+                }
+            }
+            return JSON.stringify(data, null, 2); // Pretty print JSON
+        } catch (e) {
+            return `Error reading localStorage: ${e}`;
+        }
+    };
+
+    // Effect to update localStorage data on component mount
+    useEffect(() => {
+        setLocalStorageData(getLocalStorageData());
+    }, []);
+
     if (!treeData || treeData.length === 0) {
         return (
             <div className="text-gray-500 dark:text-gray-400 italic mt-4">
@@ -128,9 +152,14 @@ const ExplorationTreeView: React.FC<ExplorationTreeViewProps> = ({ treeData, opt
                     );
                 })}
             </div>
+            <div className="mb-4">
+                <h4 className="text-md font-semibold mb-2 text-purple-600 dark:text-purple-400">Local Storage Data:</h4>
+                <pre className="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-2 rounded-md overflow-auto max-h-48">
+                    <code>{localStorageData || 'No data in localStorage'}</code>
+                </pre>
+            </div>
         </div>
     );
 };
 
-export default ExplorationTreeView;
-
+export default DebugView;
