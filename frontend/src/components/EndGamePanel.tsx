@@ -12,11 +12,10 @@ interface LevelResultData {
 
 // Props for the combined EndGamePanel
 interface CombinedEndGamePanelProps {
-    normalModeData?: LevelResultData | null; // Optional data for normal mode
-    hardModeData?: LevelResultData | null;   // Optional data for hard mode
-    impossibleModeData?: LevelResultData | null; // Optional data for impossible mode
+    normalModeData?: LevelResultData | null;
+    hardModeData?: LevelResultData | null;
+    impossibleModeData?: LevelResultData | null;
     onClose: () => void;
-    // Removed onPlayHardMode and onResetGame as they are handled in App.tsx now
 }
 
 // Helper function to generate the emoji line for a specific mode's results

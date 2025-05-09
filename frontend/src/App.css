@@ -1,21 +1,78 @@
+/* App.css or your main CSS file */
 @import "tailwindcss";
 
-@keyframes pulse-fade-out-short { 0% { opacity: 0.6; transform: scale(1); } 20% { opacity: 0.8; transform: scale(1.05); } 80% { opacity: 0.8; transform: scale(1.05); } 100% { opacity: 0; transform: scale(1); } }
-.animate-pulse-fade-out-short { animation: pulse-fade-out-short 1.5s ease-in-out forwards; }
+/* Animation for highlighting found words */
+@keyframes pulse-fade-out-short {
+  0% { opacity: 0.6; transform: scale(1); }
+  20% { opacity: 0.8; transform: scale(1.05); }
+  80% { opacity: 0.8; transform: scale(1.05); }
+  100% { opacity: 0; transform: scale(1); }
+}
+.animate-pulse-fade-out-short {
+  animation: pulse-fade-out-short 1.5s ease-in-out forwards;
+}
 
-@keyframes pulse-fade-out-long { 0% { opacity: 0.7; transform: scale(1); } 20% { opacity: 0.9; transform: scale(1.05); } 80% { opacity: 0.9; transform: scale(1.05); } 100% { opacity: 0; transform: scale(1); } }
-.animate-pulse-fade-out-long { animation: pulse-fade-out-long 3s ease-in-out forwards; }
+/* Animation for hint highlight */
+@keyframes pulse-fade-out-long {
+  0% { opacity: 0.7; transform: scale(1); }
+  20% { opacity: 0.9; transform: scale(1.05); }
+  80% { opacity: 0.9; transform: scale(1.05); }
+  100% { opacity: 0; transform: scale(1); }
+}
+.animate-pulse-fade-out-long {
+  animation: pulse-fade-out-long 3s ease-in-out forwards;
+}
 
-@keyframes wiggle { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 50% { transform: translateX(4px); } 75% { transform: translateX(-4px); } }
-.animate-wiggle { animation: wiggle 0.4s ease-in-out; @apply bg-red-200 dark:bg-red-700; }
+/* Wiggle animation for invalid moves */
+/* This animation primarily controls the transform. Background color is applied by GridCell.tsx for wiggling state. */
+@keyframes wiggle {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); } /* Adjust px value for desired wiggle intensity */
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+}
+.animate-wiggle {
+  animation-name: wiggle;
+  animation-duration: 0.4s;
+  animation-timing-function: ease-in-out;
+}
 
-@keyframes gradient-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-.animate-gradient-flow { background-size: 200% 200%; animation: gradient-flow 4s ease infinite; }
+/* Gradient animation for the main title */
+@keyframes gradient-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient-flow {
+  background-size: 200% 200%; /* Or 400% 400% for slower, more expansive gradients */
+  animation: gradient-flow 10s ease infinite;
+}
 
-.scrollbar-thin { scrollbar-width: thin; scrollbar-color: #9ca3af #e5e7eb; }
-.dark .scrollbar-thin { scrollbar-color: #4b5563 #374151; }
-.scrollbar-thin::-webkit-scrollbar { height: 6px; width: 6px; }
-.scrollbar-thin::-webkit-scrollbar-track { background: #e5e7eb; border-radius: 3px; }
-.dark .scrollbar-thin::-webkit-scrollbar-track { background: #374151; }
-.scrollbar-thin::-webkit-scrollbar-thumb { background-color: #9ca3af; border-radius: 3px; border: 1px solid #e5e7eb; }
-.dark .scrollbar-thin::-webkit-scrollbar-thumb { background-color: #4b5563; border-color: #374151; }
+/* Custom scrollbar styling (optional, but good for consistency) */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #9ca3af #e5e7eb; /* thumb track */
+}
+.dark .scrollbar-thin {
+  scrollbar-color: #4b5563 #374151; /* thumb track for dark mode */
+}
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #e5e7eb; /* Light mode track */
+  border-radius: 3px;
+}
+.dark .scrollbar-thin::-webkit-scrollbar-track {
+  background: #374151; /* Dark mode track */
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #9ca3af; /* Light mode thumb */
+  border-radius: 3px;
+  border: 1px solid #e5e7eb; /* Light mode thumb border */
+}
+.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #4b5563; /* Dark mode thumb */
+  border-color: #374151; /* Dark mode thumb border */
+}

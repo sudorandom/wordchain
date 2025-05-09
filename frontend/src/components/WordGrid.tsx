@@ -1,90 +1,360 @@
 // src/components/WordGrid.tsx
-import React, { useRef } from 'react';
-import GridCell from './GridCell';
-import { CellCoordinates } from '../utils/gameHelpers';
+import React from 'react';
+import { CellCoordinates, AnimationState } from '../utils/gameHelpers'; // Adjust path as needed
 
 interface WordGridProps {
-  grid: string[][] | null;
-  selectedCell: CellCoordinates | null;
-  draggedCell: CellCoordinates | null;
-  animationState: { animating: boolean; from: CellCoordinates | null; to: CellCoordinates | null };
-  highlightedCells: CellCoordinates[];
-  hintCells: CellCoordinates[];
-  wiggleCells: CellCoordinates[];
-  onCellClick: (coords: CellCoordinates) => void;
-  onDragStart: (coords: CellCoordinates) => void;
-  onDragEnter: (coords: CellCoordinates) => void;
-  onDragLeave: (coords: CellCoordinates) => void;
-  onDragEnd: () => void;
-  onDrop: (coords: CellCoordinates) => void;
+    grid: string[][];
+    selectedCell: CellCoordinates | null;
+    draggedCell: CellCoordinates | null;
+    animationState: AnimationState; // Structure: { animating: boolean, from: CellCoordinates | null, to: CellCoordinates | null }
+    highlightedCells: CellCoordinates[];
+    hintCells: CellCoordinates[];
+    wiggleCells: CellCoordinates[];
+    onCellClick: (coords: CellCoordinates) => void;
+    onDragStart: (coords: CellCoordinates) => void;
+    onDragEnter: (coords: CellCoordinates) => void;
+    onDragLeave: (coords: CellCoordinates) => void;
+    onDragEnd: () => void;
+    onDrop: (coords: CellCoordinates) => void;
+    isDisabled?: boolean | null;
 }
 
 const WordGrid: React.FC<WordGridProps> = ({
-  grid,
-  selectedCell,
-  draggedCell,
-  animationState,
-  highlightedCells,
-  hintCells,
-  wiggleCells,
-  onCellClick,
+    grid,
+    selectedCell,
+    draggedCell,
+    animationState, // Parent component controls this to trigger/reset animations
+    highlightedCells,
+    hintCells,
+    wiggleCells,
+    onCellClick,
+    onDragStart,
+    onDragEnter,
+    onDragLeave,
+    onDragEnd,
+    onDrop,
+    isDisabled = false,
+}) => {
+    // Basic check for grid data
+    if (!grid || grid.length === 0 || (grid[0] && grid[0].length === 0)) {
+        return <div className="text-center text-red-500 dark:text-red-400 p-4">Grid data is not available or is empty.</div>;
+    }
+
+    const numRows = grid.length;
+    const numCols = grid[0]?.length || 0;
+
+    // Determine if any animation is globally active based on the 'animating' flag.
+    const isAnyAnimationActive = animationState.animating === true;
+
+    return (
+        <div
+            className={`relative inline-grid gap-1 p-2 bg-gray-200 dark:bg-gray-700 rounded-lg shadow-md transition-opacity duration-300}`}
+            style={{ gridTemplateColumns: `repeat(${numCols}, minmax(0, 1fr))` }}
+            // Prevent default drag over behavior to allow dropping, only if not disabled or animating
+            onDragOver={(e) => {
+                if (!isDisabled && !isAnyAnimationActive) { 
+                    e.preventDefault();
+                }
+            }}
+        >
+            {grid.map((row, rowIndex) =>
+                row.map((letter, colIndex) => {
+                    const cellCoords = { row: rowIndex, col: colIndex };
+                    
+                    const isSelected = selectedCell?.row === rowIndex && selectedCell?.col === colIndex;
+                    const isDragged = draggedCell?.row === rowIndex && draggedCell?.col === colIndex;
+                    const isHighlighted = highlightedCells.some(
+                        (hc) => hc.row === rowIndex && hc.col === colIndex
+                    );
+                    const isHint = hintCells.some(
+                        (hc) => hc.row === rowIndex && hc.col === colIndex
+                    );
+                    const isWiggling = wiggleCells.some(
+                        (wc) => wc.row === rowIndex && wc.col === colIndex
+                    );
+
+                    return (
+                        <GridCell
+                            key={`${rowIndex}-${colIndex}`}
+                            letter={letter}
+                            coords={cellCoords}
+                            gridRows={numRows}
+                            gridCols={numCols}
+                            isSelected={isSelected}
+                            isDragged={isDragged}
+                            isHighlighted={isHighlighted}
+                            isHint={isHint}
+                            isWiggling={isWiggling}
+                            animationState={animationState} // Pass the full animation state
+                            onClick={onCellClick}
+                            onDragStart={onDragStart}
+                            onDragEnter={onDragEnter}
+                            onDragLeave={onDragLeave}
+                            onDragEnd={onDragEnd}
+                            onDrop={onDrop}
+                            isDisabled={isDisabled || false} // Pass the isDisabled prop
+                        />
+                    );
+                })
+            )}
+        </div>
+    );
+};
+
+interface GridCellProps {
+  letter: string;
+  coords: CellCoordinates;
+  gridRows: number;
+  gridCols: number;
+  onClick: (coords: CellCoordinates) => void;
+  onDragStart: (coords: CellCoordinates) => void;
+  onDrop: (coords: CellCoordinates) => void;
+  onDragEnter: (coords: CellCoordinates) => void;
+  onDragLeave: (coords: CellCoordinates) => void;
+  onDragEnd: () => void;
+  isDragged: boolean;
+  isHighlighted: boolean;
+  isSelected: boolean;
+  isWiggling: boolean;
+  isHint: boolean;
+  animationState: AnimationState;
+  isDisabled?: boolean;
+}
+
+const CELL_SIZE_REM = 4; 
+const GAP_REM = 0.25;    
+const STEP_REM = CELL_SIZE_REM + GAP_REM; 
+const ANIMATION_DURATION_MS = 300;
+
+const GridCell: React.FC<GridCellProps> = ({
+  letter,
+  coords,
+  gridRows,
+  gridCols,
+  onClick,
   onDragStart,
+  onDrop,
   onDragEnter,
   onDragLeave,
   onDragEnd,
-  onDrop
+  isDragged,
+  isHighlighted,
+  isSelected,
+  isWiggling,
+  isHint,
+  animationState,
+  isDisabled = false,
 }) => {
-  const gridRef = useRef<HTMLDivElement>(null);
-  const cellSize = 64; // w-16
-  const gapSize = 4;   // gap-1
-  const totalCellSize = cellSize + gapSize;
+  const { row, col } = coords;
 
-  const getCellStyle = (r: number, c: number) => {
-    if (!animationState.animating || !gridRef.current || !animationState.from || !animationState.to) return {};
-    if (animationState.from.row === r && animationState.from.col === c) {
-      const dx = (animationState.to.col - c) * totalCellSize;
-      const dy = (animationState.to.row - r) * totalCellSize;
-      return { transform: `translate(${dx}px, ${dy}px)`, transition: 'transform 0.3s ease-in-out', zIndex: 10 };
-    } else if (animationState.to.row === r && animationState.to.col === c) {
-      const dx = (animationState.from.col - c) * totalCellSize;
-      const dy = (animationState.from.row - r) * totalCellSize;
-      return { transform: `translate(${dx}px, ${dy}px)`, transition: 'transform 0.3s ease-in-out', zIndex: 10 };
+  const [currentTransform, setCurrentTransform] = React.useState('translate(0rem, 0rem)');
+  const [currentZIndex, setCurrentZIndex] = React.useState(1);
+
+  // Ref to store the previous value of animationState.animating
+  const prevAnimationAnimating = React.useRef<boolean>(animationState.animating);
+
+  React.useEffect(() => {
+    // Update the ref after each render 
+    prevAnimationAnimating.current = animationState.animating;
+  });
+
+  // Effect to update cell's transform and z-index for swap animations
+  React.useEffect(() => {
+    let newTransform = 'translate(0rem, 0rem)';
+    let newZIndex = 1;
+
+    if (animationState.animating && animationState.from && animationState.to) {
+      const isSourceCell = coords.row === animationState.from.row && coords.col === animationState.from.col;
+      const isDestinationCell = coords.row === animationState.to.row && coords.col === animationState.to.col;
+
+      if (isSourceCell) {
+        const translateX = (animationState.to.col - animationState.from.col) * STEP_REM;
+        const translateY = (animationState.to.row - animationState.from.row) * STEP_REM;
+        newTransform = `translate(${translateX}rem, ${translateY}rem)`;
+        newZIndex = 20; 
+      } else if (isDestinationCell) {
+        const translateX = (animationState.from.col - animationState.to.col) * STEP_REM;
+        const translateY = (animationState.from.row - animationState.to.row) * STEP_REM;
+        newTransform = `translate(${translateX}rem, ${translateY}rem)`;
+        newZIndex = 20; 
+      }
     }
-    return { transition: 'transform 0.3s ease-in-out' };
+
+    // Only update state if the values have actually changed to prevent unnecessary re-renders
+    if (currentTransform !== newTransform) {
+      setCurrentTransform(newTransform);
+    }
+    if (currentZIndex !== newZIndex) {
+      setCurrentZIndex(newZIndex);
+    }
+  }, [
+    animationState.animating,
+    // Using JSON.stringify for objects in dependency array is generally okay for simple, flat objects.
+    // For more complex scenarios, consider a deep comparison utility or more granular dependencies.
+    JSON.stringify(animationState.from), 
+    JSON.stringify(animationState.to),   
+    coords.row, 
+    coords.col,
+    currentTransform, 
+    currentZIndex   
+  ]);
+
+  const isSwapAnimationGloballyActive = animationState.animating === true;
+  // Interactions are disabled if the cell is explicitly disabled, or any animation (swap/wiggle) is active.
+  const interactionsDisabled = isDisabled || isSwapAnimationGloballyActive || isWiggling;
+
+  // Event Handlers
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    if (interactionsDisabled) { e.preventDefault(); return; }
+    onDragStart(coords);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', `${row}-${col}`);
+    if (e.currentTarget) { // Check if currentTarget is not null
+        e.currentTarget.style.opacity = '0.6'; 
+        e.currentTarget.classList.add('cursor-grabbing');
+    }
+  };
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    if (interactionsDisabled) return;
+    e.preventDefault(); 
+    e.dataTransfer.dropEffect = 'move';
+  };
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    if (interactionsDisabled) return;
+    e.preventDefault(); onDrop(coords);
+  };
+  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+    if (interactionsDisabled) return;
+    e.preventDefault(); onDragEnter(coords);
+  };
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    if (interactionsDisabled) return;
+    e.preventDefault(); onDragLeave(coords);
+  };
+  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+    if (e.currentTarget) { // Check if currentTarget is not null
+        e.currentTarget.style.opacity = '1'; 
+        e.currentTarget.classList.remove('cursor-grabbing');
+    }
+    onDragEnd();
+  };
+  const handleClick = () => {
+    if (interactionsDisabled) return;
+    onClick(coords);
+  };
+  
+  // --- Dynamic Styles ---
+  const dynamicStyles: React.CSSProperties = {
+    zIndex: currentZIndex, // Apply z-index for elevation during swap
   };
 
-  if (!grid) return <div className="p-2 text-center text-gray-500 dark:text-gray-400">Loading Grid...</div>;
+  if (isWiggling) {
+    
+  } else {
+    // Not wiggling: JavaScript handles transform for swap animations.
+    dynamicStyles.transform = currentTransform; // Apply the JS-calculated transform.
+
+    if (animationState.animating) {
+      // If a swap animation is actively running, apply a smooth transition for transform.
+      dynamicStyles.transition = `transform ${ANIMATION_DURATION_MS}ms ease-in-out`;
+    } else if (prevAnimationAnimating.current === true && !animationState.animating) {
+      // If a swap animation JUST finished, set transform transition to 'none' (or '0s') to make the cell "snap".
+      dynamicStyles.transition = 'transform 0s'; 
+    } else {
+      // Idle state (not animating, and wasn't just animating for swap).
+      // No specific transform transition needed from JS. CSS transitions for other properties (like background) will apply if defined.
+      dynamicStyles.transition = 'transform 0s'; // Or 'none' if preferred for idle non-wiggling state
+    }
+  }
+
+  // --- Cell Classes ---
+  // Base classes applied to all cells
+  let cellClasses = `border w-16 h-16 flex items-center justify-center
+                   text-2xl font-bold select-none rounded-md shadow-sm
+                   relative transition-colors duration-150 ease-out`; 
+  
+  // Base background and text colors (interactive state)
+  const baseInteractiveBg = 'bg-white dark:bg-gray-700';
+  const hoverInteractiveBg = 'hover:bg-gray-50 dark:hover:bg-gray-600';
+  
+  // Apply base styling. Specific states below will override parts of this.
+  cellClasses += ` ${baseInteractiveBg} border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-100`;
+
+  if (isDragged) {
+    // Style for the cell being actively dragged
+    // Remove potentially conflicting background classes before adding new ones
+    cellClasses = cellClasses.replace(/bg-\w+-\d+/g, '').replace(/dark:bg-\w+-\d+/g, '');
+    cellClasses += ' bg-blue-200 dark:bg-blue-700 ring-2 ring-blue-500 dark:ring-blue-400 scale-105';
+  } else if (isSelected) {
+    // Style for a selected cell (not being dragged)
+    cellClasses = cellClasses.replace(/bg-\w+-\d+/g, '').replace(/dark:bg-\w+-\d+/g, '');
+    cellClasses += ' bg-indigo-100 dark:bg-indigo-800 ring-2 ring-indigo-500 dark:ring-indigo-400 cursor-pointer';
+  } else if (isDisabled) { 
+    // Style for a cell that is explicitly disabled by game logic (e.g., game over)
+    cellClasses = cellClasses.replace(/bg-\w+-\d+/g, '').replace(/dark:bg-\w+-\d+/g, '');
+    cellClasses += ' bg-gray-100 dark:bg-gray-800 opacity-70 cursor-not-allowed';
+  } else if (isSwapAnimationGloballyActive || isWiggling) { 
+     // Style for a cell during any animation (swap or wiggle)
+     // It uses the base interactive background but with 'cursor-default' and no hover effects.
+     // NO opacity change here to prevent fading during animation.
+     // If it's wiggling, the specific wiggling background will be applied in the next block.
+     // If it's just a swap animation, it keeps the baseInteractiveBg.
+     cellClasses += ` cursor-default`; 
+  } else { 
+    // Style for a normal, interactive, resting cell
+    cellClasses += ` ${hoverInteractiveBg} cursor-grab`;
+  }
+
+  if (isWiggling) {
+    // If wiggling, add the animation class and the specific wiggling background color.
+    // This ensures the red background for wiggling takes precedence.
+    cellClasses = cellClasses.replace(/bg-\w+-\d+/g, '').replace(/dark:bg-\w+-\d+/g, ''); // Remove other BGs
+    cellClasses += ' animate-wiggle bg-red-200 dark:bg-red-700'; 
+    // Ensure cursor-default if wiggling, as it's a non-interactive animation state
+    if (!cellClasses.includes('cursor-default')) {
+        cellClasses += ' cursor-default';
+    }
+  }
+
+  // SVG Icons for selection arrows
+  const UpArrow = () => (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-4 h-4 text-indigo-600 dark:text-indigo-400"><path strokeLinecap="round" strokeLinejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75" /></svg>);
+  const DownArrow = () => (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-4 h-4 text-indigo-600 dark:text-indigo-400"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75" /></svg>);
+  const LeftArrow = () => (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-4 h-4 text-indigo-600 dark:text-indigo-400"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" /></svg>);
+  const RightArrow = () => (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-4 h-4 text-indigo-600 dark:text-indigo-400"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" /></svg>);
 
   return (
-    <div ref={gridRef} className="relative inline-grid gap-1 p-2 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-md" style={{ gridTemplateColumns: `repeat(${grid[0]?.length || 0}, minmax(0, 1fr))` }} onDragOver={(e) => e.preventDefault()}>
-      {grid.map((row, r) => row.map((letter, c) => {
-        const isDraggingSource = draggedCell?.row === r && draggedCell?.col === c;
-        const isSelected = selectedCell?.row === r && selectedCell?.col === c && !isDraggingSource;
-        const isHighlighted = highlightedCells.some(cell => cell.row === r && cell.col === c);
-        const isWiggling = wiggleCells.some(cell => cell.row === r && cell.col === c);
-        const isHintHighlighted = hintCells.some(cell => cell.row === r && cell.col === c);
+    <div
+      // draggable={!interactionsDisabled}
+      onClick={handleClick}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDragEnd={handleDragEnd}
+      className={cellClasses} // Apply the constructed class string
+      style={dynamicStyles}   // Apply the JS-controlled inline styles
+      role="button"
+      tabIndex={interactionsDisabled ? -1 : 0} // Make focusable if interactive
+      aria-pressed={isSelected}
+      // aria-disabled={interactionsDisabled} // Accessibility: indicates if the element is disabled
+      aria-label={`Cell ${row}, ${col} containing letter ${letter}`} // Accessibility: label for screen readers
+    >
+      {/* Highlight overlays for found words or hints */}
+      {isHighlighted && <div className="absolute inset-0 bg-green-300 dark:bg-green-500 opacity-70 animate-pulse-fade-out-short pointer-events-none"></div>}
+      {isHint && <div className="absolute inset-0 bg-blue-300 dark:bg-blue-600 opacity-70 animate-pulse-fade-out-long pointer-events-none"></div>}
 
-        return (
-          <div key={`${r}-${c}`} style={getCellStyle(r, c)} className="relative">
-            <GridCell
-              letter={letter} row={r} col={c}
-              onClick={onCellClick}
-              isDraggingSource={isDraggingSource}
-              isSelected={isSelected}
-              gridRows={grid.length}
-              gridCols={grid[0].length}
-              isHighlighted={isHighlighted}
-              isWiggling={isWiggling}
-              isHintHighlighted={isHintHighlighted}
-              onDragStart={onDragStart}
-              onDragEnter={onDragEnter}
-              onDragLeave={onDragLeave}
-              onDragEnd={onDragEnd}
-              onDrop={onDrop}
-            />
-          </div>
-        );
-      }))}
+      {/* Selection arrows: shown if cell is selected, not dragged, and not disabled */}
+      {isSelected && !isDragged && !interactionsDisabled && (
+        <>
+          {row > 0 && (<div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-1 rounded-full bg-indigo-100 dark:bg-indigo-800 shadow-md z-30"><UpArrow /></div>)}
+          {row < gridRows - 1 && (<div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 p-1 rounded-full bg-indigo-100 dark:bg-indigo-800 shadow-md z-30"><DownArrow /></div>)}
+          {col > 0 && (<div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 p-1 rounded-full bg-indigo-100 dark:bg-indigo-800 shadow-md z-30"><LeftArrow /></div>)}
+          {col < gridCols - 1 && (<div className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 p-1 rounded-full bg-indigo-100 dark:bg-indigo-800 shadow-md z-30"><RightArrow /></div>)}
+        </>
+      )}
+      {/* Letter display: relative z-index to appear above highlights */}
+      <span className="relative z-10">{letter.toUpperCase()}</span>
     </div>
   );
 }

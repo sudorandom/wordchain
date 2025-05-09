@@ -1,6 +1,9 @@
 // src/utils/gameHelpers.ts
 
 export type DifficultyLevel = 'normal' | 'hard' | 'impossible';
+export const difficulties: DifficultyLevel[] = ['normal', 'hard', 'impossible']; // For iteration
+
+export type AnimationState = {animating: boolean, from: CellCoordinates | null, to: CellCoordinates | null};
 
 export interface CellCoordinates {
     row: number;
@@ -210,5 +213,4 @@ export const getInitialGameState = (data?: GameData | null) => ({
     turnFailedAttempts: 0,
     hintCells: [],
     animationState: { animating: false, from: null, to: null },
-    // overallFailedAttempts is managed separately as it persists across resets within a day/difficulty
 });
