@@ -1,7 +1,7 @@
 // src/App.tsx
 import React from 'react';
 import EndGamePanel from './components/EndGamePanel';
-import DebugView from './components/DebugView';
+import DebugView from './components/DebugView'; // Ensure this import is correct
 import GameBoardArea from './components/GameBoardArea';
 import {
     getFriendlyDate,
@@ -9,7 +9,7 @@ import {
     DifficultyLevel
 } from './utils/gameHelpers'; 
 import { WordSequenceDisplay } from './components/WordSequenceDisplay';
-import { StatusMessages } from './components/StatusMessages';
+import { StatusMessages } from './components/StatusMessages'; // Ensure this import is correct
 import { DailyProgressDisplay } from './components/DailyProgressDisplay';
 import { useGame } from './hooks/useGame'; 
 
@@ -52,12 +52,11 @@ function App() {
     const game = useGame(); 
 
     // --- LOADING / ERROR STATES ---
-    // Show a general loading screen if core is loading and there's no gameData yet (initial load)
-    // or if the game state is not yet stable (to prevent flicker of old data).
-    if ((game.coreLoading && !game.gameData) || (!game.isStable && game.coreLoading)) { 
+    // Show loading if not stable OR (core is loading AND no game data yet for initial load)
+    if (!game.isStable || (game.coreLoading && !game.gameData)) { 
         return (
             <div className={`flex justify-center items-center min-h-screen text-gray-700 dark:text-gray-300 ${game.darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-                Loading {game.difficulty} level for {game.currentDate ? getFormattedDate(game.currentDate) : 'today'}...
+                Loading {game.difficulty || 'level'} for {game.currentDate ? getFormattedDate(game.currentDate) : 'today'}...
             </div>
         );
     }
@@ -69,7 +68,8 @@ function App() {
                 <p className="text-gray-700 dark:text-gray-300 mt-2">{game.coreError}</p>
                 <button
                     onClick={() => {
-                        game.masterResetGame(game.difficulty, true);
+                        // Ensure game.difficulty is defined before calling masterResetGame
+                        if (game.difficulty) game.masterResetGame(game.difficulty, true);
                     }}
                     className="cursor-pointer mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
                 >
@@ -79,9 +79,8 @@ function App() {
         );
     }
 
-    // This condition might be hit if loading finishes but gameData is still null 
-    // (e.g., level file not found but not a fetch error, or if not stable yet)
-    if (!game.gameData && !game.coreLoading) { 
+    // This condition might be hit if loading finishes, state is considered stable, but gameData is still null
+    if (!game.gameData) { 
         return (
             <div className="flex justify-center items-center min-h-screen text-gray-500 dark:text-gray-400">
                 Game data could not be loaded. Please ensure levels are available or try again later.
@@ -98,29 +97,28 @@ function App() {
     const isCurrentlyOptimal = !game.hasDeviated && game.currentDepth > 0;
     const showOptimalMessage = isCurrentlyOptimal && !levelActuallyCompleted && !showNoMoreValidMovesMessage && !showDeviatedMessage && !game.coreLoading;
 
-    // Determine if the end game panel should be displayed
     // Panel data is only considered valid if the game state is stable
     const panelDataToShow = game.isStable ? game.panelDataForEndGame : { normalDataForPanel: null, hardDataForPanel: null, impossibleDataForPanel: null };
     
     const shouldShowEndGamePanel = 
         ((game.isDisplayGameOver && !game.hasAcknowledgedGameOver) || game.showEndGamePanelOverride) &&
-        !game.coreLoading && // Ensure not loading
-        game.isStable &&     // **ADDED**: Ensure game state is stable for current difficulty
-        (panelDataToShow.normalDataForPanel || panelDataToShow.hardDataForPanel || panelDataToShow.impossibleDataForPanel); // Ensure there's actual data to show
+        !game.coreLoading && 
+        game.isStable &&    
+        (panelDataToShow.normalDataForPanel || panelDataToShow.hardDataForPanel || panelDataToShow.impossibleDataForPanel); 
 
     return (
         <div className={`flex flex-col items-center justify-start min-h-screen p-4 font-sans pt-8 transition-colors duration-300 ${game.darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
             <GameHeader
                 currentDate={game.currentDate}
-                difficulty={game.difficulty}
+                difficulty={game.difficulty!} // Assert non-null: if gameData is present, difficulty should be too
                 dailyProgress={game.dailyProgress}
             />
 
-            <Instructions difficulty={game.difficulty} wordLength={game.wordLength} />
+            <Instructions difficulty={game.difficulty!} wordLength={game.wordLength} />
 
             <DailyProgressDisplay
                 dailyProgress={game.dailyProgress}
-                difficulty={game.difficulty}
+                difficulty={game.difficulty!}
                 onPlayMode={game.handlePlayMode}
                 onShowSummary={game.handleShowGameSummary}
                 loading={game.coreLoading} 
@@ -139,7 +137,7 @@ function App() {
                 levelActuallyCompleted={levelActuallyCompleted}
             />
 
-            {/* Only render GameBoardArea if gameData exists and the game state is stable */}
+            {/* GameBoardArea should only render if gameData exists and state is stable */}
             {game.grid && game.gameData && game.isStable && (
                 <GameBoardArea
                     grid={game.grid}
@@ -156,7 +154,7 @@ function App() {
                     onDragLeave={game.handleDragLeave}
                     onDragEnd={game.handleDragEnd}
                     onDrop={game.handleDrop} 
-                    noMoreValidMoves={noMoreValidMoves} 
+                    noMoreValidMoves={noMoreValidMoves}
                     loading={game.coreLoading} 
                     currentDepth={game.currentDepth}
                     liveMaxDepthAttainable={game.liveMaxDepthAttainable}
@@ -164,31 +162,26 @@ function App() {
                     isGameOver={game.isDisplayGameOver} 
                     hasAcknowledgedGameOver={game.hasAcknowledgedGameOver}
                     showEndGamePanelOverride={game.showEndGamePanelOverride}
-                    difficulty={game.difficulty}
+                    difficulty={game.difficulty!}
                     currentPossibleMovesLength={game.currentPossibleMoves.length}
                     onBack={game.handleBack}
                     onReset={game.handleReset}
                     onHint={game.handleHintButtonClick}
                     onViewMySolution={game.handleViewMySolution}
                     turnFailedAttempts={game.turnFailedAttempts}
-                    dailyProgressForDifficulty={game.dailyProgress[game.difficulty]}
+                    dailyProgressForDifficulty={game.dailyProgress[game.difficulty!]}
                     isInvalidMove={game.isInvalidMove}
                 />
             )}
-             {/* Show a simpler loading state for the board if loading but gameData was previously available (e.g. changing difficulty) */}
-             {game.coreLoading && game.gameData && !game.isStable && (
-                <div className="w-full max-w-md aspect-square bg-gray-200 dark:bg-gray-700 rounded-lg flex justify-center items-center text-gray-500 dark:text-gray-400 my-4">
-                    Loading new level...
-                </div>
-            )}
+            {/* No separate loading placeholder for board needed if main loading condition handles !isStable */}
 
 
             <WordSequenceDisplay history={game.history} showEndGamePanelOverride={game.showEndGamePanelOverride} />
 
             {game.isDebugMode && game.gameData && game.gameData.explorationTree && ( 
                 <DebugView 
-                    treeData={game.gameData.explorationTree} 
-                    optimalPathWords={game.liveOptimalPathWords} 
+                    gameData={game.gameData} 
+                    optimalPathWordsFromHook={game.liveOptimalPathWords}
                 />
             )}
             

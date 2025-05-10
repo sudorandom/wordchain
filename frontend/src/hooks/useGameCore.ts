@@ -37,6 +37,10 @@ const initialCoreGameState: CoreGameState = {
 interface StabilitySignal {
     opId: number;
     isStable: boolean;
+    // Props for which this signal is valid
+    difficulty?: DifficultyLevel;
+    currentDate?: Date;
+    reloadTrigger?: number;
 }
 
 /**
@@ -54,7 +58,13 @@ export const useGameCore = (
     const [error, setError] = useState<string | null>(null);
 
     const loadOperationIdRef = useRef(0);
-    const [stabilitySignal, setStabilitySignal] = useState<StabilitySignal>({ opId: 0, isStable: false });
+    const [stabilitySignal, setStabilitySignal] = useState<StabilitySignal>({ 
+        opId: 0, 
+        isStable: false, 
+        difficulty: undefined, 
+        currentDate: undefined, 
+        reloadTrigger: 0 
+    });
 
     const updateReactStateFromCore = useCallback((newCoreState: CoreGameState | null) => {
         if (newCoreState) {
@@ -66,17 +76,25 @@ export const useGameCore = (
 
     useEffect(() => {
         const currentLoadId = ++loadOperationIdRef.current;
-        const logPrefix = `[LoadEffect ID: ${currentLoadId}, Diff: ${difficulty || 'N/A'}]`;
+        const effectDifficulty = difficulty;
+        const effectCurrentDate = currentDate;
+        const effectReloadTrigger = reloadTrigger;
 
-        console.log(`${logPrefix} Fired. Date: ${currentDate ? getFormattedDate(currentDate) : 'N/A'}, Reload: ${reloadTrigger}`);
+        const logPrefix = `[LoadEffect ID: ${currentLoadId}, Diff: ${effectDifficulty || 'N/A'}]`;
+        console.log(`${logPrefix} Fired. Date: ${effectCurrentDate ? getFormattedDate(effectCurrentDate) : 'N/A'}, Reload: ${effectReloadTrigger}`);
 
-        if (!currentDate || !difficulty) {
+        if (!effectCurrentDate || !effectDifficulty) {
             console.log(`${logPrefix} Waiting for valid date/difficulty.`);
             setLoading(true);
             setError(null);
-            setStabilitySignal({ opId: currentLoadId, isStable: false });
-            // Only reset if there was actual game data and now params are invalid
-            if (coreState.gameData !== null) { 
+            setStabilitySignal({ 
+                opId: currentLoadId, 
+                isStable: false,
+                difficulty: effectDifficulty,
+                currentDate: effectCurrentDate,
+                reloadTrigger: effectReloadTrigger
+            });
+            if (coreState.gameData !== null) {
                 updateReactStateFromCore(null);
             }
             return;
@@ -85,18 +103,21 @@ export const useGameCore = (
         console.log(`${logPrefix} STARTING load.`);
         setLoading(true);
         setError(null);
-        setStabilitySignal({ opId: currentLoadId, isStable: false });
+        setStabilitySignal({ 
+            opId: currentLoadId, 
+            isStable: false,
+            difficulty: effectDifficulty,
+            currentDate: effectCurrentDate,
+            reloadTrigger: effectReloadTrigger
+        });
 
-        // **MODIFIED**: If there's existing game data from a previous load, reset coreState
-        // to prevent showing stale data during the new load.
-        // This will cause a flash of an empty/initial state instead of the previous difficulty's state.
         if (coreState.gameData !== null) {
             updateReactStateFromCore(null);
             console.log(`${logPrefix} coreState reset to initial because a new load operation is starting.`);
         }
 
         const loadLevelDataInternal = async (date: Date, diff: DifficultyLevel) => {
-            console.log(`${logPrefix} loadLevelDataInternal started.`);
+            console.log(`${logPrefix} loadLevelDataInternal started for diff '${diff}'.`);
             gameLogicRef.current = new GameLogic();
             console.log(`${logPrefix} New GameLogic instance created.`);
 
@@ -118,13 +139,8 @@ export const useGameCore = (
                 const fetchedGameData: GameData = await response.json();
                 console.log(`${logPrefix} Fetched GameData.`); 
 
-                if (loadOperationIdRef.current !== currentLoadId) {
-                    console.log(`${logPrefix} Stale operation (after JSON parse). Aborting.`);
-                    return;
-                }
-                if (!fetchedGameData || !fetchedGameData.initialGrid || !Array.isArray(fetchedGameData.initialGrid)) {
-                    throw new Error(`Level data for ${diff} is corrupted.`);
-                }
+                if (loadOperationIdRef.current !== currentLoadId) { /* ... */ return; }
+                if (!fetchedGameData || !fetchedGameData.initialGrid || !Array.isArray(fetchedGameData.initialGrid)) { /* ... */ throw new Error(`Level data for ${diff} is corrupted.`); }
 
                 const fetchedGameDataString = JSON.stringify(fetchedGameData);
                 const currentJsonFileHash = simpleHash(fetchedGameDataString);
@@ -138,10 +154,8 @@ export const useGameCore = (
                 if (isDailyCompleted) {
                     console.log(`${logPrefix} Level '${diff}' is marked as completed in daily progress.`);
                     const summary: LevelCompletionSummary | undefined = dailyProgressDataStore[diff]?.summary;
-                    
                     if (summary && summary.finalGrid && summary.history && summary.finalGrid.length > 0) {
                         console.log(`${logPrefix} Valid summary found. Summary's internal difficulty ('difficultyForSummary'): ${summary.difficultyForSummary || 'N/A'}. Current difficulty: '${diff}'.`);
-                        
                         if (summary.difficultyForSummary === diff) {
                             console.log(`${logPrefix} Summary difficulty matches. Setting state to solution view.`);
                             currentLogicState = gameLogicRef.current.setStateForSolutionView(summary.finalGrid, summary.history, summary.score);
@@ -165,29 +179,37 @@ export const useGameCore = (
                 if (loadOperationIdRef.current === currentLoadId) {
                     updateReactStateFromCore(currentLogicState);
                     console.log(`${logPrefix} Updated React coreState.`);
-                } else {
-                    console.log(`${logPrefix} Stale operation before final state update. Aborting state update.`);
-                }
+                } else { /* ... */ }
             } catch (err: any) {
                 if (loadOperationIdRef.current === currentLoadId) {
                     console.error(`${logPrefix} Error during loadLevelDataInternal:`, err);
                     setError(err.message || `Failed to load ${diff} level.`);
-                    updateReactStateFromCore(null); // Reset to initial on error
-                } else {
-                     console.log(`${logPrefix} Error in STALE operation's try-catch. Ignoring.`);
-                }
+                    updateReactStateFromCore(null); 
+                } else { /* ... */ }
                 throw err; 
             }
         }; 
 
-        loadLevelDataInternal(currentDate, difficulty)
+        loadLevelDataInternal(effectCurrentDate, effectDifficulty)
             .then(() => {
                 if (loadOperationIdRef.current === currentLoadId) {
-                    if (!error) { // Check error state, as catch block might have set it
-                        setStabilitySignal({ opId: currentLoadId, isStable: true });
+                    if (!error) { 
+                        setStabilitySignal({ 
+                            opId: currentLoadId, 
+                            isStable: true,
+                            difficulty: effectDifficulty,
+                            currentDate: effectCurrentDate,
+                            reloadTrigger: effectReloadTrigger
+                        });
                         console.log(`${logPrefix} State marked STABLE.`);
                     } else {
-                        setStabilitySignal({ opId: currentLoadId, isStable: false });
+                        setStabilitySignal({ 
+                            opId: currentLoadId, 
+                            isStable: false,
+                            difficulty: effectDifficulty,
+                            currentDate: effectCurrentDate,
+                            reloadTrigger: effectReloadTrigger
+                        });
                         console.log(`${logPrefix} State remains UNSTABLE due to error during load: ${error}`);
                     }
                 }
@@ -195,11 +217,15 @@ export const useGameCore = (
             .catch((promiseErr) => {
                 if (loadOperationIdRef.current === currentLoadId) {
                     console.error(`${logPrefix} Unhandled promise error in load chain:`, promiseErr);
-                    if (!error) { // Avoid overwriting more specific error from inner catch
-                        setError(promiseErr.message || 'An unexpected error occurred during loading.');
-                    }
-                    // updateReactStateFromCore(null) already called in inner catch if error originated there
-                    setStabilitySignal({ opId: currentLoadId, isStable: false });
+                    if (!error) { setError(promiseErr.message || 'An unexpected error occurred.'); }
+                    updateReactStateFromCore(null);
+                    setStabilitySignal({ 
+                        opId: currentLoadId, 
+                        isStable: false,
+                        difficulty: effectDifficulty,
+                        currentDate: effectCurrentDate,
+                        reloadTrigger: effectReloadTrigger
+                    });
                     console.log(`${logPrefix} State marked UNSTABLE due to promise error.`);
                 }
             })
@@ -207,25 +233,27 @@ export const useGameCore = (
                 if (loadOperationIdRef.current === currentLoadId) {
                     setLoading(false);
                     console.log(`${logPrefix} FINISHED load attempt. Loading: false.`);
-                    if (error) { // If an error is set by this point, ensure stability is false
+                    if (error) { 
                         setStabilitySignal(prev => {
                             if (prev.opId === currentLoadId) { 
-                                return { opId: currentLoadId, isStable: false };
+                                return { ...prev, isStable: false };
                             }
                             return prev;
                         });
                     }
-                } else {
-                    console.log(`${logPrefix} Finally block of STALE operation. Not changing loading/stability state.`);
-                }
+                } else { /* ... */ }
             });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentDate, difficulty, reloadTrigger, updateReactStateFromCore]); // error is managed internally
+    }, [currentDate, difficulty, reloadTrigger, updateReactStateFromCore]); 
 
     useEffect(() => {
         const saveLogPrefix = `[SaveEffect D:${difficulty || 'N/A'}, OpId:${loadOperationIdRef.current}]`;
-        const isCurrentlyStable = stabilitySignal.opId === loadOperationIdRef.current && stabilitySignal.isStable;
+        const isCurrentlyStable = 
+            stabilitySignal.opId === loadOperationIdRef.current &&
+            stabilitySignal.isStable &&
+            stabilitySignal.difficulty === difficulty &&
+            stabilitySignal.currentDate === currentDate &&
+            stabilitySignal.reloadTrigger === reloadTrigger;
 
         if (!loading && !error && coreState.gameData && currentDate && difficulty && isCurrentlyStable && coreState.grid.length > 0 && coreState.grid[0].length > 0) {
             console.log(`${saveLogPrefix} Conditions MET. GameData available.`); 
@@ -246,13 +274,20 @@ export const useGameCore = (
     }, [
         coreState.grid, coreState.history, coreState.currentDepth,
         coreState.turnFailedAttempts, coreState.hasDeviated, coreState.gameData,
-        currentDate, difficulty,
+        currentDate, difficulty, reloadTrigger, 
         loading, error, stabilitySignal 
     ]);
 
     const isGameActiveAndStable = useCallback(() => {
+        if (
+            stabilitySignal.difficulty !== difficulty ||
+            stabilitySignal.currentDate !== currentDate ||
+            stabilitySignal.reloadTrigger !== reloadTrigger
+        ) {
+            return false;
+        }
         return stabilitySignal.opId === loadOperationIdRef.current && stabilitySignal.isStable;
-    }, [stabilitySignal]); 
+    }, [stabilitySignal, difficulty, currentDate, reloadTrigger]); 
 
     const performSwap = useCallback((cell1: CellCoordinates, cell2: CellCoordinates): SwapResult => {
         if (loading || error || !coreState.gameData || coreState.isGameOver || !isGameActiveAndStable()) {
@@ -283,6 +318,7 @@ export const useGameCore = (
             message: logicResult.message, 
             newState: logicResult.newState,
             wordsFormed: logicResult.wordsFormed,
+            // isDeviatedMove: logicResult.isDeviatedMove, // Removed as not in SwapResult type
             moveDetails: moveDetailsForSwapResult, 
         };
         
@@ -297,10 +333,16 @@ export const useGameCore = (
         const coreStateAfterReset = gameLogicRef.current.resetLevel();
         updateReactStateFromCore(coreStateAfterReset);
         removeInProgressState(currentDate, difficulty);
-        setStabilitySignal({ opId: loadOperationIdRef.current, isStable: true });
-    }, [currentDate, difficulty, coreState.gameData, loading, error, updateReactStateFromCore, isGameActiveAndStable]);
+        setStabilitySignal({ 
+            opId: loadOperationIdRef.current, 
+            isStable: true,
+            difficulty: difficulty, 
+            currentDate: currentDate, 
+            reloadTrigger: reloadTrigger 
+        });
+    }, [currentDate, difficulty, reloadTrigger, coreState.gameData, loading, error, updateReactStateFromCore, isGameActiveAndStable]);
 
-    const undoLastMove = useCallback((): UndoResult => {
+    const undoLastMove = useCallback((): UndoResult => { 
         if (coreState.history.length === 0 || loading || error || !isGameActiveAndStable()) {
             return { success: false, message: "Cannot undo: game not ready or unstable." };
         }
@@ -311,25 +353,35 @@ export const useGameCore = (
         return result; 
     }, [coreState.history.length, loading, error, updateReactStateFromCore, isGameActiveAndStable]);
 
-    const calculateHintCoordinates = useCallback((): CellCoordinates[] => {
+    const calculateHintCoordinates = useCallback((): CellCoordinates[] => { 
         if (loading || error || !coreState.gameData || coreState.isGameOver || difficulty === 'impossible' || !isGameActiveAndStable()) {
             return [];
         }
         return gameLogicRef.current.calculateHintCoordinates();
     }, [loading, error, coreState.gameData, coreState.isGameOver, difficulty, isGameActiveAndStable]);
     
-    const viewSolutionState = useCallback((solutionGrid: string[][], solutionHistory: HistoryEntry[], solutionScore: number) => {
+    const viewSolutionState = useCallback((solutionGrid: string[][], solutionHistory: HistoryEntry[], solutionScore: number) => { 
         if (!coreState.gameData || loading || error) { 
             return;
         }
         const solutionCoreState = gameLogicRef.current.setStateForSolutionView(solutionGrid, solutionHistory, solutionScore);
         updateReactStateFromCore(solutionCoreState);
-        setStabilitySignal({ opId: loadOperationIdRef.current, isStable: true });
-    }, [coreState.gameData, updateReactStateFromCore, difficulty, loading, error]); 
+        setStabilitySignal({ 
+            opId: loadOperationIdRef.current, 
+            isStable: true,
+            difficulty: difficulty,
+            currentDate: currentDate,
+            reloadTrigger: reloadTrigger
+        });
+    }, [coreState.gameData, updateReactStateFromCore, difficulty, currentDate, reloadTrigger, loading, error]); 
 
-    const liveOptimalPathWords = useMemo(() => {
+    const liveOptimalPathWords = useMemo((): string[] => { // Explicitly type the return
         if (coreState.gameData && coreState.gameData.explorationTree) {
-            return findLongestWordChain(coreState.gameData.explorationTree, coreState.history.length > 0 ? coreState.history : undefined) || [];
+            const path = findLongestWordChain(
+                coreState.gameData.explorationTree, 
+                coreState.history.length > 0 ? coreState.history : undefined
+            );
+            return path || []; // Ensure it's always string[]
         }
         return [];
     }, [coreState.gameData, coreState.history]);
@@ -348,19 +400,9 @@ export const useGameCore = (
     const wordLength = useMemo(() => coreState.gameData?.wordLength || 4, [coreState.gameData]);
 
     return {
-        ...coreState,
-        loading,
-        error,
-        setError,
+        ...coreState, loading, error, setError,
         isStable: isGameActiveAndStable(), 
-        liveOptimalPathWords,
-        livePlayerUniqueWordsFound,
-        liveMaxDepthAttainable,
-        wordLength,
-        performSwap,
-        resetLevel,
-        undoLastMove,
-        calculateHintCoordinates,
-        viewSolutionState,
+        liveOptimalPathWords, livePlayerUniqueWordsFound, liveMaxDepthAttainable, wordLength,
+        performSwap, resetLevel, undoLastMove, calculateHintCoordinates, viewSolutionState,
     };
 };

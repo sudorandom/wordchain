@@ -14,6 +14,12 @@ export interface GameMove {
     to: [number, number];   // Assuming [row, col] tuple
 }
 
+export interface PathStep {
+    from: [number, number];
+    to: [number, number];
+    wordsFormed: string[];
+}
+
 export interface ExplorationNodeData {
     move?: GameMove; // Optional move that leads to this node
     wordsFormed: string[]; // Words formed by taking the move to this node

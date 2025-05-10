@@ -4,9 +4,9 @@ import {
     CellCoordinates,
     AnimationState,
     DifficultyLevel,
-    GameMove // Added GameMove for moveDetails type consistency
-} from '../types/gameTypes'; // Core types
-import { findWordCoordinates } from '../utils/gameHelpers'; // Import from actual location
+    GameMove 
+} from '../types/gameTypes'; 
+import { findWordCoordinates } from '../utils/gameHelpers'; 
 
 interface GameFeedbackProps {
     turnFailedAttempts: number;
@@ -15,15 +15,19 @@ interface GameFeedbackProps {
     difficulty: DifficultyLevel;
     grid: string[][];
     calculateHintCoords: () => CellCoordinates[];
-    // Callback to notify that swap animation and highlight logic has completed.
     onSwapSuccess: (
         wordsFormed: string[],
-        // Ensure moveDetails here matches the type expected by findWordCoordinates (GameMove)
-        // and the type provided by SwapResult from GameLogic
-        moveDetails: { from: CellCoordinates; to: CellCoordinates } | GameMove, // Allow either for flexibility or ensure consistency
+        moveDetails: { from: CellCoordinates; to: CellCoordinates } | GameMove, 
         newGrid: string[][]
     ) => void;
 }
+
+const HINT_DURATION_MS = 5000; 
+const SWAP_ANIMATION_DURATION_MS = 300;
+const HIGHLIGHT_DURATION_MS = 1500;
+const WIGGLE_DURATION_MS = 500;
+const UNDO_ANIMATION_DURATION_MS = 300;
+
 
 /**
  * Manages visual feedback like animations (swap), highlights, wiggles, and hints.
@@ -65,25 +69,20 @@ export const useGameFeedback = ({
         wiggleTimeoutRef.current = window.setTimeout(() => {
             setWiggleCells([]);
             wiggleTimeoutRef.current = null;
-        }, 500);
+        }, WIGGLE_DURATION_MS);
     }, []);
 
-    // This function is called by performSwapWithFeedback in useGame.ts
-    // It receives the necessary data to trigger animations and find word coordinates.
     const triggerSwapAnimationAndHighlight = useCallback(
         (
-            fromCell: CellCoordinates, // The cell the drag/click started from
-            toCell: CellCoordinates,   // The cell the drag/click ended on (target of swap)
+            fromCell: CellCoordinates, 
+            toCell: CellCoordinates,   
             wordsFormed: string[],
-            // This moveDetails should be the GameMove object {from: [r,c], to: [r,c]}
-            // that represents the state *after* the swap for findWordCoordinates.
-            // The SwapResult from GameLogic should provide this.
             moveDetailsForHighlight: GameMove,
             newGrid: string[][]
         ) => {
             setAnimationState({ animating: true, from: fromCell, to: toCell });
             if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current);
-            setHighlightedCells([]);
+            setHighlightedCells([]); 
 
             animationTimeoutRef.current = window.setTimeout(() => {
                 const allFoundCoords: CellCoordinates[] = [];
@@ -94,7 +93,9 @@ export const useGameFeedback = ({
                     });
                 }
                 const uniqueHighlightedCellsMap = new Map<string, CellCoordinates>();
-                allFoundCoords.forEach(coord => { if (coord) uniqueHighlightedCellsMap.set(`${coord.row}-${coord.col}`, coord); });
+                allFoundCoords.forEach(coord => { 
+                    if (coord) uniqueHighlightedCellsMap.set(`${coord.row}-${coord.col}`, coord); 
+                });
                 setHighlightedCells(Array.from(uniqueHighlightedCellsMap.values()));
                 
                 setAnimationState({ animating: false, from: null, to: null });
@@ -103,20 +104,18 @@ export const useGameFeedback = ({
                 highlightTimeoutRef.current = window.setTimeout(() => {
                     setHighlightedCells([]);
                     highlightTimeoutRef.current = null;
-                }, 1500);
+                }, HIGHLIGHT_DURATION_MS);
                 
-                // Notify useGame that the feedback process for this swap is complete.
-                // Pass the original fromCell/toCell if the consumer (useGame) needs that specific format for moveDetails.
                 onSwapSuccess(wordsFormed, { from: fromCell, to: toCell }, newGrid);
 
-            }, 300); // Swap animation duration
+            }, SWAP_ANIMATION_DURATION_MS); 
         },
-        [onSwapSuccess] // findWordCoordinates is stable
+        [onSwapSuccess] 
     );
     
 
     const triggerUndoAnimation = useCallback((from: CellCoordinates, to: CellCoordinates, callback?: () => void) => {
-        setAnimationState({ animating: true, from, to }); // Cells are swapped back
+        setAnimationState({ animating: true, from, to }); 
         if (highlightTimeoutRef.current) clearTimeout(highlightTimeoutRef.current); setHighlightedCells([]);
         if (wiggleTimeoutRef.current) clearTimeout(wiggleTimeoutRef.current); setWiggleCells([]);
         if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current); setHintCells([]);
@@ -125,45 +124,68 @@ export const useGameFeedback = ({
             setAnimationState({ animating: false, from: null, to: null });
             animationTimeoutRef.current = null;
             if (callback) callback();
-        }, 300); // Undo animation duration
+        }, UNDO_ANIMATION_DURATION_MS); 
     }, []);
 
 
     // Effect for showing hints based on failed attempts
     useEffect(() => {
-        if (difficulty === 'impossible' || isLoading || isUiGameOver || grid.length === 0 || grid[0].length === 0) {
-            setHintCells([]);
-            if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
+        // Conditions to prevent or clear hints
+        if (difficulty === 'impossible' || isLoading || isUiGameOver || !grid || grid.length === 0 || (grid[0] && grid[0].length === 0)) {
+            if (hintCells.length > 0) { // Only update state if necessary
+                setHintCells([]); 
+            }
+            if (hintTimeoutRef.current) {
+                clearTimeout(hintTimeoutRef.current);
+                hintTimeoutRef.current = null;
+            }
             return;
         }
 
+        // Logic to show hints
         if (turnFailedAttempts >= 3) {
-            const coordinates = calculateHintCoords();
-            if (coordinates.length > 0) {
-                setHintCells(coordinates);
-                if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
-                hintTimeoutRef.current = window.setTimeout(() => {
-                    setHintCells([]);
-                    hintTimeoutRef.current = null;
-                }, 3000); // Hint display duration
+            // Only calculate and set new hint if no hint is currently active
+            // This prevents re-triggering hint if other dependencies change while hint is already shown
+            if (hintCells.length === 0) { 
+                const coordinates = calculateHintCoords();
+                if (coordinates.length > 0) {
+                    setHintCells(coordinates);
+                    // Ensure any previous timeout is cleared before setting a new one
+                    if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current); 
+                    hintTimeoutRef.current = window.setTimeout(() => {
+                        setHintCells([]);
+                        hintTimeoutRef.current = null;
+                    }, HINT_DURATION_MS);
+                }
             }
-        } else {
-            if (hintCells.length > 0) setHintCells([]);
-            if (hintTimeoutRef.current) { clearTimeout(hintTimeoutRef.current); hintTimeoutRef.current = null;}
+        } else { // Logic to clear hints if failed attempts drop below 3
+            if (hintCells.length > 0) { // Only update state if necessary
+                setHintCells([]);
+            }
+            if (hintTimeoutRef.current) { 
+                clearTimeout(hintTimeoutRef.current); 
+                hintTimeoutRef.current = null;
+            }
         }
-    }, [turnFailedAttempts, grid, isUiGameOver, isLoading, difficulty, calculateHintCoords, hintCells.length]);
+    // **MODIFIED**: Removed hintCells.length from dependencies.
+    // The effect now primarily reacts to changes in game state or failed attempts.
+    // `calculateHintCoords` should be stable (memoized) if it's complex.
+    }, [turnFailedAttempts, grid, isUiGameOver, isLoading, difficulty, calculateHintCoords]);
 
     const handleHintButtonClick = useCallback(() => {
-        if (isUiGameOver || difficulty === 'impossible' || animationState.animating || isLoading || !grid || grid.length === 0 || grid[0].length === 0 || hintCells.length > 0) return;
+        // Conditions to prevent showing hint
+        if (isUiGameOver || difficulty === 'impossible' || animationState.animating || isLoading || !grid || grid.length === 0 || (grid[0] && grid[0].length === 0) || hintCells.length > 0) {
+            return;
+        }
         
         const coordinates = calculateHintCoords();
         if (coordinates.length > 0) {
             setHintCells(coordinates);
-            if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
+            if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current); // Clear existing timeout
             hintTimeoutRef.current = window.setTimeout(() => {
                 setHintCells([]);
                 hintTimeoutRef.current = null;
-            }, 3000);
+            }, HINT_DURATION_MS); 
         }
     }, [grid, difficulty, animationState.animating, isUiGameOver, isLoading, hintCells.length, calculateHintCoords]);
 
@@ -184,10 +206,9 @@ export const useGameFeedback = ({
         highlightedCells,
         wiggleCells,
         hintCells,
-        setHintCells,
+        setHintCells, 
 
         triggerWiggle,
-        // This is the function useGame's performSwapWithFeedback should call
         triggerSwapAnimationAndHighlight, 
         triggerUndoAnimation,
         handleHintButtonClick,
