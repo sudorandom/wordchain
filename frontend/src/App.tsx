@@ -1,31 +1,31 @@
 // src/App.tsx
-import React from 'react'; // Removed unused imports like useState, useEffect etc.
+import React from 'react';
 import EndGamePanel from './components/EndGamePanel';
 import DebugView from './components/DebugView';
 import GameBoardArea from './components/GameBoardArea';
 import {
     getFriendlyDate,
     getFormattedDate,
-    // Removed game logic specific helpers, they are now internal to the hook or imported by it
-    // CellCoordinates, GameData, HistoryEntry, ExplorationNodeData are used by the hook
-    DifficultyLevel // Keep if used directly by App, otherwise hook exports it
-} from './utils/gameHelpers';
+    DifficultyLevel
+} from './utils/gameHelpers'; // gameHelpers is still a valid source for these
 import { WordSequenceDisplay } from './components/WordSequenceDisplay';
 import { StatusMessages } from './components/StatusMessages';
 import { DailyProgressDisplay } from './components/DailyProgressDisplay';
-import {
-    gameHooks,
-} from './hooks/gameHooks'; // Adjusted import path
+import { useGame } from './hooks/useGame'; // Updated import to the main composite hook
 
 interface GameHeaderProps {
     currentDate: Date | undefined;
     difficulty: DifficultyLevel;
     dailyProgress: Record<DifficultyLevel, boolean>;
+    // darkMode: boolean; // Example if you re-add dark mode toggle here
+    // onToggleDarkMode: () => void; // Example
 }
+
 const GameHeader: React.FC<GameHeaderProps> = ({ currentDate, difficulty, dailyProgress }) => (
     <>
+        {/* Dark mode toggle button can be re-added here if desired, using game.darkMode and game.setDarkMode */}
         {/* <button
-            onClick={onToggleDarkMode}
+            onClick={onToggleDarkMode} // Would come from props if GameHeader manages it, or directly from game hook if used in App
             className="cursor-pointer absolute top-4 right-4 p-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-200"
             title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
         >
@@ -59,11 +59,10 @@ const Instructions: React.FC<InstructionsProps> = ({ difficulty, wordLength }) =
 
 // --- MAIN APP COMPONENT ---
 function App() {
-    const game = gameHooks();
+    const game = useGame(); // Use the new composite hook
 
     // --- LOADING / ERROR STATES ---
-    // Display loading message if game data is not yet available but loading is in progress
-    if (game.loading && !game.coreGameData) { // Changed game.gameData to game.coreGameData for clarity if that's what you intended from the hook
+    if (game.coreLoading && !game.gameData) { // Use game.coreLoading and game.gameData
         return (
             <div className={`flex justify-center items-center min-h-screen text-gray-700 dark:text-gray-300 ${game.darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
                 Loading {game.difficulty} level for {game.currentDate ? getFormattedDate(game.currentDate) : 'today'}...
@@ -71,16 +70,16 @@ function App() {
         );
     }
 
-    // Display error message if an error occurred
-    if (game.error) {
+    if (game.coreError) { // Use game.coreError
         return (
             <div className="flex flex-col justify-center items-center min-h-screen text-center px-4">
                 <p className="text-red-600 dark:text-red-400 text-xl font-semibold">Error</p>
-                <p className="text-gray-700 dark:text-gray-300 mt-2">{game.error}</p>
-                <button 
-                    onClick={() => { 
-                        game.masterResetGameStates(); 
-                    }} 
+                <p className="text-gray-700 dark:text-gray-300 mt-2">{game.coreError}</p>
+                <button
+                    onClick={() => {
+                        // Call masterResetGame with current difficulty to retry
+                        game.masterResetGame(game.difficulty, true);
+                    }}
                     className="cursor-pointer mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
                 >
                     Try Again
@@ -89,8 +88,7 @@ function App() {
         );
     }
 
-    // Display message if game data failed to load for other reasons (e.g., not available)
-    if (!game.coreGameData && !game.loading) { // Changed game.gameData to game.coreGameData
+    if (!game.gameData && !game.coreLoading) { // Use game.gameData and game.coreLoading
         return (
             <div className="flex justify-center items-center min-h-screen text-gray-500 dark:text-gray-400">
                 Game data could not be loaded. Please ensure levels are available or try again later.
@@ -99,45 +97,41 @@ function App() {
     }
 
     // --- DERIVED VALUES FOR RENDERING ---
-    // These values are derived from the game state provided by the hook.
     const levelActuallyCompleted = game.currentDepth === game.liveMaxDepthAttainable && game.liveMaxDepthAttainable > 0;
-    // Check if there are no more valid moves, the level isn't completed, and the game has started (currentDepth > 0)
-    const noMoreValidMoves = game.coreGameData && game.currentPossibleMoves && game.currentPossibleMoves.length === 0 && !levelActuallyCompleted && game.currentDepth > 0;
+    const noMoreValidMoves = game.gameData && game.currentPossibleMoves && game.currentPossibleMoves.length === 0 && !levelActuallyCompleted && game.currentDepth > 0;
     
-    // Determine when to show specific status messages
-    const showNoMoreValidMovesMessage = noMoreValidMoves && !levelActuallyCompleted && !game.showEndGamePanelOverride && !game.loading;
-    const showDeviatedMessage = game.hasDeviated && !levelActuallyCompleted && !showNoMoreValidMovesMessage && !game.loading;
+    const showNoMoreValidMovesMessage = noMoreValidMoves && !levelActuallyCompleted && !game.showEndGamePanelOverride && !game.coreLoading;
+    const showDeviatedMessage = game.hasDeviated && !levelActuallyCompleted && !showNoMoreValidMovesMessage && !game.coreLoading;
     const isCurrentlyOptimal = !game.hasDeviated && game.currentDepth > 0;
-    const showOptimalMessage = isCurrentlyOptimal && !levelActuallyCompleted && !showNoMoreValidMovesMessage && !showDeviatedMessage && !game.loading;
+    const showOptimalMessage = isCurrentlyOptimal && !levelActuallyCompleted && !showNoMoreValidMovesMessage && !showDeviatedMessage && !game.coreLoading;
 
     // Determine if the end game panel should be displayed
-    const shouldShowEndGamePanel = (game.isGameOver && !game.hasAcknowledgedGameOver && !game.loading) || (game.showEndGamePanelOverride && !game.loading);
+    // game.isDisplayGameOver is the UI-facing flag from useGame hook
+    const shouldShowEndGamePanel = (game.isDisplayGameOver && !game.hasAcknowledgedGameOver && !game.coreLoading) || (game.showEndGamePanelOverride && !game.coreLoading);
 
     return (
         <div className={`flex flex-col items-center justify-start min-h-screen p-4 font-sans pt-8 transition-colors duration-300 ${game.darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-            {/* Game Header: Displays date, difficulty, dark mode toggle */}
             <GameHeader
                 currentDate={game.currentDate}
                 difficulty={game.difficulty}
                 dailyProgress={game.dailyProgress}
+                // darkMode={game.darkMode} // Pass if GameHeader needs it
+                // onToggleDarkMode={game.setDarkMode} // Pass if GameHeader needs it
             />
 
-            {/* Instructions: Provides game instructions based on difficulty */}
             <Instructions difficulty={game.difficulty} wordLength={game.wordLength} />
 
-            {/* Daily Progress: Shows progress for different difficulties and allows mode switching */}
             <DailyProgressDisplay
                 dailyProgress={game.dailyProgress}
                 difficulty={game.difficulty}
                 onPlayMode={game.handlePlayMode}
                 onShowSummary={game.handleShowGameSummary}
-                loading={game.loading}
+                loading={game.coreLoading} // Pass coreLoading
                 showEndGamePanelOverride={game.showEndGamePanelOverride}
                 animationStateAnimating={game.animationState.animating}
-                gameData={game.coreGameData} // Pass coreGameData
+                gameData={game.gameData} // Pass gameData
             />
             
-            {/* Status Messages: Displays feedback like invalid moves, optimal path, etc. */}
             <StatusMessages
                 isInvalidMove={game.isInvalidMove}
                 invalidMoveMessage={game.invalidMoveMessage}
@@ -148,11 +142,10 @@ function App() {
                 levelActuallyCompleted={levelActuallyCompleted}
             />
 
-            {/* Game Board Area: Renders the main game grid and interaction elements */}
-            {game.grid && game.coreGameData && ( // Check for coreGameData before rendering
+            {game.grid && game.gameData && ( // Check for gameData
                 <GameBoardArea
                     grid={game.grid}
-                    gameData={game.coreGameData} // Use coreGameData
+                    gameData={game.gameData} // Use gameData
                     selectedCell={game.selectedCell}
                     draggedCell={game.draggedCell}
                     animationState={game.animationState}
@@ -164,13 +157,13 @@ function App() {
                     onDragEnter={game.handleDragEnter}
                     onDragLeave={game.handleDragLeave}
                     onDragEnd={game.handleDragEnd}
-                    onDrop={game.handleDrop}
+                    onDrop={game.handleDrop} // Ensure this is game.handleDrop from the hook
                     noMoreValidMoves={noMoreValidMoves} 
-                    loading={game.loading}
+                    loading={game.coreLoading} // Pass coreLoading
                     currentDepth={game.currentDepth}
                     liveMaxDepthAttainable={game.liveMaxDepthAttainable}
                     historyLength={game.history.length}
-                    isGameOver={game.isGameOver} // This is the UI-controlled game over state
+                    isGameOver={game.isDisplayGameOver} // Use isDisplayGameOver for UI logic
                     hasAcknowledgedGameOver={game.hasAcknowledgedGameOver}
                     showEndGamePanelOverride={game.showEndGamePanelOverride}
                     difficulty={game.difficulty}
@@ -187,16 +180,20 @@ function App() {
 
             <WordSequenceDisplay history={game.history} showEndGamePanelOverride={game.showEndGamePanelOverride} />
 
-            {/* Debug View: Optionally shown if debug mode is active */}
-            {game.isDebugMode && game.coreGameData && game.coreGameData.explorationTree && <DebugView treeData={game.coreGameData.explorationTree} optimalPathWords={game.liveOptimalPathWords} />}
+            {game.isDebugMode && game.gameData && game.gameData.explorationTree && ( // Check gameData
+                <DebugView 
+                    treeData={game.gameData.explorationTree} 
+                    optimalPathWords={game.liveOptimalPathWords} 
+                />
+            )}
             
-            {/* End Game Panel: Shown when the game is over or a summary is requested */}
-            {shouldShowEndGamePanel && (game.normalDataForPanel || game.hardDataForPanel || game.impossibleDataForPanel) && (
+            {/* Updated condition and props for EndGamePanel */}
+            {shouldShowEndGamePanel && (game.panelDataForEndGame.normalDataForPanel || game.panelDataForEndGame.hardDataForPanel || game.panelDataForEndGame.impossibleDataForPanel) && (
                 <EndGamePanel
-                    normalModeData={game.normalDataForPanel}
-                    hardModeData={game.hardDataForPanel}
-                    impossibleModeData={game.impossibleDataForPanel}
-                    onClose={game.handleCloseGameOver}
+                    normalModeData={game.panelDataForEndGame.normalDataForPanel}
+                    hardModeData={game.panelDataForEndGame.hardDataForPanel}
+                    impossibleModeData={game.panelDataForEndGame.impossibleDataForPanel}
+                    onClose={game.handleCloseGameOverPanel}
                 />
             )}
         </div>

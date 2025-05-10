@@ -1,4 +1,4 @@
-// src/core/WordChainGameLogic.ts
+// src/core/gameLogic.ts
 import {
     CellCoordinates,
     GameData,
@@ -30,7 +30,7 @@ export interface SavedProgressState {
     hasDeviated: boolean;
 }
 
-export class WordChainGameLogic {
+export class GameLogic {
     private grid: string[][];
     private currentPossibleMoves: ExplorationNodeData[];
     private currentDepth: number;

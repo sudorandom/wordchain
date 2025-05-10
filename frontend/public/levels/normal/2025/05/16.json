@@ -1,22 +1,22 @@
 {
   "initialGrid": [
     [
-      "w",
-      "o",
-      "m",
-      "o"
+      "t",
+      "r",
+      "h",
+      "e"
     ],
     [
       "e",
-      "s",
-      "e",
-      "d"
+      "h",
+      "l",
+      "l"
     ],
     [
       "r",
-      "h",
-      "s",
-      "c"
+      "o",
+      "g",
+      "n"
     ]
   ],
   "wordLength": 4,
@@ -36,7 +36,7 @@
         ]
       },
       "wordsFormed": [
-        "seed"
+        "hell"
       ],
       "maxDepthReached": 6,
       "nextMoves": [
@@ -52,57 +52,23 @@
             ]
           },
           "wordsFormed": [
-            "weed"
-          ],
-          "maxDepthReached": 1,
-          "nextMoves": [
-            {
-              "move": {
-                "from": [
-                  1,
-                  0
-                ],
-                "to": [
-                  2,
-                  0
-                ]
-              },
-              "wordsFormed": [
-                "reed"
-              ],
-              "maxDepthReached": 0
-            }
-          ]
-        },
-        {
-          "move": {
-            "from": [
-              1,
-              0
-            ],
-            "to": [
-              2,
-              0
-            ]
-          },
-          "wordsFormed": [
-            "reed"
+            "tell"
           ],
           "maxDepthReached": 5,
           "nextMoves": [
             {
               "move": {
                 "from": [
-                  0,
-                  0
+                  1,
+                  1
                 ],
                 "to": [
-                  1,
-                  0
+                  2,
+                  1
                 ]
               },
               "wordsFormed": [
-                "weed"
+                "toll"
               ],
               "maxDepthReached": 4,
               "nextMoves": [
@@ -110,15 +76,15 @@
                   "move": {
                     "from": [
                       0,
-                      2
+                      3
                     ],
                     "to": [
-                      0,
+                      1,
                       3
                     ]
                   },
                   "wordsFormed": [
-                    "room"
+                    "tole"
                   ],
                   "maxDepthReached": 3,
                   "nextMoves": [
@@ -126,17 +92,69 @@
                       "move": {
                         "from": [
                           0,
-                          3
+                          0
                         ],
                         "to": [
                           1,
-                          3
+                          0
                         ]
                       },
                       "wordsFormed": [
-                        "rood"
+                        "hole"
                       ],
                       "maxDepthReached": 2,
+                      "nextMoves": [
+                        {
+                          "move": {
+                            "from": [
+                              1,
+                              0
+                            ],
+                            "to": [
+                              2,
+                              0
+                            ]
+                          },
+                          "wordsFormed": [
+                            "role"
+                          ],
+                          "maxDepthReached": 1,
+                          "nextMoves": [
+                            {
+                              "move": {
+                                "from": [
+                                  0,
+                                  3
+                                ],
+                                "to": [
+                                  1,
+                                  3
+                                ]
+                              },
+                              "wordsFormed": [
+                                "roll"
+                              ],
+                              "maxDepthReached": 0
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          1,
+                          0
+                        ],
+                        "to": [
+                          2,
+                          0
+                        ]
+                      },
+                      "wordsFormed": [
+                        "role"
+                      ],
+                      "maxDepthReached": 1,
                       "nextMoves": [
                         {
                           "move": {
@@ -150,67 +168,49 @@
                             ]
                           },
                           "wordsFormed": [
-                            "wood"
+                            "hole"
                           ],
-                          "maxDepthReached": 1,
-                          "nextMoves": [
-                            {
-                              "move": {
-                                "from": [
-                                  1,
-                                  0
-                                ],
-                                "to": [
-                                  2,
-                                  0
-                                ]
-                              },
-                              "wordsFormed": [
-                                "seem"
-                              ],
-                              "maxDepthReached": 0
-                            }
-                          ]
+                          "maxDepthReached": 0
                         },
                         {
                           "move": {
                             "from": [
-                              1,
-                              0
+                              0,
+                              3
                             ],
                             "to": [
-                              2,
-                              0
+                              1,
+                              3
                             ]
                           },
                           "wordsFormed": [
-                            "seem"
+                            "roll"
                           ],
                           "maxDepthReached": 0
                         }
                       ]
                     }
                   ]
+                },
+                {
+                  "move": {
+                    "from": [
+                      1,
+                      0
+                    ],
+                    "to": [
+                      2,
+                      0
+                    ]
+                  },
+                  "wordsFormed": [
+                    "roll"
+                  ],
+                  "maxDepthReached": 0
                 }
               ]
             }
           ]
-        },
-        {
-          "move": {
-            "from": [
-              1,
-              1
-            ],
-            "to": [
-              2,
-              1
-            ]
-          },
-          "wordsFormed": [
-            "shed"
-          ],
-          "maxDepthReached": 0
         }
       ]
     }

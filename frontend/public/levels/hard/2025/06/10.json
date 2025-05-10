@@ -1,28 +1,28 @@
 {
   "initialGrid": [
     [
+      "l",
       "t",
-      "w",
-      "h",
-      "t"
+      "f",
+      "o"
     ],
     [
       "f",
-      "n",
+      "s",
       "f",
-      "w"
+      "i"
     ],
     [
-      "u",
       "o",
       "e",
-      "n"
+      "t",
+      "r"
     ],
     [
-      "y",
-      "t",
-      "t",
-      "m"
+      "w",
+      "w",
+      "a",
+      "t"
     ]
   ],
   "wordLength": 4,
@@ -33,32 +33,32 @@
     {
       "move": {
         "from": [
-          1,
-          1
+          0,
+          0
         ],
         "to": [
-          2,
-          1
+          1,
+          0
         ]
       },
       "wordsFormed": [
-        "wont"
+        "flow"
       ],
       "maxDepthReached": 5,
       "nextMoves": [
         {
           "move": {
             "from": [
-              1,
-              2
+              0,
+              1
             ],
             "to": [
-              2,
-              2
+              1,
+              1
             ]
           },
           "wordsFormed": [
-            "heft"
+            "stew"
           ],
           "maxDepthReached": 4,
           "nextMoves": [
@@ -66,31 +66,32 @@
               "move": {
                 "from": [
                   0,
-                  1
+                  0
                 ],
                 "to": [
                   0,
-                  2
+                  1
                 ]
               },
               "wordsFormed": [
-                "weft"
+                "slow"
               ],
               "maxDepthReached": 3,
               "nextMoves": [
                 {
                   "move": {
                     "from": [
-                      2,
-                      1
+                      1,
+                      0
                     ],
                     "to": [
-                      2,
-                      2
+                      1,
+                      1
                     ]
                   },
                   "wordsFormed": [
-                    "went"
+                    "flew",
+                    "stow"
                   ],
                   "maxDepthReached": 2,
                   "nextMoves": [
@@ -98,31 +99,47 @@
                       "move": {
                         "from": [
                           0,
-                          2
+                          0
                         ],
                         "to": [
                           0,
-                          3
+                          1
                         ]
                       },
                       "wordsFormed": [
-                        "tent"
+                        "slew"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          1
+                        ],
+                        "to": [
+                          3,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "flea"
                       ],
                       "maxDepthReached": 1,
                       "nextMoves": [
                         {
                           "move": {
                             "from": [
-                              0,
+                              2,
                               2
                             ],
                             "to": [
-                              1,
+                              3,
                               2
                             ]
                           },
                           "wordsFormed": [
-                            "thew"
+                            "watt"
                           ],
                           "maxDepthReached": 0
                         }
@@ -134,51 +151,34 @@
                   "move": {
                     "from": [
                       2,
-                      2
+                      0
                     ],
                     "to": [
                       2,
-                      3
+                      1
                     ]
                   },
                   "wordsFormed": [
-                    "went"
+                    "slew"
                   ],
-                  "maxDepthReached": 2,
+                  "maxDepthReached": 1,
                   "nextMoves": [
                     {
                       "move": {
                         "from": [
                           0,
-                          2
+                          0
                         ],
                         "to": [
                           0,
-                          3
+                          1
                         ]
                       },
                       "wordsFormed": [
-                        "tent"
+                        "flew",
+                        "stow"
                       ],
-                      "maxDepthReached": 1,
-                      "nextMoves": [
-                        {
-                          "move": {
-                            "from": [
-                              0,
-                              2
-                            ],
-                            "to": [
-                              1,
-                              2
-                            ]
-                          },
-                          "wordsFormed": [
-                            "thew"
-                          ],
-                          "maxDepthReached": 0
-                        }
-                      ]
+                      "maxDepthReached": 0
                     }
                   ]
                 }
@@ -188,51 +188,68 @@
               "move": {
                 "from": [
                   1,
+                  0
+                ],
+                "to": [
+                  1,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "slew"
+              ],
+              "maxDepthReached": 0
+            },
+            {
+              "move": {
+                "from": [
+                  2,
+                  0
+                ],
+                "to": [
+                  2,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "flew",
+                "stow"
+              ],
+              "maxDepthReached": 0
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              2,
+              0
+            ],
+            "to": [
+              2,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "flew"
+          ],
+          "maxDepthReached": 1,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  0,
                   1
                 ],
                 "to": [
                   1,
-                  2
+                  1
                 ]
               },
               "wordsFormed": [
-                "went"
+                "stow"
               ],
-              "maxDepthReached": 1,
-              "nextMoves": [
-                {
-                  "move": {
-                    "from": [
-                      0,
-                      0
-                    ],
-                    "to": [
-                      0,
-                      1
-                    ]
-                  },
-                  "wordsFormed": [
-                    "tent"
-                  ],
-                  "maxDepthReached": 0
-                },
-                {
-                  "move": {
-                    "from": [
-                      2,
-                      1
-                    ],
-                    "to": [
-                      2,
-                      2
-                    ]
-                  },
-                  "wordsFormed": [
-                    "weft"
-                  ],
-                  "maxDepthReached": 0
-                }
-              ]
+              "maxDepthReached": 0
             }
           ]
         }
@@ -241,16 +258,16 @@
     {
       "move": {
         "from": [
-          1,
-          2
+          0,
+          1
         ],
         "to": [
-          2,
-          2
+          1,
+          1
         ]
       },
       "wordsFormed": [
-        "heft"
+        "stew"
       ],
       "maxDepthReached": 5,
       "nextMoves": [
@@ -258,85 +275,15 @@
           "move": {
             "from": [
               0,
-              1
+              0
             ],
             "to": [
-              0,
-              2
-            ]
-          },
-          "wordsFormed": [
-            "weft"
-          ],
-          "maxDepthReached": 3,
-          "nextMoves": [
-            {
-              "move": {
-                "from": [
-                  2,
-                  2
-                ],
-                "to": [
-                  2,
-                  3
-                ]
-              },
-              "wordsFormed": [
-                "went"
-              ],
-              "maxDepthReached": 2,
-              "nextMoves": [
-                {
-                  "move": {
-                    "from": [
-                      0,
-                      2
-                    ],
-                    "to": [
-                      0,
-                      3
-                    ]
-                  },
-                  "wordsFormed": [
-                    "tent"
-                  ],
-                  "maxDepthReached": 1,
-                  "nextMoves": [
-                    {
-                      "move": {
-                        "from": [
-                          0,
-                          2
-                        ],
-                        "to": [
-                          1,
-                          2
-                        ]
-                      },
-                      "wordsFormed": [
-                        "thew"
-                      ],
-                      "maxDepthReached": 0
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "move": {
-            "from": [
               1,
-              1
-            ],
-            "to": [
-              2,
-              1
+              0
             ]
           },
           "wordsFormed": [
-            "wont"
+            "flow"
           ],
           "maxDepthReached": 4,
           "nextMoves": [
@@ -344,31 +291,32 @@
               "move": {
                 "from": [
                   0,
-                  1
+                  0
                 ],
                 "to": [
                   0,
-                  2
+                  1
                 ]
               },
               "wordsFormed": [
-                "weft"
+                "slow"
               ],
               "maxDepthReached": 3,
               "nextMoves": [
                 {
                   "move": {
                     "from": [
-                      2,
-                      1
+                      1,
+                      0
                     ],
                     "to": [
-                      2,
-                      2
+                      1,
+                      1
                     ]
                   },
                   "wordsFormed": [
-                    "went"
+                    "flew",
+                    "stow"
                   ],
                   "maxDepthReached": 2,
                   "nextMoves": [
@@ -376,31 +324,47 @@
                       "move": {
                         "from": [
                           0,
-                          2
+                          0
                         ],
                         "to": [
                           0,
-                          3
+                          1
                         ]
                       },
                       "wordsFormed": [
-                        "tent"
+                        "slew"
+                      ],
+                      "maxDepthReached": 0
+                    },
+                    {
+                      "move": {
+                        "from": [
+                          3,
+                          1
+                        ],
+                        "to": [
+                          3,
+                          2
+                        ]
+                      },
+                      "wordsFormed": [
+                        "flea"
                       ],
                       "maxDepthReached": 1,
                       "nextMoves": [
                         {
                           "move": {
                             "from": [
-                              0,
+                              2,
                               2
                             ],
                             "to": [
-                              1,
+                              3,
                               2
                             ]
                           },
                           "wordsFormed": [
-                            "thew"
+                            "watt"
                           ],
                           "maxDepthReached": 0
                         }
@@ -412,51 +376,34 @@
                   "move": {
                     "from": [
                       2,
-                      2
+                      0
                     ],
                     "to": [
                       2,
-                      3
+                      1
                     ]
                   },
                   "wordsFormed": [
-                    "went"
+                    "slew"
                   ],
-                  "maxDepthReached": 2,
+                  "maxDepthReached": 1,
                   "nextMoves": [
                     {
                       "move": {
                         "from": [
                           0,
-                          2
+                          0
                         ],
                         "to": [
                           0,
-                          3
+                          1
                         ]
                       },
                       "wordsFormed": [
-                        "tent"
+                        "flew",
+                        "stow"
                       ],
-                      "maxDepthReached": 1,
-                      "nextMoves": [
-                        {
-                          "move": {
-                            "from": [
-                              0,
-                              2
-                            ],
-                            "to": [
-                              1,
-                              2
-                            ]
-                          },
-                          "wordsFormed": [
-                            "thew"
-                          ],
-                          "maxDepthReached": 0
-                        }
-                      ]
+                      "maxDepthReached": 0
                     }
                   ]
                 }
@@ -466,51 +413,68 @@
               "move": {
                 "from": [
                   1,
-                  1
+                  0
                 ],
                 "to": [
                   1,
-                  2
+                  1
                 ]
               },
               "wordsFormed": [
-                "went"
+                "slew"
               ],
-              "maxDepthReached": 1,
-              "nextMoves": [
-                {
-                  "move": {
-                    "from": [
-                      0,
-                      0
-                    ],
-                    "to": [
-                      0,
-                      1
-                    ]
-                  },
-                  "wordsFormed": [
-                    "tent"
-                  ],
-                  "maxDepthReached": 0
-                },
-                {
-                  "move": {
-                    "from": [
-                      2,
-                      1
-                    ],
-                    "to": [
-                      2,
-                      2
-                    ]
-                  },
-                  "wordsFormed": [
-                    "weft"
-                  ],
-                  "maxDepthReached": 0
-                }
-              ]
+              "maxDepthReached": 0
+            },
+            {
+              "move": {
+                "from": [
+                  2,
+                  0
+                ],
+                "to": [
+                  2,
+                  1
+                ]
+              },
+              "wordsFormed": [
+                "flew",
+                "stow"
+              ],
+              "maxDepthReached": 0
+            }
+          ]
+        },
+        {
+          "move": {
+            "from": [
+              2,
+              0
+            ],
+            "to": [
+              2,
+              1
+            ]
+          },
+          "wordsFormed": [
+            "stow"
+          ],
+          "maxDepthReached": 1,
+          "nextMoves": [
+            {
+              "move": {
+                "from": [
+                  0,
+                  0
+                ],
+                "to": [
+                  1,
+                  0
+                ]
+              },
+              "wordsFormed": [
+                "flew"
+              ],
+              "maxDepthReached": 0
             }
           ]
         }

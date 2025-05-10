@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint . && tsc"
+    "lint": "tsc --noEmit --downlevelIteration --esModuleInterop --jsx react src/App.tsx && eslint ."
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.6",

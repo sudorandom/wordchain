@@ -26,7 +26,7 @@ const generateEmojiLine = (data: LevelResultData | null | undefined): string => 
     const goodEmoji = '🔗'; // Chain link for successful words
     const badEmoji = '⛓️‍💥'; // Broken chain for missed optimal words (U+26D3 U+200D U+1F4A5)
 
-    let emojisArray = [];
+    const emojisArray = [];
     for (let i = 0; i < maxScore; i++) {
         emojisArray.push(i < score ? goodEmoji : badEmoji);
     }
