@@ -75,7 +75,8 @@ export const useGameCore = (
             setLoading(true);
             setError(null);
             setStabilitySignal({ opId: currentLoadId, isStable: false });
-            if (coreState.gameData !== null) {
+            // Only reset if there was actual game data and now params are invalid
+            if (coreState.gameData !== null) { 
                 updateReactStateFromCore(null);
             }
             return;
@@ -85,6 +86,14 @@ export const useGameCore = (
         setLoading(true);
         setError(null);
         setStabilitySignal({ opId: currentLoadId, isStable: false });
+
+        // **MODIFIED**: If there's existing game data from a previous load, reset coreState
+        // to prevent showing stale data during the new load.
+        // This will cause a flash of an empty/initial state instead of the previous difficulty's state.
+        if (coreState.gameData !== null) {
+            updateReactStateFromCore(null);
+            console.log(`${logPrefix} coreState reset to initial because a new load operation is starting.`);
+        }
 
         const loadLevelDataInternal = async (date: Date, diff: DifficultyLevel) => {
             console.log(`${logPrefix} loadLevelDataInternal started.`);
@@ -163,7 +172,7 @@ export const useGameCore = (
                 if (loadOperationIdRef.current === currentLoadId) {
                     console.error(`${logPrefix} Error during loadLevelDataInternal:`, err);
                     setError(err.message || `Failed to load ${diff} level.`);
-                    updateReactStateFromCore(null);
+                    updateReactStateFromCore(null); // Reset to initial on error
                 } else {
                      console.log(`${logPrefix} Error in STALE operation's try-catch. Ignoring.`);
                 }
@@ -174,7 +183,7 @@ export const useGameCore = (
         loadLevelDataInternal(currentDate, difficulty)
             .then(() => {
                 if (loadOperationIdRef.current === currentLoadId) {
-                    if (!error) { 
+                    if (!error) { // Check error state, as catch block might have set it
                         setStabilitySignal({ opId: currentLoadId, isStable: true });
                         console.log(`${logPrefix} State marked STABLE.`);
                     } else {
@@ -186,10 +195,10 @@ export const useGameCore = (
             .catch((promiseErr) => {
                 if (loadOperationIdRef.current === currentLoadId) {
                     console.error(`${logPrefix} Unhandled promise error in load chain:`, promiseErr);
-                    if (!error) { 
+                    if (!error) { // Avoid overwriting more specific error from inner catch
                         setError(promiseErr.message || 'An unexpected error occurred during loading.');
                     }
-                    updateReactStateFromCore(null); 
+                    // updateReactStateFromCore(null) already called in inner catch if error originated there
                     setStabilitySignal({ opId: currentLoadId, isStable: false });
                     console.log(`${logPrefix} State marked UNSTABLE due to promise error.`);
                 }
@@ -198,7 +207,7 @@ export const useGameCore = (
                 if (loadOperationIdRef.current === currentLoadId) {
                     setLoading(false);
                     console.log(`${logPrefix} FINISHED load attempt. Loading: false.`);
-                    if (error) { 
+                    if (error) { // If an error is set by this point, ensure stability is false
                         setStabilitySignal(prev => {
                             if (prev.opId === currentLoadId) { 
                                 return { opId: currentLoadId, isStable: false };
@@ -212,7 +221,7 @@ export const useGameCore = (
             });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentDate, difficulty, reloadTrigger, updateReactStateFromCore]); 
+    }, [currentDate, difficulty, reloadTrigger, updateReactStateFromCore]); // error is managed internally
 
     useEffect(() => {
         const saveLogPrefix = `[SaveEffect D:${difficulty || 'N/A'}, OpId:${loadOperationIdRef.current}]`;
@@ -265,7 +274,6 @@ export const useGameCore = (
                 };
             } else {
                 console.warn("[useGameCore.performSwap] logicResult.moveDetails.from/to were not [number,number] tuples as expected by the error. Attempting to use as is or it might be undefined if incompatible.");
-                // **FIXED**: Use 'unknown' for a safer cast if types are truly unrelated or structure is uncertain.
                 moveDetailsForSwapResult = logicResult.moveDetails as unknown as { from: CellCoordinates, to: CellCoordinates }; 
             }
         }
@@ -275,8 +283,6 @@ export const useGameCore = (
             message: logicResult.message, 
             newState: logicResult.newState,
             wordsFormed: logicResult.wordsFormed,
-            // **FIXED**: Removed isDeviatedMove as it's not in SwapResult type.
-            // isDeviatedMove: logicResult.isDeviatedMove, // Add to SwapResult interface if needed
             moveDetails: moveDetailsForSwapResult, 
         };
         
