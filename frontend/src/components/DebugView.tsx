@@ -145,7 +145,7 @@ const DebugView: React.FC<DebugViewProps> = ({ gameData, optimalPathWordsFromHoo
             setOptimalPathsFromLogic([]);
             setTerminalPathsFromLogic([]);
         }
-    }, [gameData, gameLogicInstance]); // Rerun when gameData (and thus gameLogicInstance) changes
+    }, [gameData, gameLogicInstance, optimalPathWordsFromHook]); // Rerun when gameData (and thus gameLogicInstance) changes
 
     const getLocalStorageData = () => { 
         let data: Record<string, any> = {};

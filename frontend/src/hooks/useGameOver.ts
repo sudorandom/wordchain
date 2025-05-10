@@ -1,8 +1,8 @@
 // src/hooks/useGameOver.ts
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
-    DifficultyLevel, LevelCompletionSummary, HistoryEntry, CoreGameState,
-    DIFFICULTIES, LevelResultData, DailyProgressRecord, DailyProgressDifficultySummary
+    DifficultyLevel, LevelCompletionSummary, CoreGameState,
+    DIFFICULTIES, LevelResultData, DailyProgressRecord,
 } from '../types/gameTypes';
 import { getFriendlyDate } from '../utils/gameHelpers';
 // Import specific functions from the actual storage module
@@ -25,7 +25,6 @@ interface GameOverProps {
     isLoading: boolean;
     isCoreError: boolean | null;
     onViewSolution: (difficulty: DifficultyLevel) => void;
-    onMasterReset: () => void;
 }
 
 // Helper function to ensure the loaded progress conforms to DailyProgressRecord
@@ -52,7 +51,6 @@ export const useGameOver = ({
     isLoading,
     isCoreError,
     onViewSolution,
-    onMasterReset 
 }: GameOverProps) => {
     const [isDisplayGameOver, setIsDisplayGameOver] = useState<boolean>(false);
     const [hasAcknowledgedGameOver, setHasAcknowledgedGameOver] = useState<boolean>(false);

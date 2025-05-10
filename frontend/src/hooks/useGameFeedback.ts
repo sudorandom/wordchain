@@ -130,59 +130,63 @@ export const useGameFeedback = ({
 
     // Effect for showing hints based on failed attempts
     useEffect(() => {
-        // Conditions to prevent or clear hints
+        // High-priority clear conditions (game over, loading, impossible difficulty, invalid grid)
         if (difficulty === 'impossible' || isLoading || isUiGameOver || !grid || grid.length === 0 || (grid[0] && grid[0].length === 0)) {
-            if (hintCells.length > 0) { // Only update state if necessary
+            if (hintCells.length > 0) { // Only update state if necessary to avoid extra renders
+                console.log('[GameFeedback] Clearing hint due to high-priority condition (e.g., loading, game over).');
                 setHintCells([]); 
             }
             if (hintTimeoutRef.current) {
                 clearTimeout(hintTimeoutRef.current);
                 hintTimeoutRef.current = null;
             }
-            return;
+            return; // Exit early if any of these conditions are met
         }
 
-        // Logic to show hints
+        // Logic to show hints based on failed attempts
         if (turnFailedAttempts >= 3) {
-            // Only calculate and set new hint if no hint is currently active
-            // This prevents re-triggering hint if other dependencies change while hint is already shown
+            // Only trigger a new hint if no hint is currently being displayed.
+            // This prevents this effect from interfering with a hint shown by the button click
+            // or from re-triggering itself if other dependencies change while a hint is active.
             if (hintCells.length === 0) { 
                 const coordinates = calculateHintCoords();
                 if (coordinates.length > 0) {
+                    console.log('[GameFeedback] Showing hint due to failed attempts.');
                     setHintCells(coordinates);
-                    // Ensure any previous timeout is cleared before setting a new one
+                    // Ensure any previous timeout is cleared before setting a new one.
+                    // This is a safeguard, though hintCells.length === 0 should mean no active timer.
                     if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current); 
                     hintTimeoutRef.current = window.setTimeout(() => {
+                        console.log('[GameFeedback] Clearing hint after timeout (from failed attempts).');
                         setHintCells([]);
                         hintTimeoutRef.current = null;
                     }, HINT_DURATION_MS);
                 }
             }
-        } else { // Logic to clear hints if failed attempts drop below 3
-            if (hintCells.length > 0) { // Only update state if necessary
-                setHintCells([]);
-            }
-            if (hintTimeoutRef.current) { 
-                clearTimeout(hintTimeoutRef.current); 
-                hintTimeoutRef.current = null;
-            }
-        }
-    // **MODIFIED**: Removed hintCells.length from dependencies.
-    // The effect now primarily reacts to changes in game state or failed attempts.
-    // `calculateHintCoords` should be stable (memoized) if it's complex.
-    }, [turnFailedAttempts, grid, isUiGameOver, isLoading, difficulty, calculateHintCoords]);
+        } 
+        // No 'else' block here to clear hints if turnFailedAttempts < 3.
+        // Hints are cleared by their own timeout or by the high-priority conditions above.
+        // This prevents this effect from prematurely clearing a hint set by the hint button.
+
+    // Dependencies: React to changes in these values.
+    // hintCells.length is included so if hints are cleared externally (e.g. clearAllFeedbacks)
+    // and turnFailedAttempts is still >=3, this effect can re-show the hint.
+    }, [turnFailedAttempts, isUiGameOver, isLoading, difficulty, calculateHintCoords, grid, hintCells.length]);
 
     const handleHintButtonClick = useCallback(() => {
-        // Conditions to prevent showing hint
+        // Conditions to prevent showing hint (e.g., game over, impossible, already showing, etc.)
         if (isUiGameOver || difficulty === 'impossible' || animationState.animating || isLoading || !grid || grid.length === 0 || (grid[0] && grid[0].length === 0) || hintCells.length > 0) {
             return;
         }
         
         const coordinates = calculateHintCoords();
         if (coordinates.length > 0) {
+            console.log('[GameFeedback] Showing hint due to button click.');
             setHintCells(coordinates);
-            if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current); // Clear existing timeout
+            // Clear any existing hint timeout (e.g., from a previous failed attempt hint) before starting a new one.
+            if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current); 
             hintTimeoutRef.current = window.setTimeout(() => {
+                console.log('[GameFeedback] Clearing hint after timeout (from button click).');
                 setHintCells([]);
                 hintTimeoutRef.current = null;
             }, HINT_DURATION_MS); 
@@ -197,7 +201,8 @@ export const useGameFeedback = ({
         if (wiggleTimeoutRef.current) clearTimeout(wiggleTimeoutRef.current);
         setWiggleCells([]);
         if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
-        setHintCells([]);
+        setHintCells([]); // This will also trigger the useEffect if turnFailedAttempts is high
+        console.log('[GameFeedback] All feedbacks cleared.');
     }, []);
 
 
@@ -206,7 +211,7 @@ export const useGameFeedback = ({
         highlightedCells,
         wiggleCells,
         hintCells,
-        setHintCells, 
+        setHintCells, // Exposing setHintCells might be useful for direct control if needed
 
         triggerWiggle,
         triggerSwapAnimationAndHighlight, 

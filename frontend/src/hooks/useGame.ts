@@ -1,14 +1,13 @@
 // src/hooks/useGame.ts
-import { useCallback, useMemo, Dispatch, SetStateAction } from 'react'; // Added Dispatch, SetStateAction if setError is used directly
-import { DifficultyLevel, SwapResult, CellCoordinates, HistoryEntry, GameData, CoreGameState, GameMove } from '../types/gameTypes'; // Added GameMove
+import { useCallback } from 'react';
+import { DifficultyLevel, SwapResult, CellCoordinates, GameMove } from '../types/gameTypes';
 
 import { useAppConfig } from './useAppConfig';
 import { useGameSession } from './useGameSession';
-import { useGameCore } from './useGameCore'; // Ensure this path is correct
+import { useGameCore } from './useGameCore';
 import { useGridInteractions } from './useGridInteractions';
 import { useGameFeedback } from './useGameFeedback';
 import { useGameOver } from './useGameOver';
-// Import specific storage functions needed by useGame itself
 import { loadSummaryForDifficulty } from '../core/storage';
 
 
@@ -76,8 +75,7 @@ export const useGame = () => {
                     displayGameOverMessage(`Could not load solution for ${targetDifficulty}.`);
                  }
             }
-        },
-        onMasterReset: (targetDifficulty?: DifficultyLevel) => masterResetGame(targetDifficulty || difficulty || 'normal') // Provide a fallback for difficulty
+        }
     });
     
     const onSwapSuccessFeedback = useCallback(() => {
@@ -128,7 +126,7 @@ export const useGame = () => {
         isCoreGameActuallyOver: isCoreGameOver 
     });
 
-    const masterResetGame = useCallback((targetDifficulty: DifficultyLevel, fullResetLogic: boolean = true) => {
+    const masterResetGame = useCallback((fullResetLogic: boolean = true) => {
         feedbackApi.clearAllFeedbacks();
         gridInteractionApi.resetInteractionState();
         resetGameOverStates();
@@ -143,14 +141,14 @@ export const useGame = () => {
         if (coreLoading || feedbackApi.animationState.animating) return;
         
         if (difficulty === newDifficulty && !coreError) {
-            masterResetGame(newDifficulty, true); 
+            masterResetGame(true); 
             forceReloadLevel(); 
             return;
         }
 
         const changeResult = changeDifficultySession(newDifficulty);
         if (changeResult.success) {
-            masterResetGame(newDifficulty, true); 
+            masterResetGame(true); 
         } else if (changeResult.message) {
             gridInteractionApi.clearInvalidMove(); // Assuming this method exists
             displayGameOverMessage(changeResult.message);
@@ -170,7 +168,7 @@ export const useGame = () => {
             resetGameOverStates();
         }
         if(setCoreError) setCoreError(null); // Clear any existing errors on reset
-    }, [isInteractionAllowed, isDisplayGameOver, showEndGamePanelOverride, coreLoading, feedbackApi.animationState.animating, feedbackApi, gridInteractionApi, coreResetLevel, resetGameOverStates, setCoreError]);
+    }, [isInteractionAllowed, isDisplayGameOver, showEndGamePanelOverride, coreLoading, feedbackApi.animationState, feedbackApi, gridInteractionApi, coreResetLevel, resetGameOverStates, setCoreError]);
 
     const handleUndo = useCallback(() => {
         if (history.length === 0 || coreLoading || feedbackApi.animationState.animating || showEndGamePanelOverride) return;
@@ -178,10 +176,7 @@ export const useGame = () => {
         const result = coreUndoLastMove(); // result.undoneMove should be { from: CellCoordinates, to: CellCoordinates }
         if (result.success && result.newState && result.undoneMove) {
             gridInteractionApi.resetInteractionState(); 
-            
-            // **FIXED**: Convert [number, number] tuples (from previous incorrect assumption) to CellCoordinates for triggerUndoAnimation
-            // The error indicates triggerUndoAnimation expects CellCoordinates for its from/to arguments.
-            // Assuming result.undoneMove.from and result.undoneMove.to are already CellCoordinates as per UndoResult type.
+
             const fromCoords: CellCoordinates = result.undoneMove.from;
             const toCoords: CellCoordinates = result.undoneMove.to;
 

@@ -15,11 +15,10 @@ import { useGame } from './hooks/useGame';
 
 interface GameHeaderProps {
     currentDate: Date | undefined;
-    difficulty: DifficultyLevel;
     dailyProgress: Record<DifficultyLevel, boolean>;
 }
 
-const GameHeader: React.FC<GameHeaderProps> = ({ currentDate, difficulty, dailyProgress }) => (
+const GameHeader: React.FC<GameHeaderProps> = ({ currentDate, dailyProgress }) => (
     <>
         <h1 className="text-4xl sm:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-flow font-bungee">
             <a href="/" className="inline-flex items-center">wordseq</a>
@@ -69,7 +68,7 @@ function App() {
                 <button
                     onClick={() => {
                         // Ensure game.difficulty is defined before calling masterResetGame
-                        if (game.difficulty) game.masterResetGame(game.difficulty, true);
+                        if (game.difficulty) game.masterResetGame(true);
                     }}
                     className="cursor-pointer mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
                 >
@@ -110,7 +109,6 @@ function App() {
         <div className={`flex flex-col items-center justify-start min-h-screen p-4 font-sans pt-8 transition-colors duration-300 ${game.darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
             <GameHeader
                 currentDate={game.currentDate}
-                difficulty={game.difficulty!} // Assert non-null: if gameData is present, difficulty should be too
                 dailyProgress={game.dailyProgress}
             />
 
